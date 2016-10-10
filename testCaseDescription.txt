@@ -1,0 +1,8 @@
+Requests
+	US 01.01.01
+	Two location data (location1, location2) are used for test. A Request(startLocation,endLocation) type variable "request" is created. Use location1 as startLocation and location2 as endLocation. The test passes if the return set of getTrip() is equals to (location1, location2).
+
+	US 01.02.01
+	Create three new Request type variables (request). Create one new RequestList type variable. A list of Request (list<Request>) type variables is created. Using RequestList.add(Request) to add three requests into RequestList. Using list<Request>.add() to add three requests into the list of Request. The test passes if RequestList.getRequests() returns the same list as list<Request>.
+
+	
