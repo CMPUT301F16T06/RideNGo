@@ -70,7 +70,7 @@ Requests
 		3. Rider click on the request in request list and get into request information page.
 		4. Click on 'Confirm' button. A dialog box pop up.
 		5. Click on 'Yes'
-	Expected Result: The screen should return to rider's main page. The status of the request should become 'Done'.
+	Expected Result: The screen should return to rider's main page. The status of the request should become 'Trip Done'.
 
 	Test case: US 01.08.01
 	Description: As a rider, I want to confirm a driver's acceptance. This allows us to choose from a list of acceptances if more than 1 driver accepts simultaneously.
@@ -82,40 +82,59 @@ Requests
 		5. Click on 'Confirm acceptance'.
 	Expected Result: The screen should return to rider's main page. The status of the request should become 'On trip'. The driver should see the request with a status of 'Confirmed'.
 
-	Test case: 
-	Description:
+	Test case: US 02.01.01.01
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
 	Test Steps: 
-	Expected Result:
+		1. Rider post a request. (US 01.01.01)
+	Expected Result: In rider's main page, the request shuold be in the list with a status of 'Waiting for acceptance'
 
-	Test case: 
-	Description:
+	Test case: US 02.01.01.02
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
 	Test Steps: 
-	Expected Result:
+		1. Driver accept a request. (US 01.03.01)
+	Expected Result: In rider's main page, the request shuold be in the list with a status of 'Accepted'. In driver's 'View trip' page, the request should be in the list with a status of 'Accepted'.
 
-	Test case: 
-	Description:
+	Test case: US 02.01.01.03
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
 	Test Steps: 
-	Expected Result:
+		1. Rider confirmed the acceptance. (US 01.08.01)
+	Expected Result: In rider's main page, the request shuold be in the list with a status of 'Confirmed'. In driver's 'View trip' page, the request should be in the list with a status of 'Confirmed'.
 
-	Test case: 
-	Description:
+	Test case: US 02.01.01.04
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
 	Test Steps: 
-	Expected Result:
+		1. Rider confirmed the completion
+	Expected Result: In rider's main page, the request shuold be in the list with a status of 'Trip Done'. In driver's 'View trip' page, the request should be in the list with a status of 'Trip Done'.
 
-	Test case: 
-	Description:
+	Test case: US 03.01.01
+	Description: As a user, I want a profile with a unique username and my contact information.
 	Test Steps: 
-	Expected Result:
+		1. Start application and get to log in page.
+		2. Click on 'Sign up' button.
+		3. In 'User name' field input user name.
+		4. In 'Password' field input password.
+		5. In 'Phone number' field and 'E-mail' field input phone number and e-mail.
+		6. Click on 'Register' button.
+		7. Click on 'Edit contact information' button in menu.
+	Expected Result: The contact information of the user should be present in relatived fields.
 
-	Test case: 
-	Description:
+	Test case: US 03.02.01
+	Description: As a user, I want to edit the contact information in my profile.
 	Test Steps: 
-	Expected Result:
+		1. Click on 'Edit contact information' button in menu.
+		2. Input new information in relative fields.
+		3. Click on 'Save' button.
+	Expected Result: The contact information of the user should be updated. When clicking 'Edit contact information' button again new information should be presented in relative fields.
 
-	Test case: 
-	Description:
+	Test case: US 03.03.01
+	Description: As a user, I want to, when a username is presented for a thing, retrieve and show its contact information.
 	Test Steps: 
-	Expected Result:
+		1. Rider post a request. (US 01.01.01)
+		2. Driver accept the request. (US 01.03.01)
+		3. In rider's main page, click on the request to get into the request information page, then click on a driver in list. 
+		4. Select 'Driver's information'
+		5. In driver's main page, click on 'View trip' button, then click on the request in list.
+	Expected Result: For a rider, the information of the driver should pop up. For a driver, the information of the rider should be listed below end location field.
 
 	Test case: 
 	Description:
