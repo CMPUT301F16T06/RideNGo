@@ -1,8 +1,49 @@
 Requests
-	US 01.01.01
-	Two location data (location1, location2) are used for test. A Request(startLocation,endLocation) type variable "request" is created. Use location1 as startLocation and location2 as endLocation. The test passes if the return set of getTrip() is equals to (location1, location2).
+	Test case: US 01.01.01
+	Description: As a rider, I want to request rides between two locations.
+	Test Steps: 
+		1. Click on 'Post request' button to get into new activity.
+		2. In the 'Start' field enter a location of start.
+		3. In the 'End' field enter a location of destination
+		4. Click on 'Post' button.
+	Expected Result: The screen should return to last activity with request just made listed on screen. 
 
-	US 01.02.01
-	Create three new Request type variables (request). Create one new RequestList type variable. A list of Request (list<Request>) type variables is created. Using RequestList.add(Request) to add three requests into RequestList. Using list<Request>.add() to add three requests into the list of Request. The test passes if RequestList.getRequests() returns the same list as list<Request>.
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
 
-	
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
