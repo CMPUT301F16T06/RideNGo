@@ -6,9 +6,9 @@ Requests
 		2. In the 'Start' field enter a location of start.
 		3. In the 'End' field enter a location of destination
 		4. Click on 'Post' button.
-	Expected Result: The screen should return to last activity with request just made listed on screen. 
+	Expected Result: The screen should return to last activity with request just made listed on screen. The driver should be able to see this request if the start location is in the range of his search.
 
-	Test case: 
+	Test case: US 01.02.01
 	Description:
 	Test Steps: 
 	Expected Result:
