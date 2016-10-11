@@ -9,6 +9,90 @@ Requests
 	Expected Result: The screen should return to last activity with request just made listed on screen. The driver should be able to see this request if the start location is in the range of his search.
 
 	Test case: US 01.02.01
+	Description: As a rider, I want to see current requests I have open.
+	Test Steps: 
+		1. Post requests. (US 01.01.01)
+		2. Navigate to rider's main page which has a list of requests on screen.
+		3. Click on the request user want to check.
+	Expected Result: The start location and end location should be shown on screen. There should be a list of drivers who have accepted the request.
+
+	Test case: US 01.03.01
+	Description: As a rider, I want to be notified if my request is accepted.
+	Test Steps: 
+		1. Rider post a request. (US 01.01.01)
+		2. In driver's main page 'search' field, type in a location near the start location of the request.
+		3. Click on 'search' button
+		4. Click on the request in the list below and get into request information page.
+		5. Click on 'Accept' button.
+		6. In rider's main page, click on the request in list.
+	Expected Result: The driver's name should be listed in the list before trip information.
+
+	Test case: US 01.04.01.01
+	Description: As a rider, I want to cancel requests.
+	Test Steps: 
+		1. Rider post a request. (US 01.01.01)
+		2. Click on the request in list.
+		3. Click on 'Cancel Request' button.
+	Expected Result: The screen should return to rider's main page. The request should disappear from the list. No drivers should be able to see this request anymore.
+
+	Test case: US 01.04.01.02
+	Description: As a rider, I want to cancel requests.
+	Test Steps: 
+		1. Rider post a request. (US 01.01.01)
+		2. Driver accept the request. (US 01.03.01)
+		3. Rider click on the request in list.
+		4. Click on 'Cancel Request' button.
+	Expected Result: The screen should return to rider's main page. The request should disappear from the list. Drivers who accepted the request should see the request with a red background after click on 'View trips' button. Drivers whod didn't accepted the request should not be able to see this request anymore.
+
+	Test case: US 01.05.01
+	Description: As a rider, I want to be able to phone or email the driver who accepted a request.
+	Test Steps: 
+		1. Rider post a request. (US 01.01.01)
+		2. Driver accept the request. (US 01.03.01)
+		3. Rider click on the request.
+		4. Long click on the driver. A menu pop up.
+		5. Click on 'Call driver' button.
+	Expected Result: The phone in android machine should come up and dial the number automatically.
+
+	Test case: US 01.06.01
+	Description: As a rider, I want an estimate of a fair fare to offer to drivers.
+	Test Steps: 
+		1. Click on 'Post request' button to get into new activity.
+		2. In the 'Start' field enter a location of start.
+		3. In the 'End' field enter a location of destination
+	Expected Result: The estimate fee should be shown under 'End' field according to distance and estimate time.
+
+	Test case: US 01.07.01
+	Description: As a rider, I want to confirm the completion of a request and enable payment.
+	Test Steps: 
+		1. Rider post a request. (US 01.01.01)
+		2. Driver accept the request. (US 01.03.01)
+		3. Rider click on the request in request list and get into request information page.
+		4. Click on 'Confirm' button. A dialog box pop up.
+		5. Click on 'Yes'
+	Expected Result: The screen should return to rider's main page. The status of the request should become 'Done'.
+
+	Test case: US 01.08.01
+	Description: As a rider, I want to confirm a driver's acceptance. This allows us to choose from a list of acceptances if more than 1 driver accepts simultaneously.
+	Test Steps: 
+		1. Rider post a request. (US 01.01.01)
+		2. More than 1 drivers accept the request. (US 01.03.01)
+		3. Rider click on the request in request list and get into request information page.
+		4. Click on anyone of the drivers. A menu pop up.
+		5. Click on 'Confirm acceptance'.
+	Expected Result: The screen should return to rider's main page. The status of the request should become 'On trip'. The driver should see the request with a status of 'Confirmed'.
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
+	Description:
+	Test Steps: 
+	Expected Result:
+
+	Test case: 
 	Description:
 	Test Steps: 
 	Expected Result:
