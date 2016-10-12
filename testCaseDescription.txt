@@ -83,6 +83,7 @@ Requests
 		5. Click on 'Confirm acceptance'.
 	Expected Result: The screen should return to rider's main page. The status of the request should become 'On trip'. The driver should see the request with a status of 'Confirmed'.
 
+Status
 	Test case: US 02.01.01.01
 	Description: As a rider or driver, I want to see the status of a request that I am involved in.
 	Test Steps: 
@@ -107,6 +108,7 @@ Requests
 		1. Rider confirmed the completion
 	Expected Result: In rider's main page, the request shuold be in the list with a status of 'Trip Done'. In driver's 'View trip' page, the request should be in the list with a status of 'Trip Done'.
 
+User profile
 	Test case: US 03.01.01
 	Description: As a user, I want a profile with a unique username and my contact information.
 	Test Steps: 
@@ -137,6 +139,7 @@ Requests
 		5. In driver's main page, click on 'View trip' button, then click on the request in list.
 	Expected Result: For a rider, the information of the driver should pop up. For a driver, the information of the rider should be listed below end location field.
 
+Searching
 	Test case: US 04.01.01
 	Description: As a driver, I want to browse and search for open requests by geo-location.
 	Test Steps: 
@@ -151,6 +154,7 @@ Requests
 		2. Click on 'Search' button.
 	Expected Result: The list below should be refreshed and filled with requests which has description matchs keywords..
 
+Accepting
 	Test case: US 05.01.01
 	Description: As a driver,  I want to accept a request I agree with and accept that offered payment upon completion.
 	Test Steps: 
@@ -180,6 +184,7 @@ Requests
 		2. Rider confirm a acceptance. (US 01.08.01)
 	Expected Result: Driver should receive a toast text saying 'New Confirmation received'.
 
+Offline behavior
 	Test case: US 08.01.01
 	Description: As an driver, I want to see requests that I already accepted while offline.
 	Test Steps: 
@@ -213,6 +218,7 @@ Requests
 		2. Driver network online.
 	Expected Result: The request should be accepted once the network is available as long as the status of request is not 'Confirmed' or 'Trip done'.
 
+Location
 	Test case: US 10.01.01
 	Description: As a rider, I want to specify a start and end geo locations on a map for a request.
 	Test Steps: 
