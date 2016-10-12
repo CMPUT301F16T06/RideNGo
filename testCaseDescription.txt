@@ -5,7 +5,8 @@ Requests
 		1. Click on 'Post request' button to get into new activity.
 		2. In the 'Start' field enter a location of start.
 		3. In the 'End' field enter a location of destination
-		4. Click on 'Post' button.
+		4. In the 'Description' field enter the description for your trip.
+		5. Click on 'Post' button.
 	Expected Result: The screen should return to last activity with request just made listed on screen. The driver should be able to see this request if the start location is in the range of his search.
 
 	Test case: US 01.02.01
@@ -136,17 +137,93 @@ Requests
 		5. In driver's main page, click on 'View trip' button, then click on the request in list.
 	Expected Result: For a rider, the information of the driver should pop up. For a driver, the information of the rider should be listed below end location field.
 
-	Test case: 
-	Description:
+	Test case: US 04.01.01
+	Description: As a driver, I want to browse and search for open requests by geo-location.
 	Test Steps: 
-	Expected Result:
+		1. In driver's main page 'search' field, input a location. 
+		2. Click on 'Search' button
+	Expected Result: The list below should be refreshed and filled with requests which has start points near the input location.
 
-	Test case: 
-	Description:
+	Test case: US 04.02.01
+	Description: As a driver, I want to browse and search for open requests by keyword.
 	Test Steps: 
-	Expected Result:
+		1. In driver's main page 'search' field, input keywords.
+		2. Click on 'Search' button.
+	Expected Result: The list below should be refreshed and filled with requests which has description matchs keywords..
 
-	Test case: 
-	Description:
+	Test case: US 05.01.01
+	Description: As a driver,  I want to accept a request I agree with and accept that offered payment upon completion.
 	Test Steps: 
-	Expected Result:
+		1. In driver's main page, search for requests by 'Nearby requests' or 'Search'.
+		2. Click on the request to get into request information page.
+		3. Click one 'Accept' button.
+	Expected Result: The screen should return to driver's main page and the request in list should have a status of 'Accepted'. 
+
+	Test case: US 05.02.01
+	Description: As a driver, I want to view a list of things I have accepted that are pending, each request with its description, and locations.
+	Test Steps: 
+		1. In driver's main page, click on 'View trip' button.
+	Expected Result: All accepted requests should be listed on the screen. Click on any of them gives the information of the request.
+
+	Test case: US 05.03.01
+	Description: As a driver, I want to see if my acceptance was accepted.
+	Test Steps: 
+		1. Driver accept a request. (US 05.01.01)
+		2. Rider confirm a acceptance. (US 01.08.01)
+		3. Driver click on 'View trip' button and get into accepted requests list.
+	Expected Result: confirmed acceptance should be listed with a status of 'Confirmed'.
+
+	Test case: US 05.04.01
+	Description: As a driver, I want to be notified if my ride offer was accepted.
+	Test Steps: 
+		1. Driver accept a request. (US 05.01.01)
+		2. Rider confirm a acceptance. (US 01.08.01)
+	Expected Result: Driver should receive a toast text saying 'New Confirmation received'.
+
+	Test case: US 08.01.01
+	Description: As an driver, I want to see requests that I already accepted while offline.
+	Test Steps: 
+		1. Driver search for a request by 'Nearby requests' or 'Search'.
+		2. Driver's network offline.
+		3. Driver accept a request. (US 05.01.01)
+		4. From driver's main page click on 'View trip' button.
+	Expected Result: The accepted trips should be listed on screen with a status of 'No network available, retrying'.
+
+
+	Test case: US 08.02.01
+	Description: As a rider, I want to see requests that I have made while offline.
+	Test Steps:
+		1. Rider's network offline.
+		2. Rider post a request. (US 01.01.01)
+		3. Click on the request in list.
+	Expected Result: The request should be in list, while the network is offline, the request should have a status of 'Not sent'.
+
+	Test case: US 08.03.01
+	Description: As a rider, I want to make requests that will be sent once I get connectivity again.
+	Test Steps: 
+		1. Rider's network offline.
+		2. Rider post a request. (US 01.01.01)
+		3. Rider's network online.
+	Expected Result: The request should be posted once the network is available and the status should change to 'Waiting for acceptance'.
+
+	Test case: US 08.04.01
+	Description: As a driver, I want to accept requests that will be sent once I get connectivity again.
+	Test Steps: 
+		1. Driver accept a request while offline. (US. 08.01.01)
+		2. Driver network online.
+	Expected Result: The request should be accepted once the network is available as long as the status of request is not 'Confirmed' or 'Trip done'.
+
+	Test case: US 10.01.01
+	Description: As a rider, I want to specify a start and end geo locations on a map for a request.
+	Test Steps: 
+		1. In rider's main page, click on 'Post new request' button.
+		2. Choose 'Choose from map' for start and end location.
+	Expected Result: Geo-location of the rider's choice should become start location and end location.
+
+	Test case: US 10.02.01
+	Description: As a driver, I want to view start and end geo locations on a map for a request.
+	Test Steps: 
+		1. In driver's main page, click on 'View trip' button to get view accepted requests.
+		2. Click on a requests to show information.
+		3. Click on 'Show trip on map' button.
+	Expected Result: A map with start location and end location should be shown on screen.
