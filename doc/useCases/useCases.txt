@@ -1,0 +1,241 @@
+Requests
+	Use Case: US 01.01.01, US 01.02.01, US 01.06.01
+	Participating Actors: Rider
+	Goal: Make a request and check in list.
+	Triger: User click on 'Post request' button
+	Precondition: User log in as rider.
+	Description: As a rider, I want to request rides between two locations, an estimate of a fair fare to offer to drivers, and see current requests I have open.
+	Basic Flow: 
+		1. In the 'Start' field enter a location of start.
+		2. In the 'End' field enter a location of destination
+		3. In the 'Description' field enter the description for your trip.
+		4. Click on 'Post' button.
+		5. Navigate to rider's main screen.
+	Postcondition: On success, the fare should came out on screen when start and end location is filled up. When get back to main screen, the requests including the one just posted should be posted and shown on rider's requests list.
+
+	Use Case: US 01.04.01.01
+	Participating Actors: Rider
+	Goal: Cancel a request
+	Triger: User clicked 'Cancel trip' button.
+	Precondition: The request is posted and no driver accepted yet.
+	Description: As a rider, I want to cancel requests.
+	Basic Flow: 
+		1. Click on the request in requests list.
+		2. Click on 'Cancel Request' button.
+	Postcondition: On success, the request should disappear from the requests list and no driver can see it anymore.
+
+	Use Case: US 01.04.01.02
+	Participating Actors: Rider
+	Goal: Cancel a request
+	Triger: User clicked 'Cancel trip' button
+	Precondition: The request is posted and there's at least one driver accepted.
+	Description: As a rider, I want to cancel requests.
+	Basic Flow: 
+		1. User click on the request in requests list.
+		2. Click on 'Cancel Request' button.
+	Postcondition: On success, the request should disappear from the requests list. Drivers who accepted the request should see the request with a red background in 'View trip' screen. Drivers whod didn't accepted the request should not be able to see this request anymore.
+
+	Use Case: US 01.05.01
+	Participating Actors: Rider
+	Goal: Contact driver
+	Triger: Rider click on 'Call driver' or 'Email driver'.
+	Precondition: Driver accepted the request
+	Description: As a rider, I want to be able to phone or email the driver who accepted a request.
+	Basic Flow: 
+		1. Click on the request.
+		2. Long click on the driver. A menu pop up.
+		3. Click on 'Call driver' in menu.
+	Postcondition: The phone in android machine should come up and dial the number automatically.
+
+	Use Case: US 01.07.01
+	Participating Actors: Rider
+	Goal: Confirm completion
+	Triger: User click on 'Complete trip' button
+	Precondition: Rider confirm an acceptance from driver.
+	Description: As a rider, I want to confirm the completion of a request and enable payment.
+	Basic Flow: 
+		1. Rider click on the request in request list and get into request information page.
+		2. Click on 'Confirm completion' button. A dialog box pop up.
+		3. Click on 'Yes'
+	Postcondition: On success , the status of the request should become 'Trip Done'.
+
+	Use Case: US 01.08.01
+	Participating Actors: Rider
+	Goal: Confirm acceptance
+	Triger: User click on 'Confirm' button.
+	Precondition: At least one driver accept a request.
+	Description: As a rider, I want to confirm a driver's acceptance. This allows us to choose from a list of acceptances if more than 1 driver accepts simultaneously.
+	Basic Flow: 
+		1. Rider post a request. (US 01.01.01)
+		2. More than 1 drivers accept the request. (US 01.03.01)
+		3. Rider click on the request in request list and get into request information page.
+		4. Click on anyone of the drivers. A menu pop up.
+		5. Click on 'Confirm acceptance'.
+	Postcondition: The screen should return to rider's main page. The status of the request should become 'On trip'. The driver should see the request with a status of 'Confirmed'.
+
+Status
+	Use Case: US 02.01.01.01
+	Participating Actors: Rider
+	Goal: Check status of requests
+	Triger: NA
+	Precondition: Rider post request
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
+	Basic Flow: NA
+	Postcondition: In rider's main page, the request shuold be in the list with a status of 'Waiting for acceptance'
+
+	Use Case: US 02.01.01.02
+	Participating Actors: Rider, Driver
+	Goal: Check status of requests
+	Triger: NA
+	Precondition:Driver accept a request.
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
+	Basic Flow: 
+		NA
+	Postcondition: In rider's main page, the request shuold be in the list with a status of 'Accepted'. In driver's 'View trip' page, the request should be in the list with a status of 'Accepted'.
+
+	Use Case: US 02.01.01.03
+	Participating Actors: Rider, Driver
+	Goal: Check status of requests
+	Triger: NA
+	Precondition: Rider confirm a acceptance
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
+	Basic Flow: 
+		NA
+	Postcondition: In rider's main page, the request shuold be in the list with a status of 'Confirmed'. In driver's 'View trip' page, the request should be in the list with a status of 'Confirmed'.
+
+	Use Case: US 02.01.01.04
+	Participating Actors: Rider, Driver
+	Goal: Check status of requests
+	Triger: NA
+	Precondition: Rider complete the trip
+	Description: As a rider or driver, I want to see the status of a request that I am involved in.
+	Basic Flow: 
+		1. Rider confirmed the completion
+	Postcondition: In rider's main page, the request shuold be in the list with a status of 'Trip Done'. In driver's 'View trip' page, the request should be in the list with a status of 'Trip Done'.
+
+User profile
+	Use Case: US 03.01.01
+	Participating Actors: All users
+	Goal: Sign up for account
+	Triger: User click on 'Sign up' button
+	Precondition: NA
+	Description: As a user, I want a profile with a unique username and my contact information.
+	Basic Flow: 
+		1. Start application and get to log in page.
+		2. Click on 'Sign up' button.
+		3. In 'User name' field input user name.
+		4. In 'Password' field input password.
+		5. In 'Phone number' field and 'E-mail' field input phone number and e-mail.
+		6. Click on 'Register' button.
+		7. Click on 'Edit profile' button in menu.
+	Postcondition: The contact information of the user should be present in relatived fields.
+
+	Use Case: US 03.02.01
+	Participating Actors: All users
+	Goal: Edit profile
+	Triger: User click on 'Edit profile' button
+	Precondition: The user signed in
+	Description: As a user, I want to edit the contact information in my profile.
+	Basic Flow: 
+		1. Input new information in relative fields.
+		2. Click on 'Save' button.
+	Postcondition: The contact information of the user should be updated. When clicking 'Edit profile' button again new information should be presented in relative fields.
+
+	Use Case: US 03.03.01
+	Participating Actors: Rider, Driver
+	Goal: Retrieve information
+	Triger: NA
+	Precondition: The user being retrieved is valid
+	Description: As a user, I want to, when a username is presented for a thing, retrieve and show its contact information.
+	Basic Flow: 
+		1. In rider's main page, click on the request to get into the request information page, then click on a driver in list. 
+		2. Select 'Driver's information'
+		3. In driver's main page, click on 'View trip' button, then click on the request in list.
+	Postcondition: For a rider, the information of the driver should pop up. For a driver, the information of the rider should be listed below end location field.
+
+Searching
+	Use Case: US 04.01.01, US 04.02.01
+	Participating Actors: Driver
+	Goal: Search for requests.
+	Triger: Driver Click on 'Search button'.
+	Precondition:
+	Description: As a driver, I want to browse and search for open requests by geo-location or keyword.
+	Basic Flow: 
+		1. In driver's main page 'search' field, input a location or keyword. 
+		2. Click on 'Search' button
+	Postcondition: The list below should be refreshed and filled with requests which has start points near the input location, or those has description matchs keywords.
+
+Accepting
+	Use Case: US 05.01.01, US 01.03.01
+	Participating Actors: Driver, Rider
+	Goal: Driver accept the request and rider get notified.
+	Triger: Driver search for requests.
+	Precondition: Requests are available.
+	Description: As a driver,  I want to accept a request I agree with and accept that offered payment upon completion. As a rider, I want to be notified if my request is accepted.
+	Basic Flow: 
+		1. In driver's main page, search for requests by 'Nearby requests' or 'Search'. System returns a list of requests.
+		2. Click on one of the request to get into request information page.
+		3. Click one 'Accept' button.
+	Postcondition: On success, the driver can see the request he accept in 'View trip' page. Rider got a Toast text notification.
+
+
+	Use Case: US 05.03.01, US 05.04.01
+	Participating Actors: Driver
+	Goal: Check for confirmation
+	Triger: Driver click on 'Accept' button
+	Precondition: Rider pushed requsts
+	Description: As a driver, I want to see if my acceptance was accepted, also I want to be notified.
+	Basic Flow: 
+		1. Driver click on 'View trip' button and get into accepted requests list.
+	Postcondition: When rider confirmed a acceptance, driver should receive a toast text saying 'New Confirmation received'. Confirmed acceptance should be listed with a status of 'Confirmed'.
+
+Offline behavior
+	Use Case: US 08.01.01, US 08.04.01
+	Participating Actors: Driver
+	Goal: Accept request while offline
+	Triger: Driver click 'Accept' button
+	Precondition: Requests available.
+	Description: As an driver, I want to see requests that I already accepted while offline, and I want to accept requests that will be sent once I get connectivity again.
+	Basic Flow: 
+		1. Driver search for a request by 'Nearby requests' or 'Search'.
+		2. Driver's network offline.
+		3. Driver accept a request. (US 05.01.01)
+		4. Driver's network online.
+	Postcondition: The accepted trips should be listed on screen with a status of 'No network available, retrying'. The request should be accepted once the network is available as long as the status of request is not 'Confirmed' or 'Trip done'.
+
+
+	Use Case: US 08.02.01, US 08.03.01
+	Participating Actors: Rider
+	Goal: Post request while offline
+	Triger: Rider click 'Post request' button
+	Precondition: User log in as rider
+	Description: As a rider, I want to see requests that I have made while offline, and make requests that will be sent once I get connectivity again.
+	Basic Flow:
+		1. Rider's network offline.
+		2. Rider post a request. (US 01.01.01)
+		4. Rider's network online.
+	Postcondition: The request should be in list, while the network is offline, the request should have a status of 'Not sent'. The request should be posted once the network is available and the status should change to 'Waiting for acceptance'.
+
+Location
+	Use Case: US 10.01.01
+	Participating Actors: Rider
+	Goal: Select location from map
+	Triger: Rider click 'Post new request'
+	Precondition: User log in as rider
+	Description: As a rider, I want to specify a start and end geo locations on a map for a request.
+	Basic Flow: 
+		1. In rider's main page, click on 'Post new request' button.
+		2. Choose 'Choose from map' for start and end location.
+	Postcondition: Geo-location of the rider's choice should become start location and end location.
+
+	Use Case: US 10.02.01
+	Participating Actors: Driver
+	Goal: Check route through map
+	Triger: Driver click 'View trip' button
+	Precondition: Confirmed trip available
+	Description: As a driver, I want to view start and end geo locations on a map for a request.
+	Basic Flow: 
+		1. In driver's main page, click on 'View trip' button to get view accepted requests.
+		2. Click on a requests to show information.
+		3. Click on 'Show trip on map' button.
+	Postcondition: A map with start location and end location should be shown on screen.
