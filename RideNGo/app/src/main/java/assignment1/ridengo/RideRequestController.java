@@ -21,4 +21,8 @@ public class RideRequestController {
     static public void saveRequestList(){
 
     }
+
+    static public void loadReqeustList(){
+
+    }
 }

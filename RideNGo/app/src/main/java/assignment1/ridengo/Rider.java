@@ -3,16 +3,25 @@ package assignment1.ridengo;
 /**
  * Created by Mingjun on 10/11/2016.
  */
-public class Rider extends User {
+public class Rider{
 
-    public Rider(String username, String password, String email, String phoneNum){
-        super(username, password, email, phoneNum);
+    private RideRequestList requests;
+
+    private User user;
+
+    public void setUser(User user){
+        this.user = user;
     }
 
-    public void postRideRequest(RideRequest request){
+    public User getUser(){
+        return this.user;
+    }
+
+    public void postRideRequest(User user, RideRequest request){
+
         request.setStatus("Posted");
         RideRequestController.getRequestList().addRequest(request);
-        this.getRequests().add(request);
+        requests.addRequest(request);
     }
 
     public void acceptAcception(RideRequest request, Driver driver){

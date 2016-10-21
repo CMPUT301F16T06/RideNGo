@@ -10,7 +10,7 @@ import java.util.List;
 public class RideRequestList {
 
     private static ArrayList<RideRequest> requestList = null;
-    private static final long serialVersionUID = 6673446047991058932L;
+//    private static final long serialVersionUID = 6673446047991058932L;
     protected transient ArrayList<Listener> listeners = null;
 
     public RideRequestList() {
@@ -18,7 +18,7 @@ public class RideRequestList {
         listeners = new ArrayList<Listener>();
     }
 
-    public boolean contains(User testRequest) {
+    public boolean contains(RideRequest testRequest) {
         return requestList.contains(testRequest);
     }
 

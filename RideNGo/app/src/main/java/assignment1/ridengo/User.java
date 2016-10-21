@@ -1,5 +1,6 @@
 package assignment1.ridengo;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,14 +11,14 @@ import java.util.List;
 public class User {
 
     private String username;
-    private String password;
     private String email;
     private String phoneNum;
-    private List<RideRequest> requests;
+    private Rider rider;
+    private Driver driver;
 
-    public User(String username, String password, String email, String phoneNum){
+
+    public User(String username, String email, String phoneNum){
         this.username = username;
-        this.password = password;
         this.email = email;
         this.phoneNum = phoneNum;
     }
@@ -47,5 +48,21 @@ public class User {
             requests = new ArrayList<RideRequest>();
         }
         return this.requests;
+    }
+
+    public void setRider(){
+        rider = new Rider();
+    }
+
+    public Rider getRider(){
+        return this.rider;
+    }
+
+    public void setDriver(){
+        driver = new Driver();
+    }
+
+    public Driver getDriver(){
+        return this.driver;
     }
 }
