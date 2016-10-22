@@ -13,9 +13,8 @@ public class User {
     private String username;
     private String email;
     private String phoneNum;
-    private Rider rider;
-    private Driver driver;
-
+    private UserRider rider;
+    private UserDriver driver;
 
     public User(String username, String email, String phoneNum){
         this.username = username;
@@ -43,26 +42,19 @@ public class User {
         this.phoneNum = newPhoneNum;
     }
 
-    public List<RideRequest> getRequests(){
-        if(requests == null){
-            requests = new ArrayList<RideRequest>();
-        }
-        return this.requests;
-    }
-
     public void setRider(){
-        rider = new Rider();
+        rider = new UserRider(this);
     }
 
-    public Rider getRider(){
+    public UserRider getRider(){
         return this.rider;
     }
 
     public void setDriver(){
-        driver = new Driver();
+        driver = new UserDriver(this);
     }
 
-    public Driver getDriver(){
+    public UserDriver getDriver(){
         return this.driver;
     }
 }

@@ -12,12 +12,12 @@ public class RideRequest {
     private String endPoint;
     private String description;
     private Double fare;
-    private Rider rider;
-    private Driver driver;
+    private UserRider rider;
+    private UserDriver driver;
     private String status;
-    private List<Driver> acceptions = null;
+    private List<UserDriver> acceptions = null;
 
-    public RideRequest(String startPoint, String endPoint, String description, Rider rider, Double fare){
+    public RideRequest(String startPoint, String endPoint, String description, UserRider rider, Double fare){
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
@@ -25,7 +25,7 @@ public class RideRequest {
         this.fare = fare;
     }
 
-    public Rider getRider(){
+    public UserRider getRider(){
         return this.rider;
     }
 
@@ -41,7 +41,7 @@ public class RideRequest {
         return this.description;
     }
 
-    public Driver getDriver(){
+    public UserDriver getDriver(){
         return this.driver;
     }
 
@@ -53,20 +53,20 @@ public class RideRequest {
         return this.status;
     }
 
-    public List<Driver> getAcceptions(){
+    public List<UserDriver> getAcceptions(){
         if(acceptions == null){
-            acceptions = new ArrayList<Driver>();
+            acceptions = new ArrayList<UserDriver>();
         }
         return acceptions;
     }
 
-    public void setDriver(Driver driver){
+    public void setDriver(UserDriver driver){
         this.driver = driver;
     }
 
-    public void addAcception(Driver driver){
+    public void addAcception(UserDriver driver){
         if(acceptions == null){
-            acceptions = new ArrayList<Driver>();
+            acceptions = new ArrayList<UserDriver>();
         }
         acceptions.add(driver);
     }

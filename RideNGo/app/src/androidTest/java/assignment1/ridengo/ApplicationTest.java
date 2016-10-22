@@ -15,129 +15,352 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 
-    public void testUserProfile(){
-        // US 03.01.01
+    public void testUS010101() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS010201() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        rider1.postRideRequest(newRequest1);
+
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest);
+        assertTrue(rider1.isNotified());
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS010401() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+
+        rider1.cancelRequest(newRequest);
+        assertTrue(newRequest.getStatus().equals("Cancelled"));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS010501() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest);
+        assertTrue(rider1.isNotified());
+
+        assertTrue(newRequest.getAcceptions().get(0).getUser().getPhoneNum().equals(user2.getPhoneNum()));
+        assertTrue(newRequest.getAcceptions().get(0).getUser().getEmail().equals(user2.getEmail()));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS010601() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest);
+        assertTrue(rider1.isNotified());
+
+        rider1.acceptAcception(newRequest, newRequest.getAcceptions().get(0));
+        driver2.completeRide(newRequest);
+        assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
+        rider1.completeRide(newRequest);
+        assertTrue(newRequest.getStatus().equals("Completed"));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS010701() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest);
+        assertTrue(rider1.isNotified());
+
+        User user3 = new User("User3", "user3@gmail.com", "8888888888");
+        UserDriver driver3 = new UserDriver(user3);
+        driver3.acceptRequest(newRequest);
+        assertTrue(rider1.isNotified());
+
+        rider1.acceptAcception(newRequest, newRequest.getAcceptions().get(0));
+        assertTrue(newRequest.getDriver().equals(driver2));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS020101() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest));
+        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Posted"));
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest);
+        assertTrue(rider1.isNotified());
+
+        assertTrue(rider1.getRequests().contains(newRequest));
+        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Accepted By Driver"));
+        assertTrue(driver2.getRequests().contains(newRequest));
+        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Accepted By Driver"));
+
+        rider1.acceptAcception(newRequest, driver2);
+        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed"));
+        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed"));
+
+        driver2.completeRide(newRequest);
+        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed Completion"));
+        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed Completion"));
+
+        rider1.completeRide(newRequest);
+        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Completed"));
+        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Completed"));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS030101() {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserList users = UserController.getUserList();
         users.addUser(user1);
         assertTrue(users.contains(user1));
         User user2 = new User("User1", "user1@gmail.com", "8888888888");
-        try{
+        try {
             users.addUser(user2);
             assertTrue("Should not reach here", false);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             assertTrue("User2 not being added", true);
         }
 
-        // US 03.02.01
-        String newEmail = "newUser1@gmail.com";
-        user1.setEmail(newEmail);
-        assertTrue(newEmail.equals(user1.getEmail()));
-
-        String newPhone = "77777777777";
-        user1.setPhoneNum(newPhone);
-        assertTrue(newPhone.equals(user1.getPhoneNum()));
-
-        // US 03.03.01
-        User user3 = new User("User3", "user3@gmail.com", "33333333333");
-        users.addUser(user3);
-        User user = users.getUserByUsername("User3");
-        assertTrue(user.getEmail().equals("user3@gmail.com"));
-        assertTrue(user.getPhoneNum().equals("33333333333"));
-
-        RideRequestController.getRequestList().clear();
         UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
-    public void testRequests(){
-        // US 01.01.01
-        Rider rider1 = new Rider("Rider1", "rider1@gmail.com", "8888888888");
+    public void testUS030201() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserList users = UserController.getUserList();
+        users.addUser(user1);
+        assertTrue(users.contains(user1));
+        String newEmail = "newuser1@gmail.com";
+        user1.setEmail(newEmail);
+        assertTrue(user1.getEmail().equals(newEmail));
+        String newPhone = "9999999999";
+        user1.setPhoneNum(newPhone);
+        assertTrue(user1.getPhoneNum().equals(newPhone));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS030301() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserList users = UserController.getUserList();
+        users.addUser(user1);
+        assertTrue(users.contains(user1));
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        users.addUser(user2);
+        assertTrue(users.contains(user2));
+
+        User user = users.getUserByUsername("User2");
+        assertTrue(user.getPhoneNum().equals(user2.getPhoneNum()));
+        assertTrue(user.getEmail().equals(user2.getEmail()));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS040101() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
         RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
 
-        // US 01.02.01
-        RideRequest request = rider1.getRequests().get(0);
-        assertTrue(request.equals(newRequest));
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
 
-        // US 01.03.01
-        // Notifications not implemented
+        List<RideRequest> requests = driver2.getRequestsByGeoLocation("location");
+        assertTrue(requests.contains(newRequest));
 
-        // US 01.04.01, US 02.01.01
-        rider1.cancelRequest(request);
-        assertTrue(request.getStatus().equals("Cancelled"));
-
-        // US 01.05.01, US 05.01.01
-        Driver driver1 = new Driver("Driver1", "driver1@gmail.com", "77777777777");
-        driver1.acceptRequest(request);
-
-        Driver driver = rider1.getRequests().get(0).getAcceptions().get(0);
-        assertTrue(driver.getUsername().equals("Driver1"));
-        assertTrue(driver.getEmail().equals("driver1@gmail.com"));
-        assertTrue(driver.getPhoneNum().equals("77777777777"));
-
-        // US 01.06.01
-        assertTrue(request.getFare().equals(fare));
-
-        // US 01.08.01, US 05.01.01
-        Driver driver2 = new Driver("Driver2", "driver2@gmail.com", "66666666666");
-        driver2.acceptRequest(request);
-        rider1.acceptAcception(request, driver);
-        assertTrue(request.getDriver().equals(driver1));
-
-        // US 05.03.01
-        assertTrue("Accepted Driver1's Acception", request.getDriver().equals(driver1));
-        assertFalse("Not Accepted Driver2's Acception", request.getDriver().equals(driver2));
-
-        // US 05.02.01
-        List<RideRequest> driver1Requests = driver1.getPendingRequests();
-        RideRequest request1 = driver1Requests.get(0);
-        assertTrue(request1.getStartPoint().equals("Start"));
-        assertTrue(request1.getEndPoint().equals("End"));
-        assertTrue(request1.getDescription().equals("From start to end"));
-
-        // US 01.07.01, US 02.01.01
-        driver1.completeRide(request);
-        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
-        rider1.completeRide(request);
-        assertTrue(request.getStatus().equals("Completed"));
-
-        // US 05.04.01
-        // Notifications not implemented
-
-        RideRequestController.getRequestList().clear();
         UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
-    public void testSearching(){
-        // US 04.01.01
-        // geo-location not implemented
+    public void testUS040201() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
 
-        // US 04.02.01
-        Rider rider1 = new Rider("Rider1", "rider1@gmail.com", "8888888888");
-        RideRequest newRequest1 = new RideRequest("Start1", "end1", "From start1 to end1", rider1, 50.0);
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+
+        List<RideRequest> requests = driver2.getRequestsByKeyword("start");
+        assertTrue(requests.contains(newRequest));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS050101() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
         rider1.postRideRequest(newRequest1);
-        RideRequest newRequest2 = new RideRequest("Start1", "end1", "From start2 to end2", rider1, 50.0);
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest1);
+
+        rider1.acceptAcception(newRequest1, driver2);
+        driver2.completeRide(newRequest1);
+        rider1.completeRide(newRequest1);
+
+        assertTrue("Payment not implemented", false);
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS050201() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        rider1.postRideRequest(newRequest1);
+        RideRequest newRequest2 = new RideRequest("Start2", "End2", "From start2 to end2", rider1, fare);
         rider1.postRideRequest(newRequest2);
 
-        Driver driver1 = new Driver("Driver1", "driver1@gmail.com", "77777777777");
-        driver1.acceptRequest(newRequest1);
-        driver1.acceptRequest(newRequest2);
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest1);
+        driver2.acceptRequest(newRequest2);
 
-        List<RideRequest> search1 = driver1.getRequestsByKeyword("start");
-        assertTrue(search1.size() == 2);
-        List<RideRequest> search2 = driver1.getRequestsByKeyword("start1");
-        assertTrue(search2.size() == 1);
+        assertTrue(driver2.getPendingRequests().contains(newRequest1));
+        assertTrue(driver2.getPendingRequests().contains(newRequest2));
 
-        RideRequestController.getRequestList().clear();
         UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
-    public void testOfflineBehavior(){
-        // Offline behavior not implemented
+    public void testUS050301() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        rider1.postRideRequest(newRequest1);
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest1);
+
+        rider1.acceptAcception(newRequest1, driver2);
+        assertTrue(newRequest1.getDriver().equals(driver2));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
-    public void testLocation(){
-        // Map not implemented
+    public void testUS050401() {
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserRider rider1 = new UserRider(user1);
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        rider1.postRideRequest(newRequest1);
+
+        User user2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserDriver driver2 = new UserDriver(user2);
+        driver2.acceptRequest(newRequest1);
+
+        rider1.acceptAcception(newRequest1, driver2);
+        assertTrue(driver2.isNotified());
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testUS080101() {
+        // Without actually building code for server, runnable test for offline behavior is hard
+        // to write. The basic idea is to use local data to store data and retrieve when offline.
+        assertTrue(false);
+    }
+
+    public void testUS080201() {
+        // Without actually building code for server, runnable test for offline behavior is hard
+        // to write. The basic idea is to use local data to store data and retrieve when offline.
+        assertTrue(false);
+    }
+
+    public void testUS080301() {
+        // Without actually building code for server, runnable test for offline behavior is hard
+        // to write. The basic idea is to use local data to store data and retrieve when offline.
+        assertTrue(false);
+    }
+
+    public void testUS080401() {
+        // Without actually building code for server, runnable test for offline behavior is hard
+        // to write. The basic idea is to use local data to store data and retrieve when offline.
+        assertTrue(false);
+    }
+
+    public void testUS100101() {
+        // Without knowledge of google map api, runnable test for selecting and showing location
+        // on a map
+        assertTrue(false);
+    }
+
+    public void testUS100201() {
+        // Without knowledge of google map api, runnable test for selecting and showing location
+        // on a map
+        assertTrue(false);
     }
 }

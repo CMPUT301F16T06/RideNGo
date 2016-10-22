@@ -2,6 +2,7 @@ package assignment1.ridengo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Mingjun on 10/11/2016.
@@ -41,7 +42,7 @@ public class UserList {
         return listeners;
     }
 
-    public List<User> getUsers() {
+    public ArrayList<User> getUsers() {
         return userList;
     }
 
