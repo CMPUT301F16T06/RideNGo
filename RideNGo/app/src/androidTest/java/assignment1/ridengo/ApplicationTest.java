@@ -17,11 +17,11 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testUserProfile(){
         // US 03.01.01
-        User user1 = new User("User1", "password1", "user1@gmail.com", "8888888888");
+        User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserList users = UserController.getUserList();
         users.addUser(user1);
         assertTrue(users.contains(user1));
-        User user2 = new User("User1", "password2", "user1@gmail.com", "8888888888");
+        User user2 = new User("User1", "user1@gmail.com", "8888888888");
         try{
             users.addUser(user2);
             assertTrue("Should not reach here", false);
@@ -39,7 +39,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(newPhone.equals(user1.getPhoneNum()));
 
         // US 03.03.01
-        User user3 = new User("User3", "password3", "user3@gmail.com", "33333333333");
+        User user3 = new User("User3", "user3@gmail.com", "33333333333");
         users.addUser(user3);
         User user = users.getUserByUsername("User3");
         assertTrue(user.getEmail().equals("user3@gmail.com"));
@@ -51,7 +51,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testRequests(){
         // US 01.01.01
-        Rider rider1 = new Rider("Rider1", "password1", "rider1@gmail.com", "8888888888");
+        Rider rider1 = new Rider("Rider1", "rider1@gmail.com", "8888888888");
         Double fare = 50.0;
         RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
@@ -68,7 +68,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(request.getStatus().equals("Cancelled"));
 
         // US 01.05.01, US 05.01.01
-        Driver driver1 = new Driver("Driver1", "password1", "driver1@gmail.com", "77777777777");
+        Driver driver1 = new Driver("Driver1", "driver1@gmail.com", "77777777777");
         driver1.acceptRequest(request);
 
         Driver driver = rider1.getRequests().get(0).getAcceptions().get(0);
@@ -80,7 +80,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(request.getFare().equals(fare));
 
         // US 01.08.01, US 05.01.01
-        Driver driver2 = new Driver("Driver2", "password2", "driver2@gmail.com", "66666666666");
+        Driver driver2 = new Driver("Driver2", "driver2@gmail.com", "66666666666");
         driver2.acceptRequest(request);
         rider1.acceptAcception(request, driver);
         assertTrue(request.getDriver().equals(driver1));
@@ -114,13 +114,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         // geo-location not implemented
 
         // US 04.02.01
-        Rider rider1 = new Rider("Rider1", "password1", "rider1@gmail.com", "8888888888");
+        Rider rider1 = new Rider("Rider1", "rider1@gmail.com", "8888888888");
         RideRequest newRequest1 = new RideRequest("Start1", "end1", "From start1 to end1", rider1, 50.0);
         rider1.postRideRequest(newRequest1);
         RideRequest newRequest2 = new RideRequest("Start1", "end1", "From start2 to end2", rider1, 50.0);
         rider1.postRideRequest(newRequest2);
 
-        Driver driver1 = new Driver("Driver1", "password1", "driver1@gmail.com", "77777777777");
+        Driver driver1 = new Driver("Driver1", "driver1@gmail.com", "77777777777");
         driver1.acceptRequest(newRequest1);
         driver1.acceptRequest(newRequest2);
 

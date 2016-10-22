@@ -9,7 +9,7 @@ import java.util.Collection;
 public class UserList {
 
     private static ArrayList<User> userList = null;
-    private static final long serialVersionUID = 6673446047991058932L;
+//    private static final long serialVersionUID = 6673446047991058932L;
     protected transient ArrayList<Listener> listeners = null;
 
     public UserList() {
@@ -41,7 +41,7 @@ public class UserList {
         return listeners;
     }
 
-    public Collection<User> getUsers() {
+    public List<User> getUsers() {
         return userList;
     }
 
