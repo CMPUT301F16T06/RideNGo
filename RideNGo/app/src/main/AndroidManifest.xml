@@ -8,13 +8,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".UserInfoActivity" />
+        <activity android:name=".RoleSelectActivity" />
+        <activity android:name=".RiderMainActivity" />
+        <activity android:name=".RiderPostRequestActivity" />
+        <activity android:name=".RiderRequestDetailActivity" />
+        <activity android:name=".DriverMainActivity" />
+        <activity android:name=".DriverRequestDetailActivity" />
+        <activity android:name=".DriverAcceptRequestActivity" />
+        <activity android:name=".DriverAcceptedListActivity"></activity>
     </application>
 
 </manifest>
