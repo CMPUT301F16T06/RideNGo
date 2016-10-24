@@ -1,5 +1,7 @@
 package assignment1.ridengo;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +52,11 @@ public class UserDriver {
 
     }
 
-    public List<RideRequest> getPendingRequests(){
-        List<RideRequest> pendingRequests = new ArrayList<RideRequest>();
+    public RideRequestList getPendingRequests(){
+        RideRequestList pendingRequests = new RideRequestList();
         for(RideRequest request : requests.getRequests()){
             if(request.getStatus().equals("Accepted By Driver")){
-                pendingRequests.add(request);
+                pendingRequests.addRequest(request);
             }
 //            else if(request.getStatus() == "Driver Confirmed" && request.getDriver().equals(this)){
 //                pendingRequests.add(request);
@@ -63,20 +65,20 @@ public class UserDriver {
         return pendingRequests;
     }
 
-    public List<RideRequest> getRequestsByKeyword(String keyword){
-        List<RideRequest> requests = new ArrayList<RideRequest>();
+    public RideRequestList getRequestsByKeyword(String keyword){
+        RideRequestList requests = new RideRequestList();
         for(RideRequest request : RideRequestController.getRequestList().getRequests()){
             if(request.getDescription().contains(keyword)){
                 if(request.getStatus().equals("Posted")) {
-                    requests.add(request);
+                    requests.addRequest(request);
                 }
             }
         }
         return requests;
     }
 
-    public List<RideRequest> getRequestsByGeoLocation(String geoLocation){
-        List<RideRequest> requests = new ArrayList<RideRequest>();
+    public RideRequestList getRequestsByGeoLocation(LatLng geoLocation){
+        RideRequestList requests = new RideRequestList();
         //Code... Don't know how to do.
 
 

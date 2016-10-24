@@ -1,5 +1,10 @@
 package assignment1.ridengo;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,32 +13,34 @@ import java.util.List;
  */
 public class RideRequest {
 
-    private String startPoint;
-    private String endPoint;
+    private LatLng startPoint;
+    private LatLng endPoint;
     private String description;
     private Double fare;
     private UserRider rider;
     private UserDriver driver;
     private String status;
     private List<UserDriver> acceptions = null;
+    private ArrayList<Listener> listeners;
 
-    public RideRequest(String startPoint, String endPoint, String description, UserRider rider, Double fare){
+    public RideRequest(LatLng startPoint, LatLng endPoint, String description, UserRider rider, Double fare){
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
         this.rider = rider;
         this.fare = fare;
+        this.listeners = new ArrayList<Listener>();
     }
 
     public UserRider getRider(){
         return this.rider;
     }
 
-    public String getStartPoint(){
+    public LatLng getStartPoint(){
         return this.startPoint;
     }
 
-    public String getEndPoint(){
+    public LatLng getEndPoint(){
         return this.endPoint;
     }
 
@@ -62,6 +69,7 @@ public class RideRequest {
 
     public void setDriver(UserDriver driver){
         this.driver = driver;
+        notifyListeners();
     }
 
     public void addAcception(UserDriver driver){
@@ -69,9 +77,26 @@ public class RideRequest {
             acceptions = new ArrayList<UserDriver>();
         }
         acceptions.add(driver);
+        notifyListeners();
     }
 
     public void setStatus(String status){
         this.status = status;
+        notifyListeners();
+    }
+
+
+    public void addListener(Listener l){
+        this.listeners.add(l);
+    }
+
+    public void notifyListeners(){
+        for(Listener listener : this.listeners){
+            listener.update();
+        }
+    }
+
+    public void removeListener(Listener l) {
+        this.listeners.remove(l);
     }
 }

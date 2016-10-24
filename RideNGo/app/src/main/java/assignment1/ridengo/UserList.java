@@ -29,10 +29,16 @@ public class UserList {
 
     public void addListener(Listener l) {
         getListeners().add(l);
+        for(User user : this.getUsers()){
+            user.addListener(l);
+        }
     }
 
     public void removeListener(Listener l) {
         getListeners().remove(l);
+        for(User user : this.getUsers()){
+            user.removeListener(l);
+        }
     }
 
     private ArrayList<Listener> getListeners() {

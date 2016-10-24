@@ -4,6 +4,11 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.widget.ArrayAdapter;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +24,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
 
@@ -31,10 +36,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start1 to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
 
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(1, 1), new LatLng(1, 1), "From start1 to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
 
@@ -51,7 +56,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
 
@@ -66,7 +71,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
 
@@ -86,7 +91,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
 
@@ -109,7 +114,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
 
@@ -134,7 +139,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest));
         assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Posted"));
@@ -220,13 +225,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
 
         User user2 = new User("User2", "user2@gmail.com", "8888888888");
         UserDriver driver2 = new UserDriver(user2);
 
-        List<RideRequest> requests = driver2.getRequestsByGeoLocation("location");
+        RideRequestList requests = driver2.getRequestsByGeoLocation(new LatLng(0, 0));
         assertTrue(requests.contains(newRequest));
 
         UserController.getUserList().clear();
@@ -237,13 +242,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest("Start", "End", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
 
         User user2 = new User("User2", "user2@gmail.com", "8888888888");
         UserDriver driver2 = new UserDriver(user2);
 
-        List<RideRequest> requests = driver2.getRequestsByKeyword("start");
+        RideRequestList requests = driver2.getRequestsByKeyword("start");
         assertTrue(requests.contains(newRequest));
 
         UserController.getUserList().clear();
@@ -254,7 +259,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
 
         User user2 = new User("User2", "user2@gmail.com", "8888888888");
@@ -275,9 +280,9 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
-        RideRequest newRequest2 = new RideRequest("Start2", "End2", "From start2 to end2", rider1, fare);
+        RideRequest newRequest2 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest2);
 
         User user2 = new User("User2", "user2@gmail.com", "8888888888");
@@ -296,7 +301,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
 
         User user2 = new User("User2", "user2@gmail.com", "8888888888");
@@ -314,7 +319,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
         UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest("Start1", "End1", "From start1 to end1", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
 
         User user2 = new User("User2", "user2@gmail.com", "8888888888");

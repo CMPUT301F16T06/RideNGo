@@ -24,10 +24,16 @@ public class RideRequestList {
 
     public void addListener(Listener l) {
         getListeners().add(l);
+        for(RideRequest request : requestList){
+            request.addListener(l);
+        }
     }
 
     public void removeListener(Listener l) {
         getListeners().remove(l);
+        for(RideRequest request : requestList){
+            request.removeListener(l);
+        }
     }
 
     private ArrayList<Listener> getListeners() {
