@@ -27,6 +27,15 @@ public class UserList {
         return false;
     }
 
+    public boolean contains(String username) {
+        for(User user : userList){
+            if(username.equals(user.getUsername())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addListener(Listener l) {
         getListeners().add(l);
         for(User user : this.getUsers()){

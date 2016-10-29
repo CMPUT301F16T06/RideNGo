@@ -12,5 +12,40 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/app_name"
+        android:textSize="52sp"
+        android:id="@+id/textView_Title"
+        android:layout_marginTop="106dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_Username"
+        android:text="Username"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/textView_Title"
+        android:layout_alignEnd="@+id/textView_Title" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign In"
+        android:id="@+id/button_MainSignIn"
+        android:layout_below="@+id/editText_Username"
+        android:layout_alignStart="@+id/editText_Username"
+        android:layout_marginTop="57dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:id="@+id/button_SignUp"
+        android:layout_alignTop="@+id/button_MainSignIn"
+        android:layout_marginStart="24dp"
+        android:layout_alignEnd="@+id/editText_Username" />
+
+
 </RelativeLayout>

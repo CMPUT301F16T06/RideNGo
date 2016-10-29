@@ -10,11 +10,12 @@ import java.util.List;
  */
 public class User {
 
+    private String id;
     private String username;
     private String email;
     private String phoneNum;
-    private UserRider rider;
-    private UserDriver driver;
+    private UserRider rider = new UserRider(this);
+    private UserDriver driver = new UserDriver(this);
     private ArrayList<Listener> listeners;
 
     public User(String username, String email, String phoneNum){
@@ -76,5 +77,13 @@ public class User {
 
     public void removeListener(Listener l) {
         this.listeners.remove(l);
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId(){
+        return this.id;
     }
 }
