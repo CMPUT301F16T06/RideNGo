@@ -37,7 +37,7 @@ public class RoleSelectActivity extends Activity {
         });
 
         Button driverButton = (Button) findViewById(R.id.button_Driver);
-        riderButton.setOnClickListener(new View.OnClickListener() {
+        driverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, DriverMainActivity.class);
