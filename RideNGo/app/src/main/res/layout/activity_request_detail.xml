@@ -7,6 +7,90 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".RiderRequestDetailActivity">
+    tools:context="assignment1.ridengo.RiderPostRequestActivity"
+    android:id="@+id/RequestDetailLayout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Request Detail"
+        android:id="@+id/RequestDetailTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Start: "
+        android:id="@+id/RequestDetailStartTextView"
+        android:layout_below="@+id/RequestDetailTextView"
+        android:layout_alignParentStart="false"
+        android:textSize="10pt"
+        android:layout_marginTop="30dp"
+        android:editable="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End:"
+        android:id="@+id/RequestDetialEndTextView"
+        android:textSize="10pt"
+        android:layout_below="@+id/RequestDetailStartTextView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:layout_alignEnd="@+id/RequestDetailStartTextView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:id="@+id/RequestDetailConfirmButton"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/RequestDetailEndPointTextView"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/RequestDetailStartPointTextView"
+        android:layout_alignEnd="@+id/RequestDetailTextView"
+        android:layout_above="@+id/RequestDetialEndTextView"
+        android:layout_toEndOf="@+id/RequestDetailStartTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/RequestDetailEndPointTextView"
+        android:layout_alignTop="@+id/RequestDetialEndTextView"
+        android:layout_alignEnd="@+id/RequestDetailStartPointTextView"
+        android:layout_alignBottom="@+id/RequestDetialEndTextView"
+        android:layout_toEndOf="@+id/RequestDetialEndTextView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel Request"
+        android:id="@+id/RequestDetailCancelRequestButton"
+        android:layout_alignTop="@+id/RequestDetailConfirmButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="30dp" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/RequestDetailListView"
+        android:layout_below="@+id/RequestDetialEndTextView"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/RequestDetailConfirmButton"
+        android:layout_marginTop="30dp" />
 
 </RelativeLayout>

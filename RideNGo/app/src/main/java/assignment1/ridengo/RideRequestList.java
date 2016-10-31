@@ -50,6 +50,16 @@ public class RideRequestList {
         return requestList;
     }
 
+    public List<RideRequest> getRequestsWithRider(String username){
+        List<RideRequest> rideRequests = new ArrayList<RideRequest>();
+        for(RideRequest request: requestList){
+            if(request.getRider().getUser().getUsername().equals(username)){
+                rideRequests.add(request);
+            }
+        }
+        return rideRequests;
+    }
+
     public void addRequest(RideRequest testRequest) {
         requestList.add(testRequest);
         notifyListeners();
@@ -63,6 +73,11 @@ public class RideRequestList {
 
     public void clear() {
         requestList.clear();
+        notifyListeners();
+    }
+
+    public void removeRequest(int index){
+        requestList.remove(index);
         notifyListeners();
     }
 }

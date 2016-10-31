@@ -13,8 +13,12 @@ import java.util.List;
  */
 public class RideRequest {
 
-    private LatLng startPoint;
-    private LatLng endPoint;
+    //private LatLng startPoint;
+    //private LatLng endPoint;
+    private String startPoint;
+    private String endPoint;
+
+
     private String description;
     private Double fare;
     private UserRider rider;
@@ -23,7 +27,7 @@ public class RideRequest {
     private List<UserDriver> acceptions = null;
     private ArrayList<Listener> listeners;
 
-    public RideRequest(LatLng startPoint, LatLng endPoint, String description, UserRider rider, Double fare){
+    public RideRequest(String startPoint, String endPoint, String description, UserRider rider, Double fare){
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
@@ -36,11 +40,17 @@ public class RideRequest {
         return this.rider;
     }
 
-    public LatLng getStartPoint(){
+//    public LatLng getStartPoint(){
+//        return this.startPoint;
+//    }
+//
+//    public LatLng getEndPoint(){
+//        return this.endPoint;
+//    }
+    public String getStartPoint(){
         return this.startPoint;
     }
-
-    public LatLng getEndPoint(){
+    public String getEndPoint(){
         return this.endPoint;
     }
 
@@ -98,5 +108,10 @@ public class RideRequest {
 
     public void removeListener(Listener l) {
         this.listeners.remove(l);
+    }
+
+    public String toString(){
+        String string= "From: "+ getStartPoint() + " to "+ getEndPoint();
+        return string;
     }
 }

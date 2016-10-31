@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText usernameText = (EditText) findViewById(R.id.editText_Username);
+                EditText usernameText = (EditText) findViewById(R.id.edit1);
                 String username = usernameText.getText().toString();
                 if(UserController.getUserList().contains(username)){
                     Intent intent = new Intent(activity, RoleSelectActivity.class);
