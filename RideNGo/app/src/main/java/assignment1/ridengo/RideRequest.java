@@ -17,7 +17,7 @@ public class RideRequest {
     //private LatLng endPoint;
     private String startPoint;
     private String endPoint;
-
+    final private String waitForDriver="Waiting for Driver";
 
     private String description;
     private Double fare;
@@ -33,6 +33,7 @@ public class RideRequest {
         this.description = description;
         this.rider = rider;
         this.fare = fare;
+        this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
     }
 

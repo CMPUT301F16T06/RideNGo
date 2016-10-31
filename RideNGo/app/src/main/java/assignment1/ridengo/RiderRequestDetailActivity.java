@@ -40,6 +40,9 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         TextView endPoint = (TextView) findViewById(R.id.RequestDetailEndPointTextView);
         endPoint.setText(rideRequest.getEndPoint());
 
+        TextView status = (TextView) findViewById(R.id.RequestDetailCurrentStatusTextView);
+        status.setText(rideRequest.getStatus().toString());
+
         ListView listView = (ListView) findViewById(R.id.RequestDetailListView);
 
         List<UserDriver> driverList = rideRequest.getAcceptions();

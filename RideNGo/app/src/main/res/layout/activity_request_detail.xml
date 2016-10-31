@@ -27,10 +27,11 @@
         android:text="Start: "
         android:id="@+id/RequestDetailStartTextView"
         android:layout_below="@+id/RequestDetailTextView"
-        android:layout_alignParentStart="false"
         android:textSize="10pt"
         android:layout_marginTop="30dp"
-        android:editable="false" />
+        android:editable="false"
+        android:layout_alignEnd="@+id/RequestDetialEndTextView"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,9 +40,9 @@
         android:id="@+id/RequestDetialEndTextView"
         android:textSize="10pt"
         android:layout_below="@+id/RequestDetailStartTextView"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="15dp"
-        android:layout_alignEnd="@+id/RequestDetailStartTextView" />
+        android:layout_alignEnd="@+id/RequestDetailStatusTextView"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -88,9 +89,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/RequestDetailListView"
-        android:layout_below="@+id/RequestDetialEndTextView"
+        android:layout_below="@+id/RequestDetailStatusTextView"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/RequestDetailConfirmButton"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status: "
+        android:id="@+id/RequestDetailStatusTextView"
+        android:layout_below="@+id/RequestDetialEndTextView"
+        android:textSize="10pt"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/RequestDetailCurrentStatusTextView"
+        android:layout_alignBottom="@+id/RequestDetailStatusTextView"
+        android:layout_alignEnd="@+id/RequestDetailEndPointTextView"
+        android:layout_toEndOf="@+id/RequestDetailStatusTextView"
+        android:layout_alignTop="@+id/RequestDetailStatusTextView" />
 
 </RelativeLayout>
