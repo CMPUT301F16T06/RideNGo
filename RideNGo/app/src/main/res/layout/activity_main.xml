@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edit1"
-        android:text="Username"
+        android:hint="Username"
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/textView_Title"
         android:layout_alignEnd="@+id/textView_Title" />
