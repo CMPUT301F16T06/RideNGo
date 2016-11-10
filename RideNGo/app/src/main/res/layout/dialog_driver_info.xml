@@ -45,5 +45,5 @@
         android:id="@+id/okButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="OK" />
+        android:text="Confirm Driver" />
 </LinearLayout>
