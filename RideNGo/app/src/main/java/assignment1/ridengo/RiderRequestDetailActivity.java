@@ -65,15 +65,17 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
                 TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
 
-                driverUsername.setText(driverList.get(pos).getUser().getUsername());
-                driverPhone.setText(driverList.get(pos).getUser().getPhoneNum());
-                driverEmail.setText(driverList.get(pos).getUser().getEmail());
+                User driver = rideRequest.getDriver().getUser();
+                driverUsername.setText(driver.getUsername());
+                driverPhone.setText(driver.getPhoneNum());
+                driverEmail.setText(driver.getEmail());
 
 
                 // make this the confirmation button instead?
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 okButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
+                        // TODO: confirm the driver you want
                         onBackPressed();
                     }
                 });
