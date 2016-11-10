@@ -18,6 +18,7 @@ public class RideRequest {
     private String startPoint;
     private String endPoint;
     final private String waitForDriver="Waiting for Driver";
+    final private String waitForConfirmation = "Waiting for Confirmation";
 
     private String description;
     private Double fare;
@@ -88,7 +89,17 @@ public class RideRequest {
             acceptions = new ArrayList<UserDriver>();
         }
         acceptions.add(driver);
+        if(status == waitForDriver){
+            status = waitForConfirmation;
+        }
         notifyListeners();
+    }
+
+    public boolean isAccepted(UserDriver driver){
+        if(getAcceptions().contains(driver)){
+            return true;
+        }
+        return false;
     }
 
     public void setStatus(String status){

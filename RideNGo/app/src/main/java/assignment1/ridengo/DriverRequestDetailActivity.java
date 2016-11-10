@@ -27,6 +27,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
         hash = getIntent().getIntExtra("hash",0);
+        final UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
         rideRequest = RideRequestController.getRequestList().getRequestWithHash(hash);
         getInfo();
 
@@ -35,23 +36,29 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,info);
         requestDetailListView.setAdapter(adapter);
-        acceptButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(DriverRequestDetailActivity.this,"Give him/her a ride!",Toast.LENGTH_SHORT).show();
-                UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
-                RideRequestController.getRequestList().getRequestWithHash(hash).addAcception(driver);
-                finish();
-            }
-        });
+
+        if(rideRequest.isAccepted(driver)){
+            acceptButton.setText("Accepted");
+            acceptButton.setEnabled(false);
+        }
+        else {
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(DriverRequestDetailActivity.this, "Give him/her a ride!", Toast.LENGTH_SHORT).show();
+                    RideRequestController.getRequestList().getRequestWithHash(hash).addAcception(driver);
+                    finish();
+                }
+            });
+        }
         requestDetailListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 if(id == 3){
                     Toast.makeText(DriverRequestDetailActivity.this,"Email rider",Toast.LENGTH_SHORT).show();
                 }
-                else if(id == 4){
-                    Toast.makeText(DriverRequestDetailActivity.this,"Call rider",Toast.LENGTH_SHORT).show();
+                else if(id == 4) {
+                    Toast.makeText(DriverRequestDetailActivity.this, "Call rider", Toast.LENGTH_SHORT).show();
                 }
             }
         });
