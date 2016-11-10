@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,14 +11,37 @@
     tools:context="assignment1.ridengo.DriverMainActivity">
 
     <Button
+        android:text="View Accepted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ViewAcceptedButton"
+        android:layout_below="@+id/FindNearbyButton"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/DriverRequestListView"
+        android:layout_below="@+id/ViewAcceptedButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SearchButton"
+        android:layout_below="@+id/SearchTextView"
+        android:layout_alignStart="@+id/FindNearbyButton"
+        android:layout_alignEnd="@+id/FindNearbyButton" />
+
+    <Button
         android:text="Find Nearby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/findNearbyButton"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/searchTextView"
-        android:layout_alignEnd="@+id/viewAcceptedButton"
-        android:layout_alignStart="@+id/viewAcceptedButton" />
+        android:id="@+id/FindNearbyButton"
+        android:layout_below="@+id/SearchButton"
+        android:layout_alignEnd="@+id/ViewAcceptedButton"
+        android:layout_alignStart="@+id/ViewAcceptedButton" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -25,23 +49,8 @@
         android:inputType="textPersonName"
         android:hint="Search"
         android:ems="10"
-        android:id="@+id/searchTextView"
-        android:layout_marginTop="41dp"
+        android:id="@+id/SearchTextView"
+        android:layout_marginTop="23dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="View Accepted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/viewAcceptedButton"
-        android:layout_below="@+id/findNearbyButton"
-        android:layout_centerHorizontal="true" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/requestListView"
-        android:layout_below="@+id/viewAcceptedButton"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

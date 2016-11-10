@@ -60,6 +60,15 @@ public class RideRequestList {
         return rideRequests;
     }
 
+    public RideRequest getRequestWithHash(int h){
+        for(RideRequest rideRequest: requestList){
+            if(rideRequest.hashCode() == h){
+                return rideRequest;
+            }
+        }
+        return null;
+    }
+
     public void addRequest(RideRequest testRequest) {
         requestList.add(testRequest);
         notifyListeners();
@@ -79,5 +88,24 @@ public class RideRequestList {
     public void removeRequest(int index){
         requestList.remove(index);
         notifyListeners();
+    }
+
+    //////////////Temp Test Case/////////////
+    public void addTestCase(){
+        User user1 = new User("A","a@example.com","7800000000");
+        UserRider rider1 = new UserRider(user1);
+        RideRequest test1 = new RideRequest("Uni","100St","Have fun",rider1,10.00);
+        User user2 = new User("A","a@example.com","7800000000");
+        UserRider rider2 = new UserRider(user1);
+        RideRequest test2 = new RideRequest("Uni","101St","Have fun",rider1,20.00);
+        requestList.add(test1);
+        requestList.add(test2);
+    }
+    public List<RideRequest> getTestRequests(){
+        addTestCase();
+        if(requestList == null){
+            requestList = new ArrayList<RideRequest>();
+        }
+        return requestList;
     }
 }
