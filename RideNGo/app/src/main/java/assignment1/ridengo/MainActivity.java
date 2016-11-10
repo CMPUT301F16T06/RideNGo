@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "User not exits.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "User does not exist.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

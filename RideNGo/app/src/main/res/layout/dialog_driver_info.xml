@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Driver Username:"
+        android:id="@+id/driverUserText" />
+
+    <TextView
+        android:id="@+id/driverUsername"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#0086b3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone #:"
+        android:id="@+id/driverPhoneText" />
+
+    <TextView
+        android:id="@+id/driverPhone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="phone"
+        android:textColor="#0086b3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:id="@+id/driverEmailText" />
+
+    <TextView
+        android:id="@+id/driverEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="email"
+        android:textColor="#0086b3" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="OK" />
+</LinearLayout>

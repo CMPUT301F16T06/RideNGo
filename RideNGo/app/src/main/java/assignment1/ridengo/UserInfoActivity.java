@@ -45,7 +45,7 @@ public class UserInfoActivity extends Activity {
                     startActivity(intent);
                 }
                 catch (RuntimeException e){
-                    Toast.makeText(getApplicationContext(), "User Already Exits.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "User Already Exists.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

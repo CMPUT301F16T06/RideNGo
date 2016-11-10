@@ -33,7 +33,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
 
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
         description="Test";
-        fare = 50.0;
+        fare = 50.00;
 
         estimatedFare.setText("$"+fare);
 
