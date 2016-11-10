@@ -17,7 +17,7 @@ public class DriverMainActivity extends Activity {
     private String username;
     final Activity activity = this;
     private ArrayAdapter<RideRequest> adapter;
-    private ArrayList<RideRequest> tempTestList = new ArrayList<RideRequest>();
+    List<RideRequest> rideRequestList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,7 @@ public class DriverMainActivity extends Activity {
         Button findNearbyButton = (Button) findViewById(R.id.FindNearbyButton);
         Button viewAcceptedButton = (Button) findViewById(R.id.ViewAcceptedButton);
         ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
-        final List<RideRequest> rideRequestList = RideRequestController.getRequestList().getTestRequests();
+        rideRequestList = RideRequestController.getRequestList().getRequests(); //.getTestRequests();
         adapter = new ArrayAdapter<RideRequest>(activity,android.R.layout.simple_list_item_1,rideRequestList);
         requestListView.setAdapter(adapter);
 
@@ -60,8 +60,7 @@ public class DriverMainActivity extends Activity {
             public void onClick(View v){
                 //TODO
             }
-         });
-         */
+         });*/
 
         requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

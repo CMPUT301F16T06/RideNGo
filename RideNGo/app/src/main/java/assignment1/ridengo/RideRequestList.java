@@ -60,6 +60,17 @@ public class RideRequestList {
         return rideRequests;
     }
 
+    public List<RideRequest> getRequestsWithDriver(String username){
+        List<RideRequest> rideRequests = new ArrayList<RideRequest>();
+        UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
+        for(RideRequest request: requestList){
+            if(request.getAcceptions().contains(driver)){
+                rideRequests.add(request);
+            }
+        }
+        return rideRequests;
+    }
+
     public RideRequest getRequestWithHash(int h){
         for(RideRequest rideRequest: requestList){
             if(rideRequest.hashCode() == h){
