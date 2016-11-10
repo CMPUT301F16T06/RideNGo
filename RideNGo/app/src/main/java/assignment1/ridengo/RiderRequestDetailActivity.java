@@ -51,6 +51,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<UserDriver>(activity, android.R.layout.simple_list_item_1, driverList);
         listView.setAdapter(adapter);
 
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
@@ -61,22 +62,22 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
                 // get info on that driver at that position
                 // fill in username, phone, email
+
                 TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
                 TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
                 TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
 
-                User driver = rideRequest.getDriver().getUser();
-                driverUsername.setText(driver.getUsername());
-                driverPhone.setText(driver.getPhoneNum());
-                driverEmail.setText(driver.getEmail());
+                driverUsername.setText(driverList.get(pos).getUser().getUsername());
+                driverPhone.setText(driverList.get(pos).getUser().getPhoneNum());
+                driverEmail.setText(driverList.get(pos).getUser().getEmail());
 
-
-                // make this the confirmation button instead?
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 okButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         // TODO: confirm the driver you want
-                        onBackPressed();
+                        UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
+                        rideRequest.getRider().acceptAcception(rideRequest,driver);
+                        finish();
                     }
                 });
                 dialog.show();

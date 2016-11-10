@@ -84,4 +84,10 @@ public class UserDriver {
 
         return requests;
     }
+
+    // Display driver username
+    @Override
+    public String toString(){
+        return user.getUsername();
+    }
 }
