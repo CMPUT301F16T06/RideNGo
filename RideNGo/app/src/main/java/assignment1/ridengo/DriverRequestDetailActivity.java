@@ -14,15 +14,18 @@ import java.util.ArrayList;
 
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
+    private String username;
     private int hash;
     private ArrayAdapter<String> adapter;
     private RideRequest rideRequest;
     private ArrayList<String> info = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_request_detail);
 
+        username = getIntent().getStringExtra("username");
         hash = getIntent().getIntExtra("hash",0);
         rideRequest = RideRequestController.getRequestList().getRequestWithHash(hash);
         getInfo();
@@ -36,6 +39,9 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Toast.makeText(DriverRequestDetailActivity.this,"Give him/her a ride!",Toast.LENGTH_SHORT).show();
+                UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
+                RideRequestController.getRequestList().getRequestWithHash(hash).addAcception(driver);
+                finish();
             }
         });
         requestDetailListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){

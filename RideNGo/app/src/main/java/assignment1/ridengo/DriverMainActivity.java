@@ -68,6 +68,7 @@ public class DriverMainActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent intent = new Intent(activity, DriverRequestDetailActivity.class);
                 int hash = rideRequestList.get((int)id).hashCode();
+                intent.putExtra("username",username);
                 intent.putExtra("hash", hash);
                 startActivity(intent);
             }
