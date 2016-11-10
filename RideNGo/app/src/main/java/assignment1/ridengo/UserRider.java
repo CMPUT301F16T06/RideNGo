@@ -47,10 +47,12 @@ public class UserRider{
     }
 
     public void completeRide(RideRequest request){
-        if(request.getStatus().equals("Driver Confirmed Completion")){
-            request.setStatus("Completed");
-            payDriver(request);
-        }
+//        if(request.getStatus().equals("Driver Confirmed Completion")){
+//            request.setStatus("Completed");
+//            payDriver(request);
+//        }
+        request.setStatus("Completed");
+        payDriver(request);
     }
 
     private void payDriver(RideRequest request){

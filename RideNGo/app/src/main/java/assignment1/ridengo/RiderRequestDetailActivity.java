@@ -42,7 +42,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         TextView endPoint = (TextView) findViewById(R.id.RequestDetailEndPointTextView);
         endPoint.setText(rideRequest.getEndPoint());
 
-        TextView status = (TextView) findViewById(R.id.RequestDetailCurrentStatusTextView);
+        final TextView status = (TextView) findViewById(R.id.RequestDetailCurrentStatusTextView);
         status.setText(rideRequest.getStatus().toString());
 
         final ListView listView = (ListView) findViewById(R.id.RequestDetailListView);
@@ -52,10 +52,10 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos, long arg) {
+            public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
                 Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
                 dialog.setTitle("Driver Information");
                 dialog.setContentView(R.layout.dialog_driver_info);
@@ -72,16 +72,20 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 driverEmail.setText(driverList.get(pos).getUser().getEmail());
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
-                okButton.setOnClickListener(new View.OnClickListener(){
-                    public void onClick(View v){
-                        // TODO: confirm the driver you want
-                        UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
-                        rideRequest.getRider().acceptAcception(rideRequest,driver);
-                        finish();
-                    }
-                });
+                if (!rideRequest.getStatus().equals("Waiting for Confirmation")) {
+                    okButton.setEnabled(false);
+                }
+                else{
+                    okButton.setOnClickListener(new View.OnClickListener(){
+                        public void onClick(View v){
+                            UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
+                            rideRequest.getRider().acceptAcception(rideRequest,driver);
+                            finish();
+                        }
+                    });
+                }
+
                 dialog.show();
-                return true;
             }
 
         });
@@ -96,16 +100,20 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         });
 
         Button confirmButton = (Button) findViewById(R.id.RequestDetailConfirmButton);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
 
-          
+        if (!rideRequest.getStatus().equals("Driver Confirmed")){
+            confirmButton.setEnabled(false);
+        }
+        else{
+            confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rideRequest.getRider().completeRide(rideRequest);
+                    finish();
+                }
 
-
-        });
+            });
+        }
 
 
     }
