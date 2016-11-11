@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * The type Role select activity.
+ */
 public class RoleSelectActivity extends Activity {
 
     @Override

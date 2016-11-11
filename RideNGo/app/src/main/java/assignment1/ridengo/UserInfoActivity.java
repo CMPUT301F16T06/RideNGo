@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * The type User info activity.
+ */
 public class UserInfoActivity extends Activity {
 
     @Override

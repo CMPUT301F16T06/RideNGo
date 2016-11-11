@@ -15,9 +15,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * The type Rider main activity.
+ */
 public class RiderMainActivity extends AppCompatActivity {
 
     private String username;
+    /**
+     * The Activity.
+     */
     final Activity activity = this;
     private ArrayAdapter<RideRequest> adapter;
     @Override

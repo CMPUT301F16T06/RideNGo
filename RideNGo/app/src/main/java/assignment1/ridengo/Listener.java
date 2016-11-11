@@ -1,8 +1,11 @@
 package assignment1.ridengo;
 
 /**
- * Created by Mingjun on 10/11/2016.
+ * The interface Listener.
  */
 public interface Listener {
+    /**
+     * Update.
+     */
     public void update();
 }

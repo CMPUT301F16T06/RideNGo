@@ -13,10 +13,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Driver main activity.
+ */
 public class DriverMainActivity extends Activity {
     private String username;
+    /**
+     * The Activity.
+     */
     final Activity activity = this;
     private ArrayAdapter<RideRequest> adapter;
+    /**
+     * The Ride request list.
+     */
     List<RideRequest> rideRequestList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

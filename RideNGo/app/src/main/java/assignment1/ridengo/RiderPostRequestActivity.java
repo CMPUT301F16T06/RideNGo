@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * The type Rider post request activity.
+ */
 public class RiderPostRequestActivity extends AppCompatActivity {
 
     private String startPoint;
@@ -20,6 +23,9 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private Double fare;
     final private Activity activity = this;
 
+    /**
+     * The Ride request controller.
+     */
     RideRequestController rideRequestController = new RideRequestController();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -17,6 +17,9 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Rider request detail activity.
+ */
 public class RiderRequestDetailActivity extends AppCompatActivity {
 
     private ArrayAdapter<UserDriver> adapter;
@@ -24,6 +27,9 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
     private int position;
     private RideRequest rideRequest;
 
+    /**
+     * The Activity.
+     */
     final Activity activity = this;
 
     @Override
