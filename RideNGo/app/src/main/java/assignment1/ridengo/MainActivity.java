@@ -1,3 +1,4 @@
+
 package assignment1.ridengo;
 
 import android.app.Activity;
@@ -8,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends Activity {
 
     @Override

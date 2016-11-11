@@ -5,23 +5,40 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by Mingjun on 10/11/2016.
+ * The type Ride request list.
  */
 public class RideRequestList {
 
     private ArrayList<RideRequest> requestList = null;
+    /**
+     * The constant listeners.
+     */
 //    private static final long serialVersionUID = 6673446047991058932L;
     protected transient ArrayList<Listener> listeners = null;
 
+    /**
+     * Instantiates a new Ride request list.
+     */
     public RideRequestList() {
         requestList = new ArrayList<RideRequest>();
         listeners = new ArrayList<Listener>();
     }
 
+    /**
+     * Contains boolean.
+     *
+     * @param testRequest the test request
+     * @return the boolean
+     */
     public boolean contains(RideRequest testRequest) {
         return requestList.contains(testRequest);
     }
 
+    /**
+     * Add listener.
+     *
+     * @param l the l
+     */
     public void addListener(Listener l) {
         getListeners().add(l);
         for(RideRequest request : requestList){
@@ -29,6 +46,11 @@ public class RideRequestList {
         }
     }
 
+    /**
+     * Remove listener.
+     *
+     * @param l the l
+     */
     public void removeListener(Listener l) {
         getListeners().remove(l);
         for(RideRequest request : requestList){
@@ -43,6 +65,11 @@ public class RideRequestList {
         return listeners;
     }
 
+    /**
+     * Gets requests.
+     *
+     * @return the requests
+     */
     public List<RideRequest> getRequests() {
         if(requestList == null){
             requestList = new ArrayList<RideRequest>();
@@ -50,6 +77,12 @@ public class RideRequestList {
         return requestList;
     }
 
+    /**
+     * Get requests with rider list.
+     *
+     * @param username the username
+     * @return the list
+     */
     public List<RideRequest> getRequestsWithRider(String username){
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
         for(RideRequest request: requestList){
@@ -60,6 +93,12 @@ public class RideRequestList {
         return rideRequests;
     }
 
+    /**
+     * Get requests with driver list.
+     *
+     * @param username the username
+     * @return the list
+     */
     public List<RideRequest> getRequestsWithDriver(String username){
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
         UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
@@ -71,6 +110,12 @@ public class RideRequestList {
         return rideRequests;
     }
 
+    /**
+     * Get request with hash ride request.
+     *
+     * @param h the h
+     * @return the ride request
+     */
     public RideRequest getRequestWithHash(int h){
         for(RideRequest rideRequest: requestList){
             if(rideRequest.hashCode() == h){
@@ -80,6 +125,11 @@ public class RideRequestList {
         return null;
     }
 
+    /**
+     * Add request.
+     *
+     * @param testRequest the test request
+     */
     public void addRequest(RideRequest testRequest) {
         requestList.add(testRequest);
         notifyListeners();
@@ -91,17 +141,28 @@ public class RideRequestList {
         }
     }
 
+    /**
+     * Clear.
+     */
     public void clear() {
         requestList.clear();
         notifyListeners();
     }
 
+    /**
+     * Remove request.
+     *
+     * @param index the index
+     */
     public void removeRequest(int index){
         requestList.remove(index);
         notifyListeners();
     }
 
-    //////////////Temp Test Case/////////////
+    /**
+     * Add test case.
+     */
+//////////////Temp Test Case/////////////
     public void addTestCase(){
         User user1 = new User("A","a@example.com","7800000000");
         UserRider rider1 = new UserRider(user1);
@@ -112,6 +173,12 @@ public class RideRequestList {
         requestList.add(test1);
         requestList.add(test2);
     }
+
+    /**
+     * Get test requests list.
+     *
+     * @return the list
+     */
     public List<RideRequest> getTestRequests(){
         addTestCase();
         if(requestList == null){

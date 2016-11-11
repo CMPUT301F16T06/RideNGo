@@ -8,6 +8,9 @@ import android.os.Bundle;
 Driver accept requests in request detail activity
 */
 
+/**
+ * The type Driver accept request activity.
+ */
 public class DriverAcceptRequestActivity extends AppCompatActivity {
 
     @Override

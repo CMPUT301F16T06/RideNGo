@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * The type Driver request detail activity.
+ */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
     private String username;
@@ -64,6 +67,9 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get info.
+     */
     public void getInfo(){
         info.clear();
         User rider = rideRequest.getRider().getUser();

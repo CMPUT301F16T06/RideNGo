@@ -16,14 +16,19 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Created by Mingjun on 10/11/2016.
+ * The type User controller.
  */
 public class UserController {
 
     private static JestDroidClient client;
     private static UserList userList = null;
 
-    // To implement load from file or server
+    /**
+     * Get user list user list.
+     *
+     * @return the user list
+     */
+// To implement load from file or server
     static public UserList getUserList(){
         /*
         If(online){
@@ -38,15 +43,24 @@ public class UserController {
         return userList;
     }
 
-    // Save current user list
+    /**
+     * Save user list.
+     */
+// Save current user list
     static public void saveUserList(){
         //Save to server.
     }
 
+    /**
+     * Load user list from server.
+     */
     static public void loadUserListFromServer(){
 
     }
 
+    /**
+     * The type Get users task.
+     */
     public static class GetUsersTask extends AsyncTask<String, Void, ArrayList<User>> {
         @Override
         protected ArrayList<User> doInBackground(String... search_parameters) {
@@ -83,7 +97,10 @@ public class UserController {
     }
 
 
-    // TODO we need a function which adds a tweet!
+    /**
+     * The type Add users task.
+     */
+// TODO we need a function which adds a tweet!
     public static class AddUsersTask extends AsyncTask<User, Void, Void> {
 
         @Override

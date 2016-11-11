@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mingjun on 10/11/2016.
+ * The type User driver.
  */
 public class UserDriver {
 
@@ -14,27 +14,57 @@ public class UserDriver {
     private boolean isNotified;
     private User user;
 
+    /**
+     * Instantiates a new User driver.
+     *
+     * @param user the user
+     */
     public UserDriver(User user){
         this.user = user;
         this.requests = new RideRequestList();
     }
 
+    /**
+     * Set notified.
+     *
+     * @param notify the notify
+     */
     public void setNotified(boolean notify){
         this.isNotified = notify;
     }
 
+    /**
+     * Is notified boolean.
+     *
+     * @return the boolean
+     */
     public boolean isNotified(){
         return this.isNotified;
     }
 
+    /**
+     * Get user user.
+     *
+     * @return the user
+     */
     public User getUser(){
         return this.user;
     }
 
+    /**
+     * Get requests ride request list.
+     *
+     * @return the ride request list
+     */
     public RideRequestList getRequests(){
         return this.requests;
     }
 
+    /**
+     * Accept request.
+     *
+     * @param request the request
+     */
     public void acceptRequest(RideRequest request){
         request.addAcception(this);
         request.setStatus("Accepted By Driver");
@@ -42,6 +72,11 @@ public class UserDriver {
         request.getRider().setNotified(true);
     }
 
+    /**
+     * Complete ride.
+     *
+     * @param request the request
+     */
     public void completeRide(RideRequest request){
         request.setStatus("Driver Confirmed Completion");
         // receive payment
@@ -52,6 +87,11 @@ public class UserDriver {
 
     }
 
+    /**
+     * Get pending requests ride request list.
+     *
+     * @return the ride request list
+     */
     public RideRequestList getPendingRequests(){
         RideRequestList pendingRequests = new RideRequestList();
         for(RideRequest request : requests.getRequests()){
@@ -65,6 +105,12 @@ public class UserDriver {
         return pendingRequests;
     }
 
+    /**
+     * Get requests by keyword ride request list.
+     *
+     * @param keyword the keyword
+     * @return the ride request list
+     */
     public RideRequestList getRequestsByKeyword(String keyword){
         RideRequestList requests = new RideRequestList();
         for(RideRequest request : RideRequestController.getRequestList().getRequests()){
@@ -77,6 +123,12 @@ public class UserDriver {
         return requests;
     }
 
+    /**
+     * Get requests by geo location ride request list.
+     *
+     * @param geoLocation the geo location
+     * @return the ride request list
+     */
     public RideRequestList getRequestsByGeoLocation(LatLng geoLocation){
         RideRequestList requests = new RideRequestList();
         //Code... Don't know how to do.

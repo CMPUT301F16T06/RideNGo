@@ -19,10 +19,16 @@ import java.util.List;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.GRAY;
 
+/**
+ * The type Driver accepted list activity.
+ */
 public class DriverAcceptedListActivity extends AppCompatActivity {
 
     private String username;
     private ArrayAdapter<RideRequest> adapter;
+    /**
+     * The Activity.
+     */
     final Activity activity = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mingjun on 10/11/2016.
+ * The type Ride request.
  */
 public class RideRequest {
 
@@ -31,6 +31,15 @@ public class RideRequest {
     private List<UserDriver> acceptions = null;
     private ArrayList<Listener> listeners;
 
+    /**
+     * Instantiates a new Ride request.
+     *
+     * @param startPoint  the start point
+     * @param endPoint    the end point
+     * @param description the description
+     * @param rider       the rider
+     * @param fare        the fare
+     */
     public RideRequest(String startPoint, String endPoint, String description, UserRider rider, Double fare){
         this.startPoint = startPoint;
         this.endPoint = endPoint;
@@ -41,10 +50,20 @@ public class RideRequest {
         this.listeners = new ArrayList<Listener>();
     }
 
+    /**
+     * Get rider user rider.
+     *
+     * @return the user rider
+     */
     public UserRider getRider(){
         return this.rider;
     }
 
+    /**
+     * Gets start point.
+     *
+     * @return the start point
+     */
 //    public LatLng getStartPoint(){
 //        return this.startPoint;
 //    }
@@ -55,26 +74,57 @@ public class RideRequest {
     public String getStartPoint(){
         return this.startPoint;
     }
+
+    /**
+     * Get end point string.
+     *
+     * @return the string
+     */
     public String getEndPoint(){
         return this.endPoint;
     }
 
+    /**
+     * Get description string.
+     *
+     * @return the string
+     */
     public String getDescription(){
         return this.description;
     }
 
+    /**
+     * Get driver user driver.
+     *
+     * @return the user driver
+     */
     public UserDriver getDriver(){
         return this.driver;
     }
 
+    /**
+     * Get fare double.
+     *
+     * @return the double
+     */
     public Double getFare(){
         return this.fare;
     }
 
+    /**
+     * Get status string.
+     *
+     * @return the string
+     */
     public String getStatus(){
         return this.status;
     }
 
+    /**
+     * Get acceptions list.
+     *
+     * @return the list
+     */
     public List<UserDriver> getAcceptions(){
         if(acceptions == null){
             acceptions = new ArrayList<UserDriver>();
@@ -82,12 +132,22 @@ public class RideRequest {
         return acceptions;
     }
 
+    /**
+     * Set driver.
+     *
+     * @param driver the driver
+     */
     public void setDriver(UserDriver driver){
         this.driver = driver;
         setStatus(tripConfirmed);
         notifyListeners();
     }
 
+    /**
+     * Add acception.
+     *
+     * @param driver the driver
+     */
     public void addAcception(UserDriver driver){
         if(acceptions == null){
             acceptions = new ArrayList<UserDriver>();
@@ -99,6 +159,12 @@ public class RideRequest {
         notifyListeners();
     }
 
+    /**
+     * Is accepted boolean.
+     *
+     * @param driver the driver
+     * @return the boolean
+     */
     public boolean isAccepted(UserDriver driver){
         if(getAcceptions().contains(driver)){
             return true;
@@ -120,6 +186,11 @@ public class RideRequest {
         setStatus(tripCompleted);
     }
 
+    /**
+     * Set status.
+     *
+     * @param status the status
+     */
     public void setStatus(String status){
         this.status = status;
 //        if(this.status.equals(tripConfirmed)){
@@ -129,16 +200,29 @@ public class RideRequest {
     }
 
 
+    /**
+     * Add listener.
+     *
+     * @param l the l
+     */
     public void addListener(Listener l){
         this.listeners.add(l);
     }
 
+    /**
+     * Notify listeners.
+     */
     public void notifyListeners(){
         for(Listener listener : this.listeners){
             listener.update();
         }
     }
 
+    /**
+     * Remove listener.
+     *
+     * @param l the l
+     */
     public void removeListener(Listener l) {
         this.listeners.remove(l);
     }
