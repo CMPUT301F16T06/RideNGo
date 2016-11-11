@@ -33,6 +33,7 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
 
         ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
         final List<RideRequest> requestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
+
         adapter = new ArrayAdapter<RideRequest>(this,android.R.layout.simple_list_item_1,requestList){
             @Override
             public View getView(int position, View convertView, ViewGroup parent){
@@ -45,9 +46,17 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
                 }
                 RideRequest request = requestList.get(position);
                 row.getText1().setText(request.toString());
-                row.getText1().setTextColor(BLACK);
-                row.getText2().setText(request.getStatus());
-                row.getText2().setTextColor(GRAY);
+                if(!request.isDriver(username)){
+                    row.getText1().setTextColor(GRAY);
+                    Toast.makeText(DriverAcceptedListActivity.this,request.getDriver() + "," + request.isDriver(username),Toast.LENGTH_SHORT).show();
+                    row.getText2().setText("Request on trip, customer has picked another driver.");
+                    row.getText2().setTextColor(GRAY);
+                }
+                else {
+                    row.getText1().setTextColor(BLACK);
+                    row.getText2().setText(request.getStatus());
+                    row.getText2().setTextColor(GRAY);
+                }
                 return row;
             }
         };

@@ -2,15 +2,8 @@ package assignment1.ridengo;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
-import android.widget.ArrayAdapter;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
@@ -100,7 +93,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         driver2.acceptRequest(newRequest);
         assertTrue(rider1.isNotified());
 
-        rider1.acceptAcception(newRequest, newRequest.getAcceptions().get(0));
+        rider1.confirmAcception(newRequest, newRequest.getAcceptions().get(0));
         driver2.completeRide(newRequest);
         assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
         rider1.completeRide(newRequest);
@@ -128,7 +121,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         driver3.acceptRequest(newRequest);
         assertTrue(rider1.isNotified());
 
-        rider1.acceptAcception(newRequest, newRequest.getAcceptions().get(0));
+        rider1.confirmAcception(newRequest, newRequest.getAcceptions().get(0));
         assertTrue(newRequest.getDriver().equals(driver2));
 
         UserController.getUserList().clear();
@@ -154,7 +147,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(driver2.getRequests().contains(newRequest));
         assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Accepted By Driver"));
 
-        rider1.acceptAcception(newRequest, driver2);
+        rider1.confirmAcception(newRequest, driver2);
         assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed"));
         assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed"));
 
@@ -266,7 +259,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserDriver driver2 = new UserDriver(user2);
         driver2.acceptRequest(newRequest1);
 
-        rider1.acceptAcception(newRequest1, driver2);
+        rider1.confirmAcception(newRequest1, driver2);
         driver2.completeRide(newRequest1);
         rider1.completeRide(newRequest1);
 
@@ -308,7 +301,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserDriver driver2 = new UserDriver(user2);
         driver2.acceptRequest(newRequest1);
 
-        rider1.acceptAcception(newRequest1, driver2);
+        rider1.confirmAcception(newRequest1, driver2);
         assertTrue(newRequest1.getDriver().equals(driver2));
 
         UserController.getUserList().clear();
@@ -326,7 +319,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserDriver driver2 = new UserDriver(user2);
         driver2.acceptRequest(newRequest1);
 
-        rider1.acceptAcception(newRequest1, driver2);
+        rider1.confirmAcception(newRequest1, driver2);
         assertTrue(driver2.isNotified());
 
         UserController.getUserList().clear();

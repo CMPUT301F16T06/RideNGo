@@ -19,6 +19,9 @@ public class RideRequest {
     private String endPoint;
     final private String waitForDriver="Waiting for Driver";
     final private String waitForConfirmation = "Waiting for Confirmation";
+    final private String tripConfirmed = "Driver Confirmed";
+    final private String tripCompleted = "Trip Completed";
+    final private String requestCanceled = "Request canceled";
 
     private String description;
     private Double fare;
@@ -81,6 +84,7 @@ public class RideRequest {
 
     public void setDriver(UserDriver driver){
         this.driver = driver;
+        setStatus(tripConfirmed);
         notifyListeners();
     }
 
@@ -90,7 +94,7 @@ public class RideRequest {
         }
         acceptions.add(driver);
         if(status == waitForDriver){
-            status = waitForConfirmation;
+            setStatus(waitForConfirmation);
         }
         notifyListeners();
     }
@@ -102,8 +106,25 @@ public class RideRequest {
         return false;
     }
 
+    public boolean isDriver(String username){
+        if(getDriver() == null){
+            return true;
+        }
+        else if(getDriver().getUser().getUsername().equals(username)){
+            return true;
+        }
+        return false;
+    }
+
+    public void completeTrip(){
+        setStatus(tripCompleted);
+    }
+
     public void setStatus(String status){
         this.status = status;
+//        if(this.status.equals(tripConfirmed)){
+//            this.status = this.status + ", Driver is " + getDriver().toString();
+//        }
         notifyListeners();
     }
 

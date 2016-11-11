@@ -12,9 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class RiderRequestDetailActivity extends AppCompatActivity {
@@ -56,6 +53,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
+                final int id = (int)arg;
                 Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
                 dialog.setTitle("Driver Information");
                 dialog.setContentView(R.layout.dialog_driver_info);
@@ -78,8 +76,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 else{
                     okButton.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View v){
-                            UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
-                            rideRequest.getRider().acceptAcception(rideRequest,driver);
+                            UserDriver driver = driverList.get(id); //UserController.getUserList().getUserByUsername(username).getDriver();
+                            rideRequest.getRider().confirmAcception(rideRequest,driver);
                             finish();
                         }
                     });
@@ -91,13 +89,18 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         });
 
         Button cancelRequestButton = (Button) findViewById(R.id.RequestDetailCancelRequestButton);
-        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RideRequestController.getRequestList().removeRequest(position);
-                finish();
-            }
-        });
+        if (rideRequest.getStatus().equals("Driver Confirmed")||rideRequest.getStatus().equals("Trip Completed")) {
+            cancelRequestButton.setEnabled(false);
+        }
+        else {
+            cancelRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RideRequestController.getRequestList().removeRequest(position);
+                    finish();
+                }
+            });
+        }
 
         Button confirmButton = (Button) findViewById(R.id.RequestDetailConfirmButton);
 

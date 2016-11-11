@@ -36,9 +36,8 @@ public class UserRider{
         requests.addRequest(request);
     }
 
-    public void acceptAcception(RideRequest request, UserDriver driver){
+    public void confirmAcception(RideRequest request, UserDriver driver){
         request.setDriver(driver);
-        request.setStatus("Driver Confirmed");
         driver.setNotified(true);
     }
 
@@ -51,7 +50,7 @@ public class UserRider{
 //            request.setStatus("Completed");
 //            payDriver(request);
 //        }
-        request.setStatus("Completed");
+        request.completeTrip();
         payDriver(request);
     }
 
