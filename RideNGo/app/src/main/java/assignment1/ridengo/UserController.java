@@ -58,6 +58,18 @@ public class UserController {
 
     }
 
+    static public void addUser(User user) {
+        userList.addUser(user);
+        AddUsersTask addUsersTask = new AddUsersTask();
+        try{
+            addUsersTask.execute(user);
+        }catch(RuntimeException e) {
+            Log.i("Error", "Not able to add user to elasticsearch server.");
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * The type Get users task.
      */
@@ -74,7 +86,7 @@ public class UserController {
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
-                    .addIndex("testing")
+                    .addIndex("t06")
                     .addType("user")
                     .build();
 
@@ -108,7 +120,7 @@ public class UserController {
             verifySettings();
 
             for (User user: users) {
-                Index index = new Index.Builder(user).index("testing").type("user").build();
+                Index index = new Index.Builder(user).index("t06").type("user").build();
 
                 try {
                     DocumentResult result = client.execute(index);

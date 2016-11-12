@@ -86,7 +86,7 @@ public class RideRequestList {
     public List<RideRequest> getRequestsWithRider(String username){
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
         for(RideRequest request: requestList){
-            if(request.getRider().getUser().getUsername().equals(username)){
+            if(request.getRider().getUsername().equals(username)){
                 rideRequests.add(request);
             }
         }
@@ -101,7 +101,7 @@ public class RideRequestList {
      */
     public List<RideRequest> getRequestsWithDriver(String username){
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
-        UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
+        User driver = UserController.getUserList().getUserByUsername(username);
         for(RideRequest request: requestList){
             if(request.getAcceptions().contains(driver)){
                 rideRequests.add(request);
@@ -164,11 +164,9 @@ public class RideRequestList {
      */
 //////////////Temp Test Case/////////////
     public void addTestCase(){
-        User user1 = new User("A","a@example.com","7800000000");
-        UserRider rider1 = new UserRider(user1);
+        User rider1 = new User("A","a@example.com","7800000000");
         RideRequest test1 = new RideRequest("Uni","100St","Have fun",rider1,10.00);
-        User user2 = new User("A","a@example.com","7800000000");
-        UserRider rider2 = new UserRider(user1);
+        User rider2 = new User("A","a@example.com","7800000000");
         RideRequest test2 = new RideRequest("Uni","101St","Have fun",rider1,20.00);
         requestList.add(test1);
         requestList.add(test2);

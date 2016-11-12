@@ -42,7 +42,7 @@ public class UserInfoActivity extends Activity {
                 String phoneNum = phoneNumText.getText().toString();
                 User user = new User(username, email, phoneNum);
                 try{
-                    UserController.getUserList().addUser(user);
+                    UserController.addUser(user);
                     Intent intent = new Intent(activity, RoleSelectActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);

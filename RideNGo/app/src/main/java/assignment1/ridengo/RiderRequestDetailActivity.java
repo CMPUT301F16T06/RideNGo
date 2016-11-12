@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class RiderRequestDetailActivity extends AppCompatActivity {
 
-    private ArrayAdapter<UserDriver> adapter;
+    private ArrayAdapter<User> adapter;
     private String username;
     private int position;
     private RideRequest rideRequest;
@@ -50,8 +50,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
         final ListView listView = (ListView) findViewById(R.id.RequestDetailListView);
 
-        final List<UserDriver> driverList = rideRequest.getAcceptions();
-        adapter = new ArrayAdapter<UserDriver>(activity, android.R.layout.simple_list_item_1, driverList);
+        final List<User> driverList = rideRequest.getAcceptions();
+        adapter = new ArrayAdapter<User>(activity, android.R.layout.simple_list_item_1, driverList);
         listView.setAdapter(adapter);
 
 
@@ -71,9 +71,9 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
                 TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
 
-                driverUsername.setText(driverList.get(pos).getUser().getUsername());
-                driverPhone.setText(driverList.get(pos).getUser().getPhoneNum());
-                driverEmail.setText(driverList.get(pos).getUser().getEmail());
+                driverUsername.setText(driverList.get(pos).getUsername());
+                driverPhone.setText(driverList.get(pos).getPhoneNum());
+                driverEmail.setText(driverList.get(pos).getEmail());
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 if (!rideRequest.getStatus().equals("Waiting for Confirmation")) {
@@ -82,7 +82,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 else{
                     okButton.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View v){
-                            UserDriver driver = driverList.get(id); //UserController.getUserList().getUserByUsername(username).getDriver();
+                            User driver = driverList.get(id); //UserController.getUserList().getUserByUsername(username).getDriver();
                             rideRequest.getRider().confirmAcception(rideRequest,driver);
                             finish();
                         }
@@ -117,7 +117,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    rideRequest.getRider().completeRide(rideRequest);
+                    rideRequest.getRider().riderCompleteRide(rideRequest);
                     finish();
                 }
 

@@ -25,10 +25,10 @@ public class RideRequest {
 
     private String description;
     private Double fare;
-    private UserRider rider;
-    private UserDriver driver;
+    private User rider;
+    private User driver;
     private String status;
-    private List<UserDriver> acceptions = null;
+    private List<User> acceptions = null;
     private ArrayList<Listener> listeners;
 
     /**
@@ -40,7 +40,7 @@ public class RideRequest {
      * @param rider       the rider
      * @param fare        the fare
      */
-    public RideRequest(String startPoint, String endPoint, String description, UserRider rider, Double fare){
+    public RideRequest(String startPoint, String endPoint, String description, User rider, Double fare){
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
@@ -55,7 +55,7 @@ public class RideRequest {
      *
      * @return the user rider
      */
-    public UserRider getRider(){
+    public User getRider(){
         return this.rider;
     }
 
@@ -98,7 +98,7 @@ public class RideRequest {
      *
      * @return the user driver
      */
-    public UserDriver getDriver(){
+    public User getDriver(){
         return this.driver;
     }
 
@@ -125,9 +125,9 @@ public class RideRequest {
      *
      * @return the list
      */
-    public List<UserDriver> getAcceptions(){
+    public List<User> getAcceptions(){
         if(acceptions == null){
-            acceptions = new ArrayList<UserDriver>();
+            acceptions = new ArrayList<User>();
         }
         return acceptions;
     }
@@ -137,7 +137,7 @@ public class RideRequest {
      *
      * @param driver the driver
      */
-    public void setDriver(UserDriver driver){
+    public void setDriver(User driver){
         this.driver = driver;
         setStatus(tripConfirmed);
         notifyListeners();
@@ -148,9 +148,9 @@ public class RideRequest {
      *
      * @param driver the driver
      */
-    public void addAcception(UserDriver driver){
+    public void addAcception(User driver){
         if(acceptions == null){
-            acceptions = new ArrayList<UserDriver>();
+            acceptions = new ArrayList<User>();
         }
         acceptions.add(driver);
         if(status == waitForDriver){
@@ -165,7 +165,7 @@ public class RideRequest {
      * @param driver the driver
      * @return the boolean
      */
-    public boolean isAccepted(UserDriver driver){
+    public boolean isAccepted(User driver){
         if(getAcceptions().contains(driver)){
             return true;
         }
@@ -176,7 +176,7 @@ public class RideRequest {
         if(getDriver() == null){
             return true;
         }
-        else if(getDriver().getUser().getUsername().equals(username)){
+        else if(getDriver().getUsername().equals(username)){
             return true;
         }
         return false;

@@ -14,9 +14,11 @@ public class User {
     private String username;
     private String email;
     private String phoneNum;
-    private UserRider rider = new UserRider(this);
-    private UserDriver driver = new UserDriver(this);
+//    private UserRider rider = new UserRider(this);
+//    private UserDriver driver = new UserDriver(this);
     private ArrayList<Listener> listeners;
+    private RideRequestList acceptedRequests;
+    private RideRequestList postedRequests;
 
     /**
      * Instantiates a new User.
@@ -30,6 +32,7 @@ public class User {
         this.email = email;
         this.phoneNum = phoneNum;
         this.listeners = new ArrayList<Listener>();
+        this.acceptedRequests = new RideRequestList();
     }
 
     /**
@@ -80,40 +83,6 @@ public class User {
     }
 
     /**
-     * Set rider.
-     */
-    public void setRider(){
-        rider = new UserRider(this);
-        notifyListeners();
-    }
-
-    /**
-     * Get rider user rider.
-     *
-     * @return the user rider
-     */
-    public UserRider getRider(){
-        return this.rider;
-    }
-
-    /**
-     * Set driver.
-     */
-    public void setDriver(){
-        driver = new UserDriver(this);
-        notifyListeners();
-    }
-
-    /**
-     * Get driver user driver.
-     *
-     * @return the user driver
-     */
-    public UserDriver getDriver(){
-        return this.driver;
-    }
-
-    /**
      * Add listener.
      *
      * @param l the l
@@ -158,4 +127,86 @@ public class User {
         return this.id;
     }
 
+    /**
+     * Accept request.
+     *
+     * @param request the request
+     */
+    public void acceptRequest(RideRequest request){
+        request.addAcception(this);
+        request.setStatus("Accepted By Driver");
+        acceptedRequests.addRequest(request);
+    }
+
+    /**
+     * Complete ride.
+     *
+     * @param request the request
+     */
+    public void driverCompleteRide(RideRequest request){
+        request.setStatus("Driver Confirmed Completion");
+        // receive payment
+        receivePay(request);
+    }
+
+    private void receivePay(RideRequest request){
+
+    }
+
+    /**
+     * Get requests ride request list.
+     *
+     * @return the ride request list
+     */
+    public RideRequestList getRequests(){
+        return this.postedRequests;
+    }
+
+    /**
+     * Post ride request.
+     *
+     * @param request the request
+     */
+    public void postRideRequest(RideRequest request){
+        request.setStatus("Posted");
+        RideRequestController.getRequestList().addRequest(request);
+        postedRequests.addRequest(request);
+    }
+
+    /**
+     * Accept acception.
+     *
+     * @param request the request
+     * @param driver  the driver
+     */
+    public void confirmAcception(RideRequest request, User driver){
+        request.setDriver(driver);
+    }
+
+    /**
+     * Cancel request.
+     *
+     * @param request the request
+     */
+    public void cancelRequest(RideRequest request){
+        request.setStatus("Cancelled");
+    }
+
+    /**
+     * Complete ride.
+     *
+     * @param request the request
+     */
+    public void riderCompleteRide(RideRequest request){
+//        if(request.getStatus().equals("Driver Confirmed Completion")){
+//            request.setStatus("Completed");
+//            payDriver(request);
+//        }
+        request.completeTrip();
+        payDriver(request);
+    }
+
+    private void payDriver(RideRequest request){
+        // pay the driver
+    }
 }
