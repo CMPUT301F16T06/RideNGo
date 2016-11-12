@@ -30,7 +30,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
         hash = getIntent().getIntExtra("hash",0);
-        final UserDriver driver = UserController.getUserList().getUserByUsername(username).getDriver();
+        final User driver = UserController.getUserList().getUserByUsername(username);
         rideRequest = RideRequestController.getRequestList().getRequestWithHash(hash);
         getInfo();
 
@@ -72,7 +72,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
      */
     public void getInfo(){
         info.clear();
-        User rider = rideRequest.getRider().getUser();
+        User rider = rideRequest.getRider();
         info.add("Start: " + rideRequest.getStartPoint().toString());
         info.add("End: " + rideRequest.getEndPoint().toString());
         info.add("Name: " + rider.getUsername());

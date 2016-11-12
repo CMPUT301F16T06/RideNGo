@@ -60,32 +60,11 @@ public class UserDriver {
         return this.requests;
     }
 
-    /**
-     * Accept request.
-     *
-     * @param request the request
-     */
-    public void acceptRequest(RideRequest request){
-        request.addAcception(this);
-        request.setStatus("Accepted By Driver");
-        requests.addRequest(request);
-        request.getRider().setNotified(true);
-    }
 
-    /**
-     * Complete ride.
-     *
-     * @param request the request
-     */
-    public void completeRide(RideRequest request){
-        request.setStatus("Driver Confirmed Completion");
-        // receive payment
-        receivePay(request);
-    }
 
-    private void receivePay(RideRequest request){
 
-    }
+
+
 
     /**
      * Get pending requests ride request list.

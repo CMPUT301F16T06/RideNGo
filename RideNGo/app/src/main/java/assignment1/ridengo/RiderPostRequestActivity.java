@@ -33,7 +33,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rider_post_request);
 
         final String username = getIntent().getStringExtra("username");
-        final UserRider rider = UserController.getUserList().getUserByUsername(username).getRider();
+        final User rider = UserController.getUserList().getUserByUsername(username);
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
         final EditText end = (EditText) findViewById(R.id.EndPointEditText);
 
@@ -55,8 +55,5 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
     }
 }
