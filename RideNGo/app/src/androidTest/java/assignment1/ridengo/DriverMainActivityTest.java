@@ -17,7 +17,11 @@ public class DriverMainActivityTest extends ActivityInstrumentationTestCase2<Dri
 
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
+    }
+
+    public void testActivity() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+
     }
 
     @Override

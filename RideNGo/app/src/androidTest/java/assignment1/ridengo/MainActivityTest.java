@@ -36,6 +36,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void testInvalidSignIn() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
+        User newUser = new User("","","");
+        UserList userList = UserController.getUserList();
+        assertFalse(userList.contains(newUser));
+
         solo.clearEditText((EditText) solo.getView(R.id.usernameMain));
         solo.clickOnView(solo.getView(R.id.button_MainSignIn));
         assertTrue(solo.searchText("User does not exist."));
@@ -46,7 +50,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         UserList userList = UserController.getUserList();
         User newUser = new User("test", "", "");
+        assertFalse(userList.contains(newUser));
         userList.addUser(newUser);
+        assertTrue(userList.contains(newUser));
 
         solo.enterText((EditText) solo.getView(R.id.usernameMain), newUser.getUsername());
         Intent intent = new Intent();

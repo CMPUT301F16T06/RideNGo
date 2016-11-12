@@ -24,16 +24,16 @@ public class UserInfoActivityTest extends ActivityInstrumentationTestCase2<UserI
 
     public void setUp() throws Exception{
         super.setUp();
-        //solo = new Solo(getInstrumentation(), getActivity());
-    }
-
-
-    public void testValidSignUp()throws Exception{
         intent = new Intent();
         intent.putExtra("username", "");
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
+        //solo = new Solo(getInstrumentation(), getActivity());
+    }
+
+
+    public void testValidSignUp()throws Exception{
 
         solo.assertCurrentActivity("Wrong Activity", UserInfoActivity.class);
 
@@ -44,6 +44,16 @@ public class UserInfoActivityTest extends ActivityInstrumentationTestCase2<UserI
         solo.clickOnView(solo.getView(R.id.button_SignUpMain));
 
     }
+
+    public void testAddUser() throws Exception{
+        User newUser = new User("testUser", "test@example.com", "0000000000");
+        UserList userList = UserController.getUserList();
+        assertFalse(userList.contains(newUser));
+
+        userList.addUser(newUser);
+        assertTrue(userList.contains(newUser));
+    }
+
 
     @Override
     public void tearDown() throws Exception{

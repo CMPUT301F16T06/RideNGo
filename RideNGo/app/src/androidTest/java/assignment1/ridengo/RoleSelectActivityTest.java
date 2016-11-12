@@ -11,6 +11,7 @@ import com.robotium.solo.Solo;
  */
 public class RoleSelectActivityTest extends ActivityInstrumentationTestCase2<RoleSelectActivity> {
     private Solo solo;
+    Intent intent;
 
     public RoleSelectActivityTest(){
         super(RoleSelectActivity.class);
@@ -18,18 +19,21 @@ public class RoleSelectActivityTest extends ActivityInstrumentationTestCase2<Rol
     }
 
     public void setUp() throws Exception{
-
+        intent = new Intent();
+        intent.putExtra("username", "testUser");
+        setActivityIntent(intent);
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
     public void testActivity() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", RoleSelectActivity.class);
 
+        solo.clickOnView(solo.getView(R.id.button_Driver));
 
+        solo.clickOnView(solo.getView(R.id.button_Rider));
 
-        //solo.clickOnButton("Edit UserInfo");
-        //solo.clickOnButton("Driver");
-        //solo.clickOnButton("Rider");
+        //solo.clickOnView(solo.getView(R.id.button_EditInfo));
+
     }
 
     @Override
