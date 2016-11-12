@@ -17,6 +17,9 @@ public class DriverRequestDetailActivityTest extends ActivityInstrumentationTest
 
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
+    }
+
+    public void testActivity() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
     }
 

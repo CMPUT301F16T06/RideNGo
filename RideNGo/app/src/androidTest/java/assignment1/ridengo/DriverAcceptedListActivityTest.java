@@ -20,6 +20,10 @@ public class DriverAcceptedListActivityTest extends ActivityInstrumentationTestC
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
     }
 
+    public void testActivity() throws Exception{
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+    }
+
     @Override
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

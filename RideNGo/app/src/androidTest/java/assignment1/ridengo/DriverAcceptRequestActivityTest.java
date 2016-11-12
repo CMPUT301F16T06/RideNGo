@@ -8,16 +8,19 @@ import com.robotium.solo.Solo;
  * Test for DriverAcceptRequestActivity
  * Created by Rui on 2016-11-11.
  */
-public class DriverAcceptRequestActivityTest extends ActivityInstrumentationTestCase2<DriverAcceptRequestActivity> {
+public class DriverAcceptRequestActivityTest extends ActivityInstrumentationTestCase2<DriverAcceptedListActivity> {
 
     private Solo solo;
 
     public DriverAcceptRequestActivityTest(){
-        super(DriverAcceptRequestActivity.class);
+        super(DriverAcceptedListActivity.class);
     }
 
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
+    }
+
+    public void testActivity() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
     }
 
