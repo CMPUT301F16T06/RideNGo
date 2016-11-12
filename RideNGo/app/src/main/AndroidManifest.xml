@@ -31,7 +31,6 @@
         <activity android:name=".RiderRequestDetailActivity" />
         <activity android:name=".DriverMainActivity" />
         <activity android:name=".DriverRequestDetailActivity" />
-        <activity android:name=".DriverAcceptRequestActivity" />
         <activity android:name=".DriverAcceptedListActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
