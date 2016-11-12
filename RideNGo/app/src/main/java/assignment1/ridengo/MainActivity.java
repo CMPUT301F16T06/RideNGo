@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText usernameText = (EditText) findViewById(R.id.edit1);
+                EditText usernameText = (EditText) findViewById(R.id.usernameMain);
                 String username = usernameText.getText().toString();
                 if(UserController.getUserList().contains(username)){
                     Intent intent = new Intent(activity, RoleSelectActivity.class);
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        Button signup = (Button) findViewById(R.id.button_SignUp);
+        Button signup = (Button) findViewById(R.id.button_SignUpMain);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

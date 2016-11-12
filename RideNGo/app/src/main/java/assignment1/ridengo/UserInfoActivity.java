@@ -33,7 +33,7 @@ public class UserInfoActivity extends Activity {
             phoneNumText.setText(currentUser.getPhoneNum());
         }
 
-        Button signupButton = (Button) findViewById(R.id.button_SignUp);
+        Button signupButton = (Button) findViewById(R.id.button_SignUpMain);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
