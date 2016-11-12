@@ -209,4 +209,8 @@ public class User {
     private void payDriver(RideRequest request){
         // pay the driver
     }
+
+    public String toString(){
+        return username;
+    }
 }
