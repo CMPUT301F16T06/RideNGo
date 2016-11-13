@@ -1,8 +1,11 @@
 package assignment1.ridengo;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.robotium.solo.Solo;
@@ -24,9 +27,19 @@ public class RiderMainActivityTest extends ActivityInstrumentationTestCase2<Ride
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testPostRequest() throws Exception{
+    @UiThreadTest
+    public void testViewRequest() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", RiderMainActivity.class);
 
+        ListView listView = (ListView) solo.getView(R.id.RiderRequestListView);
+        if(listView.getCount() != 0){
+            solo.clickInList(0);
+            assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
+        }
+    }
+
+    public void testPostRequest() throws Exception{
+        solo.assertCurrentActivity("Wrong Activity", RiderMainActivity.class);
 
         solo.clickOnView(solo.getView(R.id.AddRequestButton));
         assertTrue(solo.waitForActivity(RiderPostRequestActivity.class));

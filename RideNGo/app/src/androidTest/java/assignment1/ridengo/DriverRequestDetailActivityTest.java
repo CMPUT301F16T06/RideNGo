@@ -1,5 +1,6 @@
 package assignment1.ridengo;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.robotium.solo.Solo;
@@ -16,11 +17,18 @@ public class DriverRequestDetailActivityTest extends ActivityInstrumentationTest
     }
 
     public void setUp() throws Exception{
+
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
     public void testActivity() throws Exception{
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", DriverRequestDetailActivity.class);
+
+        solo.clickInList(3);
+        assertTrue(solo.searchText("Email Rider"));
+
+        solo.clickInList(4);
+        assertTrue(solo.searchText("Call Rider"));
     }
 
     @Override

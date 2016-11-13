@@ -17,17 +17,19 @@ public class RiderPostRequestActivityTest extends ActivityInstrumentationTestCas
     }
 
     public void setUp() throws Exception{
+
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
     public void testPostRequest() throws Exception{
         solo.assertCurrentActivity("Wrong Activity", RiderPostRequestActivity.class);
 
-        solo.enterText((EditText)solo.getView(R.id.StartPointEditText), "Start");
+        solo.enterText((EditText) solo.getView(R.id.StartPointEditText), "Start");
         solo.enterText((EditText)solo.getView(R.id.EndPointEditText), "End");
 
         solo.clickOnView(solo.getView(R.id.postRequestButton));
-        solo.goBack();
+
+        solo.assertCurrentActivity("Wrong", RiderMainActivity.class);
     }
 
     @Override

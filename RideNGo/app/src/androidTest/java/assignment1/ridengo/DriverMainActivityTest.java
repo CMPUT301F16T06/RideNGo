@@ -19,8 +19,21 @@ public class DriverMainActivityTest extends ActivityInstrumentationTestCase2<Dri
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testActivity() throws Exception{
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+    public void testViewAccepted() throws Exception{
+        solo.assertCurrentActivity("Wrong Activity", DriverMainActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.SearchButton));
+
+        solo.clickOnView(solo.getView(R.id.FindNearbyButton));
+
+        solo.clickOnView(solo.getView(R.id.ViewAcceptedButton));
+        assertTrue(solo.waitForActivity(DriverAcceptedListActivity.class));
+
+
+    }
+
+    public void testViewRequest() throws Exception{
+        solo.assertCurrentActivity("Wrong Activity", DriverMainActivity.class);
 
     }
 

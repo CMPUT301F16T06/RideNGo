@@ -1,5 +1,6 @@
 package assignment1.ridengo;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.robotium.solo.Solo;
@@ -16,8 +17,21 @@ public class RiderRequestDetailActivityTest extends ActivityInstrumentationTestC
     }
 
     public void setUp() throws Exception{
+        super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+    }
+
+    public void testCancelRequest() throws Exception{
+        solo.assertCurrentActivity("Wrong Activity", RiderRequestDetailActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.RequestDetailCancelRequestButton));
+        assertTrue(solo.waitForActivity(RiderMainActivity.class));
+    }
+
+    public void testCompleteRequest() throws Exception{
+        solo.assertCurrentActivity("Wrong Activity", RiderRequestDetailActivity.class);
+        solo.clickOnView(solo.getView(R.id.RequestDetailConfirmButton));
+        assertTrue(solo.waitForActivity(RiderMainActivity.class));
     }
 
     @Override
