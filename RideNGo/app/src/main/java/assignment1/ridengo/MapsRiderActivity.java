@@ -78,12 +78,9 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
         setContentView(R.layout.activity_maps_rider);
         startAndEndPoints = new ArrayList<LatLng>();
         addressesToReturn = new ArrayList<String>();
-        //addresses = new List<Address>();
         geocoder = new Geocoder(this, Locale.getDefault());
         final Button optionButton = (Button) findViewById(R.id.locationSearcher);
         Button doneButton = (Button) findViewById(R.id.doneButton);
-        //final EditText startTextLocation = (EditText) findViewById(R.id.editTextFrom);
-        //EditText endTextLocation = (EditText) findViewById(R.id.editTextTo);
 
         // https://developers.google.com/places/android-api/autocomplete
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -97,8 +94,6 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 if (menuLocationOption == 2) {
-
-
                     //Toast.makeText(getBaseContext(), "Past habit completion deleted." + place.getName(), Toast.LENGTH_SHORT).show();
                     if (startAndEndPoints.size() >= 2) {
                         mMap.clear();
@@ -111,17 +106,10 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                     if (startAndEndPoints.size() <= 1) {
                         try {
                             startSearchAddressReturn = geocoder.getFromLocationName(place.getName().toString(), 1);
-                            //Toast.makeText(getBaseContext(),"Error getting location" + startSearchAddressReturn.get(0),Toast.LENGTH_SHORT).show();
                             LatLng fromLocation = place.getLatLng();
                             fromLocationName = place.getName().toString();
-                            //startSearchAddressReturn = geocoder.getFromLocation(fromLocation.latitude,fromLocation.longitude,1);
-                            //Toast.makeText(getBaseContext(),"Error getting location" + fromLocationName,Toast.LENGTH_SHORT).show();
-                            //Address addressFrom = startSearchAddressReturn.get(0);
-                            //double latFrom = addressFrom.getLatitude();
-                            //double longTo = addressFrom.getLongitude();
-                            //LatLng newZoom = new LatLng(latFrom,longTo);
                             startAndEndPoints.add(fromLocation);
-                            //startAndEndPointsSearcher.add(newZoom);
+
 
                             if (startMarker == null) {
                                 startMarker = mMap.addMarker(new MarkerOptions().position(fromLocation).title("Start Location"));
@@ -167,13 +155,7 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                             endSearchAddressReturn = geocoder.getFromLocationName(place.getName().toString(), 1);
                             LatLng toLocation = place.getLatLng();
                             toLocationName = place.getName().toString();
-                            //Address addressFrom = endSearchAddressReturn.get(0);
-                            //double latFrom = addressFrom.getLatitude();
-                            //double longTo = addressFrom.getLongitude();
-                            //LatLng newZoom = new LatLng(latFrom,longTo);
                             startAndEndPoints.add(toLocation);
-                            //startAndEndPointsSearcher.add(newZoom);
-                            //mMap.addMarker(new MarkerOptions().position(newZoom).title("End Location"));
                             if (endMarker == null) {
                                 endMarker = mMap.addMarker(new MarkerOptions().position(toLocation).title("End Location"));
                             } else {
@@ -220,7 +202,7 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                 }
                 extras.putFloat("DISTANCE_FROM_POINTS",distanceResult[0]);
                 intent.putExtras(extras);
-                setResult(1,intent);
+                setResult(RESULT_OK,intent);
                 finish();
                 //startActivity(intent);
             }
@@ -294,6 +276,32 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                 return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    public void resetMap(){
+        mMap.clear();
+        startAndEndPoints.clear();
+        addressesToReturn.clear();
+        startMarker = null;
+        endMarker = null;
+        startSearchAddressReturn = null;
+        fromLocationName = null;
+        endSearchAddressReturn = null;
+        toLocationName = null;
+
+//        private GoogleMap mMap;
+//        private ArrayList<LatLng> startAndEndPoints;
+//        private ArrayList<LatLng> startAndEndPointsSearcher;
+//        private Geocoder geocoder;
+//        private List<Address> addresses = null;
+//        private List<Address> startSearchAddressReturn = null;
+//        private List<Address> endSearchAddressReturn = null;
+//        private ArrayList<String> addressesToReturn;
+//        private float[] distanceResult = new float[1];
+//        private Marker startMarker;
+//        private Marker endMarker;
+//        private String fromLocationName = null;
+//        private String toLocationName = null;
     }
 //    @Override
 //    protected void onResume() {
@@ -388,15 +396,10 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onMapClick(LatLng latLng) {
                 if (menuLocationOption == 1) {
-
-
                     // Need to check if there is already a start and end point
                     //Toast.makeText(getBaseContext(),"Past habit completion deleted." + startAndEndPoints.size(),Toast.LENGTH_SHORT).show();
                     if (startAndEndPoints.size() >= 2 || startMarker != null) {
-                        mMap.clear();
-                        startAndEndPoints.clear();
-                        addressesToReturn.clear();
-                        startMarker = null;
+                        resetMap();
                     }
 
                     startAndEndPoints.add(latLng);
