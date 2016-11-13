@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
@@ -73,6 +74,10 @@ public class UserController {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        }
+
+        for(User user : userList.getUsers()) {
+            user.addUpdateListener(user);
         }
     }
 
@@ -180,11 +185,15 @@ public class UserController {
             verifySettings();
 
             for (User user: users) {
-                String script = "{\"username\":\"" + user.getUsername() + "\"}";
-                DeleteByQuery index = new DeleteByQuery.Builder(script).addIndex("t06").addType("user").build();
+                final String query = "{\n" +
+                        "    \"query\": {\n" +
+                        "        \"term\": { \"username\" : \"" + user.getUsername() + "\" }\n" +
+                        "    }\n" +
+                        "}";
+                DeleteByQuery index = new DeleteByQuery.Builder(query).addIndex("t06").addType("user").build();
 
                 try {
-                    DocumentResult result = (DocumentResult) client.execute(index);
+                    JestResult result = client.execute(index);
                     if (!result.isSucceeded()) {
                         Log.i("Error", "Elastic search was not able to delete the user.");
                     }

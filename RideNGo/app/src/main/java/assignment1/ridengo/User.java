@@ -36,7 +36,7 @@ public class User {
         addUpdateListener(this);
     }
 
-    private void addUpdateListener(final User user) {
+    public void addUpdateListener(final User user) {
         Listener l = new Listener() {
             @Override
             public void update() {
@@ -110,7 +110,9 @@ public class User {
      */
     public void notifyListeners(){
         for(Listener listener : this.listeners){
-            listener.update();
+            if(listener != null) {
+                listener.update();
+            }
         }
     }
 
@@ -222,5 +224,9 @@ public class User {
 
     private void payDriver(RideRequest request){
         // pay the driver
+    }
+
+    public String toString(){
+        return username;
     }
 }

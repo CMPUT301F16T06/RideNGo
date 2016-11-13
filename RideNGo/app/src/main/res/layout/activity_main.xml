@@ -23,7 +23,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edit1"
+        android:id="@+id/usernameMain"
         android:hint="Username"
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/textView_Title"
@@ -34,18 +34,18 @@
         android:layout_height="wrap_content"
         android:text="Sign In"
         android:id="@+id/button_MainSignIn"
-        android:layout_below="@+id/edit1"
-        android:layout_alignStart="@+id/edit1"
+        android:layout_below="@+id/usernameMain"
+        android:layout_alignStart="@+id/usernameMain"
         android:layout_marginTop="57dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:id="@+id/button_SignUp"
+        android:id="@+id/button_SignUpMain"
         android:layout_alignTop="@+id/button_MainSignIn"
         android:layout_marginStart="24dp"
-        android:layout_alignEnd="@+id/edit1" />
+        android:layout_alignEnd="@+id/usernameMain" />
 
 
 </RelativeLayout>

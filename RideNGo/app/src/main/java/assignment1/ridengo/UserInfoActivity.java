@@ -33,33 +33,43 @@ public class UserInfoActivity extends Activity {
             phoneNumText.setText(currentUser.getPhoneNum());
         }
 
-        Button signupButton = (Button) findViewById(R.id.button_SignUp);
+        Button signupButton = (Button) findViewById(R.id.button_SignUpMain);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = usernameText.getText().toString();
                 String email = emailText.getText().toString();
                 String phoneNum = phoneNumText.getText().toString();
-                User currentUser = new User(username, email, phoneNum);
-                try{
+
+
+
+                User currentUser = UserController.getUserList().getUserByUsername(username);
+                if(currentUser == null) {
+                    currentUser = new User(username, email, phoneNum);
                     UserController.addUser(currentUser);
-                    Intent intent = new Intent(activity, RoleSelectActivity.class);
-                    intent.putExtra("username", username);
-                    startActivity(intent);
+                } else {
+                    currentUser.setEmail(email);
+                    currentUser.setPhoneNum(phoneNum);
                 }
-                catch (RuntimeException e){
-                    if(user.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "User Already Exists.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        if(currentUser.getId() != null)
-                            Toast.makeText(activity, currentUser.getId(), Toast.LENGTH_SHORT).show();
-                        UserController.updateUser(currentUser);
-                        Intent intent = new Intent(activity, RoleSelectActivity.class);
-                        intent.putExtra("username", username);
-                        startActivity(intent);
-                    }
-                }
+                Intent intent = new Intent(activity, RoleSelectActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+//
+//                try{
+//                    UserController.addUser(currentUser);
+//
+//                }
+//                catch (RuntimeException e){
+//                    if(user.isEmpty()) {
+//                        Toast.makeText(getApplicationContext(), "User Already Exists.", Toast.LENGTH_SHORT).show();
+//                    }
+//                    else {
+//                        if(currentUser.getId() != null)
+//                            Toast.makeText(activity, currentUser.getId(), Toast.LENGTH_SHORT).show();
+//                        UserController.updateUser(currentUser);
+//
+//                    }
+//                }
             }
         });
     }
