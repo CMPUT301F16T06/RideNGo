@@ -9,11 +9,15 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import io.searchbox.core.Delete;
+import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 /**
  * The type User controller.
@@ -55,7 +59,21 @@ public class UserController {
      * Load user list from server.
      */
     static public void loadUserListFromServer(){
+        if(userList == null) {
+            userList = new UserList();
+        }
+        userList.clear();
 
+        GetUsersTask getUsersTask = new GetUsersTask();
+        getUsersTask.execute("");
+
+        try {
+            userList.getUsers().addAll(getUsersTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     static public void addUser(User user) {
@@ -67,7 +85,20 @@ public class UserController {
             Log.i("Error", "Not able to add user to elasticsearch server.");
             e.printStackTrace();
         }
+    }
 
+    static public void updateUser(User user) {
+        DeleteUsersTask deleteUsersTask = new DeleteUsersTask();
+        AddUsersTask addUsersTask = new AddUsersTask();
+
+        try{
+
+            deleteUsersTask.execute(user);
+            addUsersTask.execute(user);
+        }catch(RuntimeException e) {
+            Log.i("Error", "Not able to delete user to elasticsearch server.");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -82,7 +113,7 @@ public class UserController {
 
 
             // String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = "{\"from\": 0, \"size\": 10000, \"query\": {\"match\": {\"username\": \"" + search_parameters[0] + "\"}}}";
+            String search_string = search_parameters[0];
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)
@@ -124,15 +155,42 @@ public class UserController {
 
                 try {
                     DocumentResult result = client.execute(index);
+
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
                     }
                     else {
-                        Log.i("Error", "Elastic search was not able to add the tweet.");
+                        Log.i("Error", "Elastic search was not able to add the user.");
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Uhoh", "We failed to add a tweet to elastic search!");
+                    Log.i("Uhoh", "We failed to add a user to elastic search!");
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public static class DeleteUsersTask extends AsyncTask<User, Void, Void> {
+
+        @Override
+        protected Void doInBackground(User... users) {
+            verifySettings();
+
+            for (User user: users) {
+                String script = "{\"username\":\"" + user.getUsername() + "\"}";
+                DeleteByQuery index = new DeleteByQuery.Builder(script).addIndex("t06").addType("user").build();
+
+                try {
+                    DocumentResult result = (DocumentResult) client.execute(index);
+                    if (!result.isSucceeded()) {
+                        Log.i("Error", "Elastic search was not able to delete the user.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Uhoh", "We failed to delete a user to elastic search!");
                     e.printStackTrace();
                 }
             }

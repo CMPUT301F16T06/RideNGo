@@ -21,6 +21,10 @@ public class MainActivity extends Activity {
 
         final Activity activity = this;
 
+
+        UserController.loadUserListFromServer();
+        Toast.makeText(this, "Number of users: " + UserController.getUserList().getUsers().size(), Toast.LENGTH_LONG).show();
+
         Button signin = (Button) findViewById(R.id.button_MainSignIn);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override

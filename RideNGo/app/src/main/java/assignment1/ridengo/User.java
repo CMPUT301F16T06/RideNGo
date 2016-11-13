@@ -33,6 +33,20 @@ public class User {
         this.phoneNum = phoneNum;
         this.listeners = new ArrayList<Listener>();
         this.acceptedRequests = new RideRequestList();
+        addUpdateListener(this);
+    }
+
+    private void addUpdateListener(final User user) {
+        Listener l = new Listener() {
+            @Override
+            public void update() {
+                UserController.DeleteUsersTask deleteUsersTask = new UserController.DeleteUsersTask();
+                deleteUsersTask.execute(user);
+                UserController.AddUsersTask addUsersTask = new UserController.AddUsersTask();
+                addUsersTask.execute(user);
+            }
+        };
+        addListener(l);
     }
 
     /**

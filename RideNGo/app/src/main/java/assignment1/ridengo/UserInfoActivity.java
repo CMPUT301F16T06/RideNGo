@@ -24,9 +24,9 @@ public class UserInfoActivity extends Activity {
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
 
-        String username = getIntent().getStringExtra("username");
-        if(!username.isEmpty()){
-            User currentUser = UserController.getUserList().getUserByUsername(username);
+        final String user = getIntent().getStringExtra("username");
+        if(!user.isEmpty()){
+            User currentUser = UserController.getUserList().getUserByUsername(user);
             usernameText.setText(currentUser.getUsername());
             usernameText.setEnabled(false);
             emailText.setText(currentUser.getEmail());
@@ -40,15 +40,25 @@ public class UserInfoActivity extends Activity {
                 String username = usernameText.getText().toString();
                 String email = emailText.getText().toString();
                 String phoneNum = phoneNumText.getText().toString();
-                User user = new User(username, email, phoneNum);
+                User currentUser = new User(username, email, phoneNum);
                 try{
-                    UserController.addUser(user);
+                    UserController.addUser(currentUser);
                     Intent intent = new Intent(activity, RoleSelectActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 }
                 catch (RuntimeException e){
-                    Toast.makeText(getApplicationContext(), "User Already Exists.", Toast.LENGTH_SHORT).show();
+                    if(user.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "User Already Exists.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        if(currentUser.getId() != null)
+                            Toast.makeText(activity, currentUser.getId(), Toast.LENGTH_SHORT).show();
+                        UserController.updateUser(currentUser);
+                        Intent intent = new Intent(activity, RoleSelectActivity.class);
+                        intent.putExtra("username", username);
+                        startActivity(intent);
+                    }
                 }
             }
         });
