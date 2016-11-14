@@ -8,6 +8,7 @@ import android.widget.Button;
 
 /**
  * The type Role select activity.
+ * The user can select to be a driver or to be a rider
  */
 public class RoleSelectActivity extends Activity {
 

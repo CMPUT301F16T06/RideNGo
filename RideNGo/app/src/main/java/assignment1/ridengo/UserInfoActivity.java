@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 /**
  * The type User info activity.
+ * Able to let user to update his/her information
  */
 public class UserInfoActivity extends Activity {
 

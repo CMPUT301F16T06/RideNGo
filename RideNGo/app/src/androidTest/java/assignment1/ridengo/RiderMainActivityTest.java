@@ -36,6 +36,7 @@ public class RiderMainActivityTest extends ActivityInstrumentationTestCase2<Ride
             solo.clickInList(0);
             assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
         }
+        fail("Need to implement RiderRequestDetailActivity");
     }
 
     public void testPostRequest() throws Exception{
@@ -43,6 +44,7 @@ public class RiderMainActivityTest extends ActivityInstrumentationTestCase2<Ride
 
         solo.clickOnView(solo.getView(R.id.AddRequestButton));
         assertTrue(solo.waitForActivity(RiderPostRequestActivity.class));
+        fail("Need to implement RiderPostRequestActivity");
 
     }
 

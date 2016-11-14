@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * The type Rider post request activity.
+ * Rider able to post a new request.
+ * Rider need to enter a starting point and a end point.
  */
 public class RiderPostRequestActivity extends AppCompatActivity {
 

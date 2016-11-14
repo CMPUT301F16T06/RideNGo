@@ -3,7 +3,11 @@ package assignment1.ridengo;
 import java.util.ArrayList;
 
 /**
- * The type Ride request controller.
+ * Controller for Ride request lists
+ *1. Load from server
+ * 2. Save to Server
+ * 3. Load from file
+ * 4. Save to file
  */
 public class RideRequestController {
 
