@@ -11,9 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Jason on 13/11/2016.
+ * This is a class that parses JSON to get the route for two points on a map. This entire class is
+ * taken from this source
+ * http://stackoverflow.com/questions/14710744/how-to-draw-road-directions-between-two-geocodes-in-android-google-map-v2
  */
-//http://stackoverflow.com/questions/14710744/how-to-draw-road-directions-between-two-geocodes-in-android-google-map-v2
 public class DirectionsJSONParser {
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 
