@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * The type User list.
+ * A list that keep tracks of all users register to the application
  */
 public class UserList {
 
@@ -125,13 +126,16 @@ public class UserList {
     }
 
     /**
-     * Clear.
+     * Clear the userlist
      */
     public void clear(){
         userList.clear();
         notifyListeners();
     }
 
+    /**
+     * Update all listeners
+     */
     private void notifyListeners() {
         for (Listener  listener : getListeners()) {
             listener.update();

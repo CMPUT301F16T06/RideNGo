@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Ride request.
+ * Ride Request, keep tracks of rider, driver, starting point, ending point, request status etc.
  */
 public class RideRequest {
 
@@ -51,7 +51,8 @@ public class RideRequest {
     }
 
     /**
-     * Get rider user rider.
+     * Get rider
+     *
      *
      * @return the user rider
      */
@@ -76,7 +77,7 @@ public class RideRequest {
     }
 
     /**
-     * Get end point string.
+     * Get end point.
      *
      * @return the string
      */
@@ -85,7 +86,7 @@ public class RideRequest {
     }
 
     /**
-     * Get description string.
+     * Get Ride description.
      *
      * @return the string
      */
@@ -94,7 +95,7 @@ public class RideRequest {
     }
 
     /**
-     * Get driver user driver.
+     * Get driver.
      *
      * @return the user driver
      */
@@ -103,7 +104,7 @@ public class RideRequest {
     }
 
     /**
-     * Get fare double.
+     * Get fare for the ride.
      *
      * @return the double
      */
@@ -112,7 +113,7 @@ public class RideRequest {
     }
 
     /**
-     * Get status string.
+     * Get request status.
      *
      * @return the string
      */
@@ -122,6 +123,7 @@ public class RideRequest {
 
     /**
      * Get acceptions list.
+     * Return a list of driver accepted the request
      *
      * @return the list
      */
@@ -133,7 +135,7 @@ public class RideRequest {
     }
 
     /**
-     * Set driver.
+     * Set driver. Confirm by rider
      *
      * @param driver the driver
      */
@@ -144,7 +146,7 @@ public class RideRequest {
     }
 
     /**
-     * Add acception.
+     * Driver accept the ride request
      *
      * @param driver the driver
      */
@@ -160,7 +162,7 @@ public class RideRequest {
     }
 
     /**
-     * Is accepted boolean.
+     * Check whether the driver had accepted the request
      *
      * @param driver the driver
      * @return the boolean
@@ -172,6 +174,11 @@ public class RideRequest {
         return false;
     }
 
+    /**
+     * Confirm driver
+     * @param username
+     * @return
+     */
     public boolean isDriver(String username){
         if(getDriver() == null){
             return true;
@@ -187,7 +194,7 @@ public class RideRequest {
     }
 
     /**
-     * Set status.
+     * Set request status
      *
      * @param status the status
      */

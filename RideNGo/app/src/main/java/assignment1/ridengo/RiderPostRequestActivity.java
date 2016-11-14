@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * The type Rider post request activity.
+ * Rider able to post a new request.
+ * Rider need to enter a starting point and a end point.
  */
 public class RiderPostRequestActivity extends AppCompatActivity {
 
@@ -79,7 +81,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 ArrayList<String> returnedAddresses = data.getStringArrayListExtra("ARRAY_LIST_ADDRESS_MARKER");
                 //String result=data.getStringExtra("result");
                 if (returnedAddresses == null) {
-                    returnedAddresses = data.getStringArrayListExtra("ARRAY_LIST_ADDRESS_SEARCHED");
+                    ArrayList<LatLng> searchedReturnAddress = data.getParcelableArrayListExtra("ARRAY_LIST_ADDRESS_SEARCHED");
                     String fromLocationName = data.getStringExtra("FROM_LOCATION");
                     String toLocationName = data.getStringExtra("TO_LOCATION");
                     final EditText start = (EditText) findViewById(R.id.StartPointEditText);

@@ -15,18 +15,15 @@ import java.util.List;
 
 /**
  * The type Driver main activity.
+ * Main activity for driver, he can search a request by keyword, search by geolocation. And he can view a requests he accepted.
  */
 public class DriverMainActivity extends Activity {
     private String username;
-    /**
-     * The Activity.
-     */
+
     final Activity activity = this;
     private ArrayAdapter<RideRequest> adapter;
-    /**
-     * The Ride request list.
-     */
-    List<RideRequest> rideRequestList = new ArrayList<>();
+
+    private List<RideRequest> rideRequestList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

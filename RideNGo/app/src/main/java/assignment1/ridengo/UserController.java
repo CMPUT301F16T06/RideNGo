@@ -21,7 +21,11 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
 /**
- * The type User controller.
+ * Controller for a list of users.
+ * 1.load from server
+ * 2.save to server
+ * 3.load from file(while offline)
+ * 4.save to file(while offline)
  */
 public class UserController {
 

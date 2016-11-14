@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 /**
  * The type Driver request detail activity.
+ * Driver able to see the details of the request including rider's username, phone number and email address
  */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 

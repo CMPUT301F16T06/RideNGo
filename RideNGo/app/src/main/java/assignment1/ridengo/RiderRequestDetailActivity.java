@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * The type Rider request detail activity.
+ * Rider able to see the detail for the requests he/she posted.
+ * The rider can select the driver, confirm the driver and/or cancel the request
  */
 public class RiderRequestDetailActivity extends AppCompatActivity {
 

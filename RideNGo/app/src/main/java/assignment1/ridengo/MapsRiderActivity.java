@@ -3,74 +3,73 @@ package assignment1.ridengo;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCallback //GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+/**
+ * This is the map activity for the riders where they pick their route
+ * @see RiderPostRequestActivity
+ * @see DirectionsJSONParser
+ */
+
+
+public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCallback
 {
     private static final String TAG = "MapsActivity";
     private int menuLocationOption = 0;
 
     private GoogleMap mMap;
     private ArrayList<LatLng> startAndEndPoints;
-    private ArrayList<LatLng> startAndEndPointsSearcher;
     private Geocoder geocoder;
     private List<Address> addresses = null;
-    private List<Address> startSearchAddressReturn = null;
-    private List<Address> endSearchAddressReturn = null;
+    private Polyline polyLine = null;
+    private LatLng fromLocation;
+    private LatLng toLocation;
     private ArrayList<String> addressesToReturn;
     private float[] distanceResult = new float[1];
     private Marker startMarker;
     private Marker endMarker;
     private String fromLocationName = null;
     private String toLocationName = null;
-    //private double latitudePoint = 0;
-    //private double longitudePoint = 0;
-//    private GoogleApiClient mGoogleApiClient;
-//    private LocationRequest mLocationRequest;
-//    public static final String TAG = MapsActivity.class.getSimpleName();
-    //private static final int LOCATION_REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,38 +93,20 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 if (menuLocationOption == 2) {
-                    //Toast.makeText(getBaseContext(), "Past habit completion deleted." + place.getName(), Toast.LENGTH_SHORT).show();
-                    if (startAndEndPoints.size() >= 2) {
-                        mMap.clear();
-                        startAndEndPoints.clear();
-                        addressesToReturn.clear();
-                        startSearchAddressReturn = null;
-                        fromLocationName = null;
+                    fromLocation = place.getLatLng();
+                    fromLocationName = place.getName().toString();
+
+
+                    if (startMarker == null) {
+                        startMarker = mMap.addMarker(new MarkerOptions().position(fromLocation).title("Start Location"));
+                    } else {
+                        startMarker.remove();
+                        startMarker = mMap.addMarker(new MarkerOptions().position(fromLocation).title("Start Location"));
+                        //startAndEndPoints.clear();
                     }
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fromLocation, 15));
 
-                    if (startAndEndPoints.size() <= 1) {
-                        try {
-                            startSearchAddressReturn = geocoder.getFromLocationName(place.getName().toString(), 1);
-                            LatLng fromLocation = place.getLatLng();
-                            fromLocationName = place.getName().toString();
-                            startAndEndPoints.add(fromLocation);
-
-
-                            if (startMarker == null) {
-                                startMarker = mMap.addMarker(new MarkerOptions().position(fromLocation).title("Start Location"));
-                            } else {
-                                startMarker.remove();
-                                startMarker = mMap.addMarker(new MarkerOptions().position(fromLocation).title("Start Location"));
-                                startAndEndPoints.clear();
-                            }
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fromLocation, 15));
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        //startSearchAddressReturn = geocoder.getFromLocationName(place.getName().toString(),1);
-                        Log.i(TAG, "Place: " + place.getName());
-                    }
+                    Log.i(TAG, "Place: " + place.getName());
                 }
             }
 
@@ -142,32 +123,25 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             public void onPlaceSelected(Place place) {
                 if (menuLocationOption == 2) {
                     // TODO: Get info about the selected place.
-                    //Toast.makeText(getBaseContext(), "Past habit completion deleted." + place.getName(), Toast.LENGTH_SHORT).show();
-                    if (startAndEndPoints.size() >= 2) {
-                        mMap.clear();
-                        startAndEndPoints.clear();
-                        addressesToReturn.clear();
-                        endSearchAddressReturn = null;
-                        toLocationName = null;
-                    }
                     if (startMarker != null) {
-                        try {
-                            endSearchAddressReturn = geocoder.getFromLocationName(place.getName().toString(), 1);
-                            LatLng toLocation = place.getLatLng();
-                            toLocationName = place.getName().toString();
-                            startAndEndPoints.add(toLocation);
-                            if (endMarker == null) {
-                                endMarker = mMap.addMarker(new MarkerOptions().position(toLocation).title("End Location"));
-                            } else {
-                                endMarker.remove();
-                                endMarker = mMap.addMarker(new MarkerOptions().position(toLocation).title("End Location"));
-                                startAndEndPoints.remove(endMarker);
-                            }
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toLocation, 15));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        toLocation = place.getLatLng();
+                        toLocationName = place.getName().toString();
+                        //startAndEndPoints.add(toLocation);
+                        if (endMarker == null) {
+                            endMarker = mMap.addMarker(new MarkerOptions().position(toLocation).title("End Location"));
+                        } else {
+                            endMarker.remove();
+                            endMarker = mMap.addMarker(new MarkerOptions().position(toLocation).title("End Location"));
+                            //startAndEndPoints.remove(endMarker);
                         }
-                        //startSearchAddressReturn = geocoder.getFromLocationName(place.getName().toString(),1);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(toLocation, 15));
+                        Location.distanceBetween(fromLocation.latitude, fromLocation.longitude, toLocation.latitude, toLocation.longitude, distanceResult);
+                        if (polyLine != null){
+                            polyLine.remove();
+                        }
+                        String url = getDirectionsUrl(toLocation,fromLocation);
+                        DownloadTask downloadTask = new DownloadTask();
+                        downloadTask.execute(url);
                         Log.i(TAG, "Place: " + place.getName());
 
                     }
@@ -186,17 +160,21 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             public void onClick(View v){
                 // Add things to save the start and end location data. Doing this for now as
                 // I don't know how to save to elastic search yet.
-                ArrayList<String> searchedReturnAddresses = new ArrayList<String>();
+                //ArrayList<String> searchedReturnAddresses = new ArrayList<String>();
+                ArrayList<LatLng> searchedReturnAddresses = new ArrayList<LatLng>();
                 Intent intent = new Intent(MapsRiderActivity.this, RiderPostRequestActivity.class);
                 Bundle extras = new Bundle();
                 if (addressesToReturn.size() == 2){
                     extras.putStringArrayList("ARRAY_LIST_ADDRESS_MARKER", addressesToReturn);
+                    searchedReturnAddresses.add(startAndEndPoints.get(0));
+                    searchedReturnAddresses.add(startAndEndPoints.get(1));
+                    extras.putParcelableArrayList("MARKER_LAT_LNG", searchedReturnAddresses);
                 }
 
-                if (startSearchAddressReturn != null && endSearchAddressReturn != null){
-                    searchedReturnAddresses.add(startSearchAddressReturn.get(0).toString());
-                    searchedReturnAddresses.add(endSearchAddressReturn.get(0).toString());
-                    extras.putStringArrayList("ARRAY_LIST_ADDRESS_SEARCHED", searchedReturnAddresses);
+                if (startMarker != null && endMarker != null){
+                    searchedReturnAddresses.add(fromLocation);
+                    searchedReturnAddresses.add(toLocation);
+                    extras.putParcelableArrayList("ARRAY_LIST_ADDRESS_SEARCHED", searchedReturnAddresses);
                     extras.putString("FROM_LOCATION", fromLocationName);
                     extras.putString("TO_LOCATION", toLocationName);
                 }
@@ -204,7 +182,6 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                 intent.putExtras(extras);
                 setResult(RESULT_OK,intent);
                 finish();
-                //startActivity(intent);
             }
         });
 
@@ -212,40 +189,8 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             public void onClick(View v){
                 registerForContextMenu(optionButton);
                 openContextMenu(optionButton);
-
             }
         });
-
-
-//        locationSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String location = startTextLocation.getText().toString();
-//                try {
-//                    startSearchAddress = geocoder.getFromLocationName(location, 1);
-//                    Address address1 = startSearchAddress.get(0);
-//                    Toast.makeText(getBaseContext(),"Past habit completion deleted." + address1,Toast.LENGTH_SHORT).show();
-//                    double lat = address1.getLatitude();
-//                    double lng = address1.getLongitude();
-//                    LatLng bleh = new LatLng(lat,lng);
-//                    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(bleh, 15);
-//                    mMap.moveCamera(update);
-//                } catch(IOException e){
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        });
-
-//        if(mGoogleApiClient == null){
-//            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addConnectionCallbacks(this)
-//                    .addOnConnectionFailedListener(this)
-//                    .addApi(LocationServices.API)
-//                    .build();
-//        }
-//        requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-//                LOCATION_REQUEST_CODE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -258,8 +203,6 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.map_options, menu);
-        //MenuItem useMarkers = menu.findItem(R.id.use_markers);
-        //MenuItem useSearcheer = menu.findItem(R.id.use_searcher);
     }
 
     public boolean onContextItemSelected(MenuItem item){
@@ -267,11 +210,13 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             case R.id.use_markers:
                 Toast.makeText(getApplicationContext(),"marker", Toast.LENGTH_SHORT).show();
                 item.setChecked(true);
+                resetMap();
                 menuLocationOption = 1;
                 return true;
             case R.id.use_searcher:
                 Toast.makeText(getApplicationContext(),"searcher", Toast.LENGTH_SHORT).show();
                 item.setChecked(true);
+                resetMap();
                 menuLocationOption = 2;
                 return true;
         }
@@ -284,53 +229,11 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
         addressesToReturn.clear();
         startMarker = null;
         endMarker = null;
-        startSearchAddressReturn = null;
+        fromLocation = null;
         fromLocationName = null;
-        endSearchAddressReturn = null;
+        toLocation = null;
         toLocationName = null;
-
-//        private GoogleMap mMap;
-//        private ArrayList<LatLng> startAndEndPoints;
-//        private ArrayList<LatLng> startAndEndPointsSearcher;
-//        private Geocoder geocoder;
-//        private List<Address> addresses = null;
-//        private List<Address> startSearchAddressReturn = null;
-//        private List<Address> endSearchAddressReturn = null;
-//        private ArrayList<String> addressesToReturn;
-//        private float[] distanceResult = new float[1];
-//        private Marker startMarker;
-//        private Marker endMarker;
-//        private String fromLocationName = null;
-//        private String toLocationName = null;
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        //setUpMapIfNeeded();
-//        mGoogleApiClient.connect();
-//    }
-
-//    @Override
-//    protected void onStart() {
-//        mGoogleApiClient.connect();
-//        //Toast.makeText(getBaseContext(),"Past habit completion deleted.",Toast.LENGTH_SHORT).show();
-//        super.onStart();
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        mGoogleApiClient.disconnect();
-//        super.onStop();
-//    }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        if (mGoogleApiClient.isConnected()) {
-//            mGoogleApiClient.disconnect();
-//        }
-//    }
-
 
     /**
      * Manipulates the map once available.
@@ -347,13 +250,10 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
 
         // Disable the toolbar on bottom right of screen
         mMap.getUiSettings().setMapToolbarEnabled(false);
+
         // Add zoom buttons
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
         LatLng edmonton = new LatLng(53.5444,-113.4909);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(edmonton,10));
 
 
@@ -368,23 +268,24 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             return;
         }
 
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//            mMap.setMyLocationEnabled(true);
+//        } else {
+//            ActivityCompat.requestPermissions(MapsRiderActivity.this,
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+//        }
+
 //        int permissionCheck = ContextCompat.checkSelfPermission(this,
 //                Manifest.permission.WRITE_CALENDAR);
 
         mMap.setMyLocationEnabled(true);
 
-//        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-//        boolean gpsReady = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-//        if (gpsReady == false){
-//            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//            startActivity(intent);
-//        }
 
         //http://stackoverflow.com/questions/35348604/location-button-doesnt-work-googlemaps-v2
         mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
-//                LatLng loc = new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude());
                 LatLng loc = new LatLng(53.5444,-113.4909);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
                 return true;
@@ -397,13 +298,11 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
             public void onMapClick(LatLng latLng) {
                 if (menuLocationOption == 1) {
                     // Need to check if there is already a start and end point
-                    //Toast.makeText(getBaseContext(),"Past habit completion deleted." + startAndEndPoints.size(),Toast.LENGTH_SHORT).show();
                     if (startAndEndPoints.size() >= 2 || startMarker != null) {
                         resetMap();
                     }
 
                     startAndEndPoints.add(latLng);
-                    //Toast.makeText(getBaseContext(),"Past habit completion deleted." + startAndEndPoints,Toast.LENGTH_SHORT).show();
                     if (startAndEndPoints.size() == 1) {
                         mMap.addMarker(new MarkerOptions().position(startAndEndPoints.get(0)).title("Start Location"));
                     } else {
@@ -415,6 +314,12 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                         // Metres
                         Location.distanceBetween(startDestination.latitude, startDestination.longitude, endDestination.latitude, endDestination.longitude, distanceResult);
                         Toast.makeText(getBaseContext(), "Distance between points in metres " + distanceResult[0], Toast.LENGTH_SHORT).show();
+                        if (polyLine != null){
+                            polyLine.remove();
+                        }
+                        String url = getDirectionsUrl(startDestination,endDestination);
+                        DownloadTask downloadTask = new DownloadTask();
+                        downloadTask.execute(url);
                     }
 
                 }
@@ -456,98 +361,160 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
                 Log.e(TAG, errorMessage);
             }
 
-            //deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
-//        } else {
-//            Address address = addresses.get(0);
-//            ArrayList<String> addressFragments = new ArrayList<String>();
-//
-//            // Fetch the address lines using getAddressLine,
-//            // join them, and send them to the thread.
-//            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-//                addressFragments.add(address.getAddressLine(i));
-//            }
-//            Log.i(TAG, getString(R.string.address_found));
-//            deliverResultToReceiver(Constants.SUCCESS_RESULT,
-//                    TextUtils.join(System.getProperty("line.separator"),
-//                            addressFragments));
-//        }
-
         } else {
             String locationAddress = addresses.get(0).getAddressLine(0);
             addressesToReturn.add(locationAddress);
-            //Toast.makeText(getBaseContext(),"Past habit completion deleted." + locationAddress,Toast.LENGTH_SHORT).show();
         }
     }
 
+private String getDirectionsUrl(LatLng origin,LatLng dest){
 
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-//        Log.i(TAG,"Connected to services");
-//        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-////        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-////                mGoogleApiClient);
-//        //Toast.makeText(getBaseContext(),"Past habit completion deleted.",Toast.LENGTH_SHORT).show();
-//        if (mLastLocation != null) {
-//            //Toast.makeText(getBaseContext(),"Past habit completion deleted.",Toast.LENGTH_SHORT).show();
-//            if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//                    || ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//                double mLatitude = mLastLocation.getLatitude();
-//                double mLongitude = mLastLocation.getLongitude();
-//                LatLng latLng = new LatLng(mLatitude, mLongitude);
-//                MarkerOptions options = new MarkerOptions()
-//                        .position(latLng)
-//                        .title("I am here!");
-//                mMap.addMarker(options);
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-//                Toast.makeText(getBaseContext(),"Stuff." + mLatitude ,Toast.LENGTH_SHORT).show();
-//            }
-////            mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-////            mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-//        } else {
-//            //LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-//        }
-//
-//    }
+    // Origin of route
+    String str_origin = "origin="+origin.latitude+","+origin.longitude;
 
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//        Log.i(TAG, "Reconnect.");
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//    }
-//
-//    @Override
-//    public void onLocationChanged(Location location) {
-//
-//    }
+    // Destination of route
+    String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
-//    protected void requestPermission(String permissionType, int requestCode) {
-//        int permission = ContextCompat.checkSelfPermission(this,
-//                permissionType);
-//
-//        if (permission != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{permissionType}, requestCode
-//            );
-//        }
-//    }
+    // Sensor enabled
+    String sensor = "sensor=false";
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                                           int[] grantResults){
-//        switch (requestCode) {
-//            case LOCATION_REQUEST_CODE: {
-//
-//                if (grantResults.length == 0
-//                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(this, "Unable to show location - permission required", Toast.LENGTH_LONG).show();
-//                }
-//                return;
-//            }
-//        }
-//    }
+    // Building the parameters to the web service
+    String parameters = str_origin+"&"+str_dest+"&"+sensor;
+
+    // Output format
+    String output = "json";
+
+    String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+    return url;
+}
+
+private String downloadUrl(String strUrl) throws IOException{
+    String data = "";
+    InputStream iStream = null;
+    HttpURLConnection urlConnection = null;
+    try{
+        URL url = new URL(strUrl);
+
+        urlConnection = (HttpURLConnection) url.openConnection();
+
+        // Connecting to url
+        urlConnection.connect();
+
+        // Reading data from url
+        iStream = urlConnection.getInputStream();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+        StringBuffer sb  = new StringBuffer();
+
+        String line = "";
+        while( ( line = br.readLine())  != null){
+            sb.append(line);
+        }
+
+        data = sb.toString();
+
+        br.close();
+
+    }catch(Exception e){
+        Log.d("Exception url", e.toString());
+    }finally{
+        iStream.close();
+        urlConnection.disconnect();
+    }
+    return data;
+}
+
+// Fetches data from url passed
+private class DownloadTask extends AsyncTask<String, Void, String> {
+
+    // Downloading data in non-ui thread
+    @Override
+    protected String doInBackground(String... url) {
+
+        // For storing data from web service
+        String data = "";
+
+        try{
+            // Fetching the data from web service
+            data = downloadUrl(url[0]);
+        }catch(Exception e){
+            Log.d("Background Task",e.toString());
+        }
+        return data;
+    }
+
+    // Executes in UI thread, after the execution of
+    // doInBackground()
+    @Override
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
+
+        ParserTask parserTask = new ParserTask();
+
+        // Invokes the thread for parsing the JSON data
+        parserTask.execute(result);
+    }
+}
+
+
+private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>>> {
+
+    @Override
+    protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+        JSONObject jObject;
+        List<List<HashMap<String, String>>> routes = null;
+
+        try {
+            jObject = new JSONObject(jsonData[0]);
+            DirectionsJSONParser parser = new DirectionsJSONParser();
+
+            // Starts parsing data
+            routes = parser.parse(jObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return routes;
+    }
+
+    @Override
+    protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+        ArrayList<LatLng> points = null;
+        PolylineOptions lineOptions = null;
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        // Traversing through all the routes
+        for (int i = 0; i < result.size(); i++) {
+            points = new ArrayList<LatLng>();
+            lineOptions = new PolylineOptions();
+
+            // Fetching i-th route
+            List<HashMap<String, String>> path = result.get(i);
+
+            // Fetching all the points in i-th route
+            for (int j = 0; j < path.size(); j++) {
+                HashMap<String, String> point = path.get(j);
+
+                double lat = Double.parseDouble(point.get("lat"));
+                double lng = Double.parseDouble(point.get("lng"));
+                LatLng position = new LatLng(lat, lng);
+
+                points.add(position);
+            }
+
+            // Adding all the points in the route to LineOptions
+            lineOptions.addAll(points);
+            lineOptions.width(2);
+            lineOptions.color(Color.RED);
+        }
+
+        // Drawing polyline in the Google Map for the i-th route
+        polyLine = mMap.addPolyline(lineOptions);
+    }
+}
+
+
 }
 

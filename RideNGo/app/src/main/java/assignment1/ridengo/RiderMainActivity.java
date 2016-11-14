@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * The type Rider main activity.
+ * Main activity for Rider. Rider able to see/update a list of requests he/she posted, and/or post a new request
  */
 public class RiderMainActivity extends AppCompatActivity {
 

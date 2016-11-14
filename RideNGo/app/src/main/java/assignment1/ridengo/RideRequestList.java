@@ -5,7 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * The type Ride request list.
+ * A list that keep tracks of all the ride request
+ * Able to manipulate(add, delete, update) ride requests
  */
 public class RideRequestList {
 
@@ -25,7 +26,7 @@ public class RideRequestList {
     }
 
     /**
-     * Contains boolean.
+     * Check whether the list contain a ride request
      *
      * @param testRequest the test request
      * @return the boolean
@@ -58,6 +59,10 @@ public class RideRequestList {
         }
     }
 
+    /**
+     * Get a list of listeners
+     * @return
+     */
     private ArrayList<Listener> getListeners() {
         if (listeners == null ) {
             listeners = new ArrayList<Listener>();
@@ -66,7 +71,7 @@ public class RideRequestList {
     }
 
     /**
-     * Gets requests.
+     * Gets all requests stored in ride request lsit
      *
      * @return the requests
      */
@@ -78,7 +83,7 @@ public class RideRequestList {
     }
 
     /**
-     * Get requests with rider list.
+     * Get requests related to a particular user
      *
      * @param username the username
      * @return the list
@@ -94,7 +99,7 @@ public class RideRequestList {
     }
 
     /**
-     * Get requests with driver list.
+     * Get requests related to a particular driver
      *
      * @param username the username
      * @return the list
@@ -111,7 +116,7 @@ public class RideRequestList {
     }
 
     /**
-     * Get request with hash ride request.
+     * Get request with a unique hash code
      *
      * @param h the h
      * @return the ride request
@@ -126,9 +131,9 @@ public class RideRequestList {
     }
 
     /**
-     * Add request.
+     * Add a new request
      *
-     * @param testRequest the test request
+     * @param testRequest
      */
     public void addRequest(RideRequest testRequest) {
         requestList.add(testRequest);
@@ -142,7 +147,7 @@ public class RideRequestList {
     }
 
     /**
-     * Clear.
+     * Clear the request list
      */
     public void clear() {
         requestList.clear();
@@ -150,7 +155,7 @@ public class RideRequestList {
     }
 
     /**
-     * Remove request.
+     * Remove a request from list.
      *
      * @param index the index
      */
@@ -159,9 +164,7 @@ public class RideRequestList {
         notifyListeners();
     }
 
-    /**
-     * Add test case.
-     */
+
 //////////////Temp Test Case/////////////
     public void addTestCase(){
         User rider1 = new User("A","a@example.com","7800000000");

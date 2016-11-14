@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 /**
  * The type Main activity.
+ * Able to let the user to select to sign in or sign up
  */
 public class MainActivity extends Activity {
 

@@ -1,5 +1,7 @@
 package assignment1.ridengo;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +9,8 @@ import java.util.List;
 
 /**
  * The type User.
+ * Keep track of all user info, such as phone, email and username
+ *Also keep track of a list of requests that a user is involve
  */
 public class User {
 
@@ -228,5 +232,21 @@ public class User {
 
     public String toString(){
         return username;
+    }
+
+    public boolean isNotified() {
+        return false;
+    }
+
+    public RideRequestList getPendingRequests() {
+        return null;
+    }
+
+    public RideRequestList getRequestsByKeyword(String start) {
+        return null;
+    }
+
+    public RideRequestList getRequestsByGeoLocation(LatLng latLng) {
+        return null;
     }
 }
