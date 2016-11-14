@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * The type Rider post request activity.
@@ -44,7 +47,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
 
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
         description="Test";
-        fare = 50.00;
+        fare = 0.00;
 
         estimatedFare.setText("$"+fare);
 
@@ -79,31 +82,38 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             //Toast.makeText(getBaseContext(),"Error getting location",Toast.LENGTH_SHORT).show();
             if(resultCode == RESULT_OK) {
                 ArrayList<String> returnedAddresses = data.getStringArrayListExtra("ARRAY_LIST_ADDRESS_MARKER");
+                final EditText start = (EditText) findViewById(R.id.StartPointEditText);
+                final EditText end = (EditText) findViewById(R.id.EndPointEditText);
+                final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
                 //String result=data.getStringExtra("result");
                 if (returnedAddresses == null) {
                     ArrayList<LatLng> searchedReturnAddress = data.getParcelableArrayListExtra("ARRAY_LIST_ADDRESS_SEARCHED");
                     String fromLocationName = data.getStringExtra("FROM_LOCATION");
                     String toLocationName = data.getStringExtra("TO_LOCATION");
-                    final EditText start = (EditText) findViewById(R.id.StartPointEditText);
-                    final EditText end = (EditText) findViewById(R.id.EndPointEditText);
+                    //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
+                    //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                     start.setText(fromLocationName);
                     end.setText(toLocationName);
                 } else {
-                    final EditText start = (EditText) findViewById(R.id.StartPointEditText);
-                    final EditText end = (EditText) findViewById(R.id.EndPointEditText);
+                    //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
+                    //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                     start.setText(returnedAddresses.get(0));
                     end.setText(returnedAddresses.get(1));
                 }
                 float returnedDistance = data.getFloatExtra("DISTANCE_FROM_POINTS", 0);
+
                 //Toast.makeText(getBaseContext(),"asdasd" + returnedDistance,Toast.LENGTH_SHORT).show();
-                final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-                estimatedFare.setText("$" + returnedDistance);
+                // http://stackoverflow.com/questions/5195837/format-float-to-n-decimal-places
+                NumberFormat fareFormat = NumberFormat.getInstance(Locale.CANADA);
+                fareFormat.setMaximumFractionDigits(2);
+                fareFormat.setMinimumFractionDigits(2);
+                fareFormat.setRoundingMode(RoundingMode.HALF_UP);
+                Float roundedFare = new Float(fareFormat.format(((returnedDistance/100) * 0.13)));
+                estimatedFare.setText("$" + roundedFare);
 
 
-                //}
-                // if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }//}
+
+            }
         }
     }//onActivityResult
 
