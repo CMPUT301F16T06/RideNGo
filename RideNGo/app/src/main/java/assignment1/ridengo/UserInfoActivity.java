@@ -48,7 +48,11 @@ public class UserInfoActivity extends Activity {
                 if(currentUser == null) {
                     currentUser = new User(username, email, phoneNum);
                     UserController.addUser(currentUser);
-                } else {
+                } else if(user.isEmpty()) {
+                    Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
                     currentUser.setEmail(email);
                     currentUser.setPhoneNum(phoneNum);
                 }
