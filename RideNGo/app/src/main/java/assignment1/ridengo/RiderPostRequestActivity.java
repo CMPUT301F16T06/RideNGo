@@ -82,12 +82,16 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             //Toast.makeText(getBaseContext(),"Error getting location",Toast.LENGTH_SHORT).show();
             if(resultCode == RESULT_OK) {
                 ArrayList<String> returnedAddresses = data.getStringArrayListExtra("ARRAY_LIST_ADDRESS_MARKER");
+                ArrayList<LatLng> markerLatLng = data.getParcelableArrayListExtra("MARKER_LAT_LNG");
+
                 final EditText start = (EditText) findViewById(R.id.StartPointEditText);
                 final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                 final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
                 //String result=data.getStringExtra("result");
+
+                // Then search option used when picking points
                 if (returnedAddresses == null) {
-                    ArrayList<LatLng> searchedReturnAddress = data.getParcelableArrayListExtra("ARRAY_LIST_ADDRESS_SEARCHED");
+                    ArrayList<LatLng> searchedReturnAddressLatLng = data.getParcelableArrayListExtra("ARRAY_LIST_ADDRESS_SEARCHED");
                     String fromLocationName = data.getStringExtra("FROM_LOCATION");
                     String toLocationName = data.getStringExtra("TO_LOCATION");
                     //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
@@ -108,7 +112,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 fareFormat.setMaximumFractionDigits(2);
                 fareFormat.setMinimumFractionDigits(2);
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
-                Float roundedFare = new Float(fareFormat.format(((returnedDistance/100) * 0.13)));
+                Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
                 estimatedFare.setText("$" + roundedFare);
 
 
