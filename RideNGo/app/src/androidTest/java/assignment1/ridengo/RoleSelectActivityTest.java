@@ -11,7 +11,7 @@ import com.robotium.solo.Solo;
  */
 public class RoleSelectActivityTest extends ActivityInstrumentationTestCase2<RoleSelectActivity> {
     private Solo solo;
-    Intent intent;
+    private Intent intent;
 
     public RoleSelectActivityTest(){
         super(RoleSelectActivity.class);

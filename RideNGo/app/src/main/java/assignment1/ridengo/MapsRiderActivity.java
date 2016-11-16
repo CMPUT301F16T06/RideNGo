@@ -254,7 +254,7 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
     /**
      * Function used to return all map conditions to the original form
      */
-    public void resetMap(){
+    private void resetMap(){
         mMap.clear();
         startAndEndPoints.clear();
         addressesToReturn.clear();
@@ -361,7 +361,7 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
      * https://developer.android.com/training/location/display-address.html
      */
     // https://developer.android.com/training/location/display-address.html
-    public void getAddressInfo(LatLng addressCoordinate){
+    private void getAddressInfo(LatLng addressCoordinate){
         String errorMessage = "";
         double latitudePoint = addressCoordinate.latitude;
         double longitudePoint = addressCoordinate.longitude;
