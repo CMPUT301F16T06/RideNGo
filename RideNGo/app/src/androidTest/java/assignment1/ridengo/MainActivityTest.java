@@ -6,8 +6,6 @@ import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
-import java.util.ArrayList;
-
 /**
  * Test for MainActivity
  * Created by Rui on 2016-11-11.

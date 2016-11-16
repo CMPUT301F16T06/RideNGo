@@ -28,7 +28,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ToDo"
+        android:text="Enable map"
         android:id="@+id/locationSearcher"
         android:layout_alignBottom="@+id/doneButton"
         android:layout_alignStart="@+id/map" />

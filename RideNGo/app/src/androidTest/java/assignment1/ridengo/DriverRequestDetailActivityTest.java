@@ -1,6 +1,5 @@
 package assignment1.ridengo;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.robotium.solo.Solo;

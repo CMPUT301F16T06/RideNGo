@@ -112,7 +112,7 @@ public class User {
     /**
      * Notify listeners.
      */
-    public void notifyListeners(){
+    private void notifyListeners(){
         for(Listener listener : this.listeners){
             if(listener != null) {
                 listener.update();

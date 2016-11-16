@@ -25,7 +25,7 @@ public class RiderMainActivity extends AppCompatActivity {
     /**
      * The Activity.
      */
-    final Activity activity = this;
+    private final Activity activity = this;
     private ArrayAdapter<RideRequest> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

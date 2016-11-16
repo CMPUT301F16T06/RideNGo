@@ -21,22 +21,20 @@ import java.util.List;
  */
 public class RiderRequestDetailActivity extends AppCompatActivity {
 
-    private ArrayAdapter<User> adapter;
-    private String username;
     private int position;
     private RideRequest rideRequest;
 
     /**
      * The Activity.
      */
-    final Activity activity = this;
+    private final Activity activity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
 
-        username = getIntent().getStringExtra("username");
+        String username = getIntent().getStringExtra("username");
         position = getIntent().getIntExtra("position", 0);
 
         rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
@@ -53,7 +51,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.RequestDetailListView);
 
         final List<User> driverList = rideRequest.getAcceptions();
-        adapter = new ArrayAdapter<User>(activity, android.R.layout.simple_list_item_1, driverList);
+        ArrayAdapter<User> adapter = new ArrayAdapter<User>(activity, android.R.layout.simple_list_item_1, driverList);
         listView.setAdapter(adapter);
 
 
