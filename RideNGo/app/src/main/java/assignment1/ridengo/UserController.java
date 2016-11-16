@@ -96,20 +96,6 @@ public class UserController {
         }
     }
 
-    static public void updateUser(User user) {
-        DeleteUsersTask deleteUsersTask = new DeleteUsersTask();
-        AddUsersTask addUsersTask = new AddUsersTask();
-
-        try{
-
-            deleteUsersTask.execute(user);
-            addUsersTask.execute(user);
-        }catch(RuntimeException e) {
-            Log.i("Error", "Not able to delete user to elasticsearch server.");
-            e.printStackTrace();
-        }
-    }
-
     /**
      * The type Get users task.
      */
@@ -121,8 +107,8 @@ public class UserController {
             ArrayList<User> users = new ArrayList<User>();
 
 
-            // String search_string = "{\"from\": 0, \"size\": 10000}";
-            String search_string = search_parameters[0];
+            String search_string = "{\"from\": 0, \"size\": 10000}";
+            //String search_string = search_parameters[0];
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)

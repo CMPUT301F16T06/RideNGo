@@ -3,9 +3,9 @@ package assignment1.ridengo;
 /**
  * The interface Listener.
  */
-public interface Listener {
+interface Listener {
     /**
      * Update.
      */
-    public void update();
+    void update();
 }

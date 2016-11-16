@@ -1,7 +1,6 @@
 package assignment1.ridengo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,7 +14,7 @@ public class RideRequestList {
      * The constant listeners.
      */
 //    private static final long serialVersionUID = 6673446047991058932L;
-    protected transient ArrayList<Listener> listeners = null;
+    private transient ArrayList<Listener> listeners = null;
 
     /**
      * Instantiates a new Ride request list.
@@ -162,30 +161,6 @@ public class RideRequestList {
     public void removeRequest(int index){
         requestList.remove(index);
         notifyListeners();
-    }
-
-
-//////////////Temp Test Case/////////////
-    public void addTestCase(){
-        User rider1 = new User("A","a@example.com","7800000000");
-        RideRequest test1 = new RideRequest("Uni","100St","Have fun",rider1,10.00);
-        User rider2 = new User("A","a@example.com","7800000000");
-        RideRequest test2 = new RideRequest("Uni","101St","Have fun",rider1,20.00);
-        requestList.add(test1);
-        requestList.add(test2);
-    }
-
-    /**
-     * Get test requests list.
-     *
-     * @return the list
-     */
-    public List<RideRequest> getTestRequests(){
-        addTestCase();
-        if(requestList == null){
-            requestList = new ArrayList<RideRequest>();
-        }
-        return requestList;
     }
 
 }

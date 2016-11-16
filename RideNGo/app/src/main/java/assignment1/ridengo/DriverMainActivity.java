@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,7 @@ import java.util.List;
 public class DriverMainActivity extends Activity {
     private String username;
 
-    final Activity activity = this;
-    private ArrayAdapter<RideRequest> adapter;
+    private final Activity activity = this;
 
     private List<RideRequest> rideRequestList = new ArrayList<>();
     @Override
@@ -41,7 +39,7 @@ public class DriverMainActivity extends Activity {
         Button viewAcceptedButton = (Button) findViewById(R.id.ViewAcceptedButton);
         ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
         rideRequestList = RideRequestController.getRequestList().getRequests(); //.getTestRequests();
-        adapter = new ArrayAdapter<RideRequest>(activity,android.R.layout.simple_list_item_1,rideRequestList);
+        ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
         requestListView.setAdapter(adapter);
 
         viewAcceptedButton.setOnClickListener(new View.OnClickListener(){

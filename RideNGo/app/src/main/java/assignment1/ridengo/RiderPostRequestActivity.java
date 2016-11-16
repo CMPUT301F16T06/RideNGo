@@ -34,7 +34,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     /**
      * The Ride request controller.
      */
-    RideRequestController rideRequestController = new RideRequestController();
+    //RideRequestController rideRequestController = new RideRequestController();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
                 RideRequest rideRequest = new RideRequest(startPoint, endPoint, description, rider,fare);
-                rideRequestController.getRequestList().addRequest(rideRequest);
+                RideRequestController.getRequestList().addRequest(rideRequest);
                 Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
                 finish();
             }

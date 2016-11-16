@@ -1,6 +1,5 @@
 package assignment1.ridengo;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +17,7 @@ import java.util.ArrayList;
  */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
-    private String username;
     private int hash;
-    private ArrayAdapter<String> adapter;
     private RideRequest rideRequest;
     private ArrayList<String> info = new ArrayList<String>();
 
@@ -29,7 +26,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_request_detail);
 
-        username = getIntent().getStringExtra("username");
+        String username = getIntent().getStringExtra("username");
         hash = getIntent().getIntExtra("hash",0);
         final User driver = UserController.getUserList().getUserByUsername(username);
         rideRequest = RideRequestController.getRequestList().getRequestWithHash(hash);
@@ -38,7 +35,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         ListView requestDetailListView = (ListView)findViewById(R.id.RequestDetailListView);
         Button acceptButton = (Button)findViewById(R.id.AcceptButton);
 
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,info);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, info);
         requestDetailListView.setAdapter(adapter);
 
         if(rideRequest.isAccepted(driver)){
@@ -71,7 +68,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
     /**
      * Get info.
      */
-    public void getInfo(){
+    private void getInfo(){
         info.clear();
         User rider = rideRequest.getRider();
         info.add("Start: " + rideRequest.getStartPoint().toString());

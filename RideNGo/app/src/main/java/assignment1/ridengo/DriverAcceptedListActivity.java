@@ -25,11 +25,10 @@ import static android.graphics.Color.GRAY;
 public class DriverAcceptedListActivity extends AppCompatActivity {
 
     private String username;
-    private ArrayAdapter<RideRequest> adapter;
     /**
      * The Activity.
      */
-    final Activity activity = this;
+    private final Activity activity = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,25 +39,24 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
         final List<RideRequest> requestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
 
-        adapter = new ArrayAdapter<RideRequest>(this,android.R.layout.simple_list_item_1,requestList){
+        ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(this, android.R.layout.simple_list_item_1, requestList) {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent){
+            public View getView(int position, View convertView, ViewGroup parent) {
                 TwoLineListItem row;
-                if(convertView == null){
-                    LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    row = (TwoLineListItem)inflater.inflate(android.R.layout.simple_list_item_2, null);
-                }else{
-                    row = (TwoLineListItem)convertView;
+                if (convertView == null) {
+                    LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    row = (TwoLineListItem) inflater.inflate(android.R.layout.simple_list_item_2, null);
+                } else {
+                    row = (TwoLineListItem) convertView;
                 }
                 RideRequest request = requestList.get(position);
                 row.getText1().setText(request.toString());
-                if(!request.isDriver(username)){
+                if (!request.isDriver(username)) {
                     row.getText1().setTextColor(GRAY);
-                    Toast.makeText(DriverAcceptedListActivity.this,request.getDriver() + "," + request.isDriver(username),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DriverAcceptedListActivity.this, request.getDriver() + "," + request.isDriver(username), Toast.LENGTH_SHORT).show();
                     row.getText2().setText("Request on trip, customer has picked another driver.");
                     row.getText2().setTextColor(GRAY);
-                }
-                else {
+                } else {
                     row.getText1().setTextColor(BLACK);
                     row.getText2().setText(request.getStatus());
                     row.getText2().setTextColor(GRAY);

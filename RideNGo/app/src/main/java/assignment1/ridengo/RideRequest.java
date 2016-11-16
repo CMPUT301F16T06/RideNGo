@@ -1,10 +1,5 @@
 package assignment1.ridengo;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,10 +163,7 @@ public class RideRequest {
      * @return the boolean
      */
     public boolean isAccepted(User driver){
-        if(getAcceptions().contains(driver)){
-            return true;
-        }
-        return false;
+        return getAcceptions().contains(driver);
     }
 
     /**
@@ -219,7 +211,7 @@ public class RideRequest {
     /**
      * Notify listeners.
      */
-    public void notifyListeners(){
+    private void notifyListeners(){
         for(Listener listener : this.listeners){
             listener.update();
         }
@@ -235,7 +227,6 @@ public class RideRequest {
     }
 
     public String toString(){
-        String string= "From: "+ getStartPoint() + " to "+ getEndPoint();
-        return string;
+        return "From: "+ getStartPoint() + " to "+ getEndPoint();
     }
 }

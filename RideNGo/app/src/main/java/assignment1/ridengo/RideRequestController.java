@@ -1,7 +1,5 @@
 package assignment1.ridengo;
 
-import java.util.ArrayList;
-
 /**
  * Controller for Ride request lists
  *1. Load from server
@@ -9,7 +7,7 @@ import java.util.ArrayList;
  * 3. Load from file
  * 4. Save to file
  */
-public class RideRequestController {
+class RideRequestController {
 
     private static RideRequestList requestList = null;
 
