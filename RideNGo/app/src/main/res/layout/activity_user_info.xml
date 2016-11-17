@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_EnterUsername"
         android:inputType="text"
+        android:maxLength="20"
         android:maxLines="1"
         android:layout_below="@+id/textView"
         android:layout_alignEnd="@+id/button_SignUpMain"

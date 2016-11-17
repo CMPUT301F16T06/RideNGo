@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
+
 /**
  * The type User info activity.
  * Able to let user to update his/her information
@@ -41,10 +44,25 @@ public class UserInfoActivity extends Activity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameText.getText().toString();
-                String email = emailText.getText().toString();
+                String username = usernameText.getText().toString().trim();
+                String email = emailText.getText().toString().trim();
                 String phoneNum = phoneNumText.getText().toString();
 
+                String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
+                //Pattern p = Pattern.compile(emailPattern);
+
+                if(username.contains(" ")){
+                    Toast.makeText(UserInfoActivity.this,"Invalid username, please try again",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!Pattern.matches(emailPattern,email)){
+                    Toast.makeText(UserInfoActivity.this,"Invalid email address, please try again",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(phoneNum.length()<14){
+                    Toast.makeText(UserInfoActivity.this,"Invalid phone number, please try again",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
 
                 User currentUser = UserController.getUserList().getUserByUsername(username);
@@ -62,6 +80,7 @@ public class UserInfoActivity extends Activity {
                 Intent intent = new Intent(activity, RoleSelectActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
+                finish();
 //
 //                try{
 //                    UserController.addUser(currentUser);
