@@ -3,6 +3,7 @@ package assignment1.ridengo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ public class UserInfoActivity extends Activity {
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
+
+        phoneNumText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         final String user = getIntent().getStringExtra("username");
         if(!user.isEmpty()){

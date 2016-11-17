@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/usernameMain"
         android:hint="Username"
+        android:inputType="text"
+        android:maxLines="1"
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/textView_Title"
         android:layout_alignEnd="@+id/textView_Title" />
