@@ -19,8 +19,6 @@ public class User {
     private String email;
     private String phoneNum;
     private Vehicle vehicle;
-//    private UserRider rider = new UserRider(this);
-//    private UserDriver driver = new UserDriver(this);
     private ArrayList<Listener> listeners;
     private RideRequestList acceptedRequests;
     private RideRequestList postedRequests;
