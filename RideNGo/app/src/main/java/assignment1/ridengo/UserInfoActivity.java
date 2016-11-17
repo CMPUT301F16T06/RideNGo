@@ -7,10 +7,10 @@ import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
-
 
 /**
  * The type User info activity.
@@ -28,6 +28,7 @@ public class UserInfoActivity extends Activity {
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
+        final TextView vehicleInfoText = (TextView) findViewById(R.id.vehicleInfoTextView);
 
         phoneNumText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
@@ -38,7 +39,18 @@ public class UserInfoActivity extends Activity {
             usernameText.setEnabled(false);
             emailText.setText(currentUser.getEmail());
             phoneNumText.setText(currentUser.getPhoneNum());
+            if(!(currentUser.getVehicle() == null)) {
+                vehicleInfoText.setText(currentUser.getVehicle().toString());
+            }
         }
+
+        Button addVehicleButton = (Button) findViewById(R.id.button_add_vehicle);
+        addVehicleButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Toast.makeText(UserInfoActivity.this,"addVehicleActivity",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Button signupButton = (Button) findViewById(R.id.button_SignUpMain);
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +61,6 @@ public class UserInfoActivity extends Activity {
                 String phoneNum = phoneNumText.getText().toString();
 
                 String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
-                //Pattern p = Pattern.compile(emailPattern);
 
                 if(username.contains(" ")){
                     Toast.makeText(UserInfoActivity.this,"Invalid username, please try again",Toast.LENGTH_SHORT).show();

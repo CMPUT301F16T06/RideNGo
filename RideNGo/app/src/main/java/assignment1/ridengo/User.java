@@ -18,6 +18,7 @@ public class User {
     private String username;
     private String email;
     private String phoneNum;
+    private Vehicle vehicle;
 //    private UserRider rider = new UserRider(this);
 //    private UserDriver driver = new UserDriver(this);
     private ArrayList<Listener> listeners;
@@ -79,6 +80,24 @@ public class User {
     public void setEmail(String newEmail){
         this.email = newEmail;
         notifyListeners();
+    }
+
+    /**
+     *
+     * @param v the user's vehicle
+     */
+    public void setVehicle(Vehicle v){
+        this.vehicle = v;
+        notifyListeners();
+    }
+
+    /**
+     * Get vehicle information
+     *
+     * @return Vehicle type vehicle information
+     */
+    public Vehicle getVehicle(){
+        return this.vehicle;
     }
 
     /**

@@ -19,24 +19,6 @@
         android:layout_marginStart="49dp"
         android:layout_marginTop="61dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email:"
-        android:id="@+id/textView2"
-        android:layout_marginTop="105dp"
-        android:layout_below="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone Number:"
-        android:id="@+id/textView3"
-        android:layout_marginTop="116dp"
-        android:layout_below="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
-
     <EditText
         android:layout_width="2000dp"
         android:layout_height="wrap_content"
@@ -69,15 +51,60 @@
         android:layout_alignStart="@+id/textView3"
         android:layout_alignEnd="@+id/button_SignUpMain" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:id="@+id/textView2"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/editText_EnterUsername"
+        android:layout_alignStart="@+id/editText_EnterUsername" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:text="Vehicle Information"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/editText_EnterPhoneNum"
+        android:layout_alignStart="@+id/editText_EnterPhoneNum" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm"
+        android:text="Add Vehicle"
+        android:id="@+id/button_add_vehicle"
+        android:layout_alignBaseline="@+id/button_SignUpMain"
+        android:layout_alignBottom="@+id/button_SignUpMain"
+        android:layout_alignStart="@+id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  Confirm  "
         android:id="@+id/button_SignUpMain"
-        android:layout_marginEnd="19dp"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/editText_EnterPhoneNum"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="34dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone Number:"
+        android:id="@+id/textView3"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/editText_EnterEmail"
+        android:layout_alignStart="@+id/editText_EnterEmail" />
+
+    <TextView
+        android:hint="No vehicle information\nPlease add vehicle if you want to be a driver"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vehicleInfoTextView"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
 
 
 </RelativeLayout>
