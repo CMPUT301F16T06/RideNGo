@@ -98,6 +98,10 @@ public class User {
         return this.vehicle;
     }
 
+    public boolean haveVehicle(){
+        return !(getVehicle() == null);
+    }
+
     /**
      * Get phone num string.
      *

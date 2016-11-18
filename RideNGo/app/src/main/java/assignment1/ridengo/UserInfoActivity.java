@@ -29,6 +29,7 @@ public class UserInfoActivity extends Activity {
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
         final TextView vehicleInfoText = (TextView) findViewById(R.id.vehicleInfoTextView);
+        final Button addVehicleButton = (Button) findViewById(R.id.button_add_vehicle);
 
         phoneNumText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
@@ -39,21 +40,23 @@ public class UserInfoActivity extends Activity {
             usernameText.setEnabled(false);
             emailText.setText(currentUser.getEmail());
             phoneNumText.setText(currentUser.getPhoneNum());
-            if(!(currentUser.getVehicle() == null)) {
+            if(currentUser.haveVehicle()) {
                 vehicleInfoText.setText(currentUser.getVehicle().toString());
+                addVehicleButton.setText("Edit Vehicle");
             }
         }
 
-        Button addVehicleButton = (Button) findViewById(R.id.button_add_vehicle);
+
         addVehicleButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(UserInfoActivity.this,"addVehicleActivity",Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        Button signupButton = (Button) findViewById(R.id.button_SignUpMain);
-        signupButton.setOnClickListener(new View.OnClickListener() {
+        Button signUpButton = (Button) findViewById(R.id.button_SignUpMain);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = usernameText.getText().toString().trim();
@@ -110,5 +113,9 @@ public class UserInfoActivity extends Activity {
 //                }
             }
         });
+    }
+
+    public void signUp(String username, String email, String phoneNum){
+
     }
 }
