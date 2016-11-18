@@ -18,8 +18,7 @@ public class User {
     private String username;
     private String email;
     private String phoneNum;
-//    private UserRider rider = new UserRider(this);
-//    private UserDriver driver = new UserDriver(this);
+    private Vehicle vehicle;
     private ArrayList<Listener> listeners;
     private RideRequestList acceptedRequests;
     private RideRequestList postedRequests;
@@ -79,6 +78,28 @@ public class User {
     public void setEmail(String newEmail){
         this.email = newEmail;
         notifyListeners();
+    }
+
+    /**
+     *
+     * @param v the user's vehicle
+     */
+    public void setVehicle(Vehicle v){
+        this.vehicle = v;
+        notifyListeners();
+    }
+
+    /**
+     * Get vehicle information
+     *
+     * @return Vehicle type vehicle information
+     */
+    public Vehicle getVehicle(){
+        return this.vehicle;
+    }
+
+    public boolean haveVehicle(){
+        return !(getVehicle() == null);
     }
 
     /**

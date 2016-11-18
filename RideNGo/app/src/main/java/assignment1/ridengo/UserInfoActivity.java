@@ -3,10 +3,14 @@ package assignment1.ridengo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.regex.Pattern;
 
 /**
  * The type User info activity.
@@ -24,6 +28,10 @@ public class UserInfoActivity extends Activity {
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
+        final TextView vehicleInfoText = (TextView) findViewById(R.id.vehicleInfoTextView);
+        final Button addVehicleButton = (Button) findViewById(R.id.button_add_vehicle);
+
+        phoneNumText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         final String user = getIntent().getStringExtra("username");
         if(!user.isEmpty()){
@@ -32,16 +40,43 @@ public class UserInfoActivity extends Activity {
             usernameText.setEnabled(false);
             emailText.setText(currentUser.getEmail());
             phoneNumText.setText(currentUser.getPhoneNum());
+            if(currentUser.haveVehicle()) {
+                vehicleInfoText.setText(currentUser.getVehicle().toString());
+                addVehicleButton.setText("Edit Vehicle");
+            }
         }
 
-        Button signupButton = (Button) findViewById(R.id.button_SignUpMain);
-        signupButton.setOnClickListener(new View.OnClickListener() {
+
+        addVehicleButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Toast.makeText(UserInfoActivity.this,"addVehicleActivity",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        Button signUpButton = (Button) findViewById(R.id.button_SignUpMain);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameText.getText().toString();
-                String email = emailText.getText().toString();
+                String username = usernameText.getText().toString().trim();
+                String email = emailText.getText().toString().trim();
                 String phoneNum = phoneNumText.getText().toString();
 
+                String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
+
+                if(username.contains(" ")){
+                    Toast.makeText(UserInfoActivity.this,"Invalid username, please try again",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!Pattern.matches(emailPattern,email)){
+                    Toast.makeText(UserInfoActivity.this,"Invalid email address, please try again",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(phoneNum.length()<14){
+                    Toast.makeText(UserInfoActivity.this,"Invalid phone number, please try again",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
 
                 User currentUser = UserController.getUserList().getUserByUsername(username);
@@ -59,6 +94,7 @@ public class UserInfoActivity extends Activity {
                 Intent intent = new Intent(activity, RoleSelectActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
+                finish();
 //
 //                try{
 //                    UserController.addUser(currentUser);
@@ -77,5 +113,9 @@ public class UserInfoActivity extends Activity {
 //                }
             }
         });
+    }
+
+    public void signUp(String username, String email, String phoneNum){
+
     }
 }
