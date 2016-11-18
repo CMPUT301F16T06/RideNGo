@@ -17,14 +17,15 @@ import java.util.regex.Pattern;
  * Able to let user to update his/her information
  */
 public class UserInfoActivity extends Activity {
+    protected String user;
+    final Activity activity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
-        final Activity activity = this;
-
+        final TextView usernameTextView = (TextView) findViewById(R.id.UserNameTextView);
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
@@ -33,9 +34,10 @@ public class UserInfoActivity extends Activity {
 
         phoneNumText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        final String user = getIntent().getStringExtra("username");
+        user = getIntent().getStringExtra("username");
         if(!user.isEmpty()){
             User currentUser = UserController.getUserList().getUserByUsername(user);
+            usernameTextView.setText("Username:");
             usernameText.setText(currentUser.getUsername());
             usernameText.setEnabled(false);
             emailText.setText(currentUser.getEmail());
@@ -51,7 +53,18 @@ public class UserInfoActivity extends Activity {
             @Override
             public void onClick(View view){
                 Toast.makeText(UserInfoActivity.this,"addVehicleActivity",Toast.LENGTH_SHORT).show();
+                String username = usernameText.getText().toString().trim();
+                String email = emailText.getText().toString().trim();
+                String phoneNum = phoneNumText.getText().toString();
 
+                if(!signUp(username,email,phoneNum)){
+                    return;
+                }
+
+                Intent intent = new Intent(activity, UserVehicleInfoActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -63,34 +76,10 @@ public class UserInfoActivity extends Activity {
                 String email = emailText.getText().toString().trim();
                 String phoneNum = phoneNumText.getText().toString();
 
-                String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
-
-                if(username.contains(" ")){
-                    Toast.makeText(UserInfoActivity.this,"Invalid username, please try again",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(!Pattern.matches(emailPattern,email)){
-                    Toast.makeText(UserInfoActivity.this,"Invalid email address, please try again",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(phoneNum.length()<14){
-                    Toast.makeText(UserInfoActivity.this,"Invalid phone number, please try again",Toast.LENGTH_SHORT).show();
+                if(!signUp(username,email,phoneNum)){
                     return;
                 }
 
-
-                User currentUser = UserController.getUserList().getUserByUsername(username);
-                if(currentUser == null) {
-                    currentUser = new User(username, email, phoneNum);
-                    UserController.addUser(currentUser);
-                } else if(user.isEmpty()) {
-                    Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else{
-                    currentUser.setEmail(email);
-                    currentUser.setPhoneNum(phoneNum);
-                }
                 Intent intent = new Intent(activity, RoleSelectActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
@@ -115,7 +104,35 @@ public class UserInfoActivity extends Activity {
         });
     }
 
-    public void signUp(String username, String email, String phoneNum){
+    public boolean signUp(String username, String email, String phoneNum){
 
+        String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
+
+        if(username.contains(" ")){
+            Toast.makeText(UserInfoActivity.this,"Invalid username, please try again",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!Pattern.matches(emailPattern,email)){
+            Toast.makeText(UserInfoActivity.this,"Invalid email address, please try again",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(phoneNum.length()<14){
+            Toast.makeText(UserInfoActivity.this,"Invalid phone number, please try again",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        User currentUser = UserController.getUserList().getUserByUsername(username);
+        if(currentUser == null) {
+            currentUser = new User(username, email, phoneNum);
+            UserController.addUser(currentUser);
+        } else if(user.isEmpty()) {
+            Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            currentUser.setEmail(email);
+            currentUser.setPhoneNum(phoneNum);
+        }
+        return true;
     }
 }
