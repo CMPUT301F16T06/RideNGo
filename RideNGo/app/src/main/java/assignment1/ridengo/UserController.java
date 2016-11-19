@@ -177,7 +177,7 @@ public class UserController {
             for (User user: users) {
                 final String query = "{\n" +
                         "    \"query\": {\n" +
-                        "        \"term\": { \"username\" : \"" + user.getUsername() + "\" }\n" +
+                        "        \"match\": { \"username\" : \"" + user.getUsername() + "\" }\n" +
                         "    }\n" +
                         "}";
                 DeleteByQuery index = new DeleteByQuery.Builder(query).addIndex("t06").addType("user").build();
