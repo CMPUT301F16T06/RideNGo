@@ -31,37 +31,6 @@
         android:layout_marginTop="30dp"
         android:editable="false" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/StartPointEditText"
-        android:hint="Start Point"
-        android:layout_alignBottom="@+id/RequestDetailStartTextView"
-        android:layout_alignParentEnd="true"
-
-        android:layout_toEndOf="@+id/RequestDetailStartTextView"
-         />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End:"
-        android:id="@+id/RequestDetialEndTextView"
-        android:layout_below="@+id/StartPointEditText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp"
-        android:textSize="10pt"
-        android:layout_toStartOf="@+id/StartPointEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/EndPointEditText"
-        android:layout_alignBottom="@+id/RequestDetialEndTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/RequestDetialEndTextView"
-        android:hint="End Point" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,5 +61,37 @@
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/FindPointOnMapButton"
         android:layout_alignStart="@+id/estimatedFareTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End:"
+        android:id="@+id/RequestDetialEndTextView"
+        android:layout_marginTop="21dp"
+        android:textSize="10pt"
+        android:layout_below="@+id/RequestDetailStartTextView"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/EndPointEditText"
+        android:hint="End Point"
+        android:editable="false"
+        android:layout_alignBaseline="@+id/RequestDetialEndTextView"
+        android:layout_alignBottom="@+id/RequestDetialEndTextView"
+        android:layout_alignStart="@+id/StartPointEditText"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/StartPointEditText"
+        android:hint="Start Point"
+        android:editable="false"
+        android:layout_alignBaseline="@+id/RequestDetailStartTextView"
+        android:layout_alignBottom="@+id/RequestDetailStartTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/RequestDetailStartTextView" />
 
 </RelativeLayout>

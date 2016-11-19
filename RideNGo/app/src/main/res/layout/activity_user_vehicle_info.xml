@@ -119,4 +119,13 @@
         android:layout_marginBottom="16dp"
         android:id="@+id/confirmButton" />
 
+    <Button
+        android:text=" Remove this Vehicle "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/confirmButton"
+        android:layout_alignStart="@+id/textView13"
+        android:id="@+id/RemoveButton"
+        android:backgroundTint="#FF4500" />
+
 </RelativeLayout>

@@ -1,9 +1,11 @@
 package assignment1.ridengo;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,12 +15,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
 import java.util.Arrays;
 import java.util.List;
+
 
 public class UserVehicleInfoActivity extends AppCompatActivity {
 
     final List<String> colorList = Arrays.asList("Black","White","Silver","Brown","Grey","Red","Blue","Yellow","Green","Other");
+    final Activity activity = UserVehicleInfoActivity.this;
     protected String username;
 
     @Override
@@ -35,6 +40,8 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
         final EditText modelText = (EditText) findViewById(R.id.ModelEditText);
         final EditText pNumText = (EditText) findViewById(R.id.PNumEditText);
         Button confirmButton = (Button) findViewById(R.id.confirmButton);
+        Button removeButton = (Button) findViewById(R.id.RemoveButton);
+
 
         if(user.haveVehicle()){
             Vehicle userVehicle = user.getVehicle();
@@ -43,6 +50,10 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
             makeText.setText(userVehicle.getMake());
             modelText.setText(userVehicle.getModel());
             pNumText.setText(userVehicle.getPlateNum());
+            removeButton.setEnabled(true);
+        }
+        else{
+            removeButton.setEnabled(false);
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -65,10 +76,34 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
                 Vehicle v = new Vehicle(pNum,y,make,model,color);
                 user.setVehicle(v);
 
-                Intent intent = new Intent(UserVehicleInfoActivity.this, UserInfoActivity.class);
+                Intent intent = new Intent(activity, UserInfoActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(activity);
+                adb.setMessage("Do you want to delete this vehicle?");
+                adb.setCancelable(true);
+                adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        user.rmVehicle();
+                        Intent intent = new Intent(activity,UserInfoActivity.class);
+                        intent.putExtra("username",username);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                });
+                adb.show();
             }
         });
     }
@@ -81,7 +116,7 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
         adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(UserVehicleInfoActivity.this,UserInfoActivity.class);
+                Intent intent = new Intent(activity,UserInfoActivity.class);
                 intent.putExtra("username",username);
                 startActivity(intent);
                 finish();

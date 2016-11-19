@@ -1,8 +1,10 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
@@ -45,9 +47,30 @@ public class RoleSelectActivity extends Activity {
         driverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, DriverMainActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+                if(UserController.getUserList().getUserByUsername(username).haveVehicle()){
+                    Intent intent = new Intent(activity, DriverMainActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+                else{
+                    AlertDialog.Builder adb = new AlertDialog.Builder(RoleSelectActivity.this);
+                    adb.setMessage("Please add a vehicle before proceeding.");
+                    adb.setCancelable(true);
+                    adb.setPositiveButton("Add a vehicle", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(activity,UserVehicleInfoActivity.class);
+                            intent.putExtra("username",username);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {}
+                    });
+                    adb.show();
+                }
             }
         });
     }

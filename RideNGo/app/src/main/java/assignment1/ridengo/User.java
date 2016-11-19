@@ -90,6 +90,14 @@ public class User {
     }
 
     /**
+     * Remove the vehicle of user
+     */
+    public void rmVehicle(){
+        this.vehicle = null;
+        notifyListeners();
+    }
+
+    /**
      * Get vehicle information
      *
      * @return Vehicle type vehicle information
