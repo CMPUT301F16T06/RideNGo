@@ -27,7 +27,7 @@
         android:id="@+id/YearSpinner"
         android:layout_alignTop="@+id/YearTextView"
         android:layout_alignStart="@+id/MakeEditText"
-        android:entries="@array/vehicle_year"/>
+        android:entries="@array/vehicle_year" />
 
     <TextView
         android:text="Model"
@@ -117,6 +117,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="13dp"
         android:layout_marginBottom="16dp"
-        android:id="@+id/button" />
+        android:id="@+id/confirmButton" />
 
 </RelativeLayout>

@@ -27,6 +27,7 @@ public class RoleSelectActivity extends Activity {
                 Intent intent = new Intent(activity, UserInfoActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
+                finish();
             }
         });
 

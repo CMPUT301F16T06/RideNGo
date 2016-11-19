@@ -21,11 +21,51 @@ public class Vehicle {
      * @param model model of vehicle
      * @param color color of vehicle
      */
-    public void Vehicle(String pNum,int year,String make,String model,String color){
+    public Vehicle(String pNum,int year,String make,String model,String color){
         this.plateNum = pNum;
         this.vYear = year;
         this.vMake = make;
         this.vModel = model;
+        this.vColor = color;
+    }
+
+    /**
+     * Set plate number of the vehicle
+     * @param pNum plate number
+     */
+    public void setPlateNum(String pNum){
+        this.plateNum = pNum;
+    }
+
+    /**
+     * Set year of the vehicle
+     * @param year year of vehicle
+     */
+    public void setYear(int year){
+        this.vYear = year;
+    }
+
+    /**
+     * Set make of the vehicle
+     * @param make make of the vehicle
+     */
+    public void setMake(String make){
+        this.vMake = make;
+    }
+
+    /**
+     * Set model of the vehicle
+     * @param model model of the vehicle
+     */
+    public void setModel(String model){
+        this.vModel = model;
+    }
+
+    /**
+     * Set color of the vehicle
+     * @param color color of the vehicle
+     */
+    public void setColor(String color){
         this.vColor = color;
     }
 

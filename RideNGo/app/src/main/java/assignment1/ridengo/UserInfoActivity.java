@@ -1,8 +1,10 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +54,6 @@ public class UserInfoActivity extends Activity {
         addVehicleButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(UserInfoActivity.this,"addVehicleActivity",Toast.LENGTH_SHORT).show();
                 String username = usernameText.getText().toString().trim();
                 String email = emailText.getText().toString().trim();
                 String phoneNum = phoneNumText.getText().toString();
@@ -102,6 +103,27 @@ public class UserInfoActivity extends Activity {
 //                }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setMessage("Are you sure to get back to the previous page? Information updated may be lost.");
+        adb.setCancelable(true);
+        adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(UserInfoActivity.this,RoleSelectActivity.class);
+                intent.putExtra("username",user);
+                startActivity(intent);
+                finish();
+            }
+        });
+        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {}
+        });
+        adb.show();
     }
 
     public boolean signUp(String username, String email, String phoneNum){
