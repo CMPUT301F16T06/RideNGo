@@ -20,8 +20,8 @@ public class User {
     private String phoneNum;
     private Vehicle vehicle;
     private ArrayList<Listener> listeners;
-    private RideRequestList acceptedRequests;
-    private RideRequestList postedRequests;
+    private ArrayList<Integer> acceptedRequests;
+    private ArrayList<Integer> postedRequests;
 
     /**
      * Instantiates a new User.
@@ -35,8 +35,8 @@ public class User {
         this.email = email;
         this.phoneNum = phoneNum;
         this.listeners = new ArrayList<Listener>();
-        this.acceptedRequests = new RideRequestList();
-        this.postedRequests = new RideRequestList();
+        this.acceptedRequests = new ArrayList<Integer>();
+        this.postedRequests = new ArrayList<Integer>();
         addUpdateListener(this);
     }
 
@@ -185,7 +185,7 @@ public class User {
     public void acceptRequest(RideRequest request){
         request.addAcception(this);
         request.setStatus("Accepted By Driver");
-        acceptedRequests.addRequest(request);
+        acceptedRequests.add(request.getId());
     }
 
     /**
@@ -208,7 +208,7 @@ public class User {
      *
      * @return the ride request list
      */
-    public RideRequestList getRequests(){
+    public ArrayList<Integer> getRequests(){
         return this.postedRequests;
     }
 
@@ -220,7 +220,7 @@ public class User {
     public void postRideRequest(RideRequest request){
         request.setStatus("Posted");
         RideRequestController.addRequest(request);
-        postedRequests.addRequest(request);
+        postedRequests.add(request.getId());
     }
 
     /**

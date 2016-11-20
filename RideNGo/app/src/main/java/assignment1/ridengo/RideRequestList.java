@@ -81,6 +81,15 @@ public class RideRequestList {
         return requestList;
     }
 
+    public RideRequest getRequestById(int id) {
+        for(RideRequest request : requestList) {
+            if(request.getId() == id) {
+                return request;
+            }
+        }
+        return null;
+    }
+
     /**
      * Get requests related to a particular user
      *

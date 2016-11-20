@@ -237,7 +237,9 @@ public class RideRequest {
      */
     private void notifyListeners(){
         for(Listener listener : this.listeners){
-            listener.update();
+            if(listener != null) {
+                listener.update();
+            }
         }
     }
 
