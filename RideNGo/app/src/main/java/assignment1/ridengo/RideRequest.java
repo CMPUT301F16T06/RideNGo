@@ -18,6 +18,15 @@ public class RideRequest {
     final private String tripCompleted = "Trip Completed";
     final private String requestCanceled = "Request canceled";
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
     private String description;
     private Double fare;
     private User rider;
@@ -43,6 +52,21 @@ public class RideRequest {
         this.fare = fare;
         this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
+        this.id = this.hashCode();
+        addUpdateListener(this);
+    }
+
+    public void addUpdateListener(final RideRequest request) {
+        Listener l = new Listener() {
+            @Override
+            public void update() {
+                RideRequestController.DeleteRequestsTask deleteRequestsTask = new RideRequestController.DeleteRequestsTask();
+                deleteRequestsTask.execute(request);
+                RideRequestController.AddRequestsTask addRequestsTask = new RideRequestController.AddRequestsTask();
+                addRequestsTask.execute(request);
+        }
+        };
+        addListener(l);
     }
 
     /**

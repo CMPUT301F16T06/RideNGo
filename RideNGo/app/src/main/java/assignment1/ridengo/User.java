@@ -36,6 +36,7 @@ public class User {
         this.phoneNum = phoneNum;
         this.listeners = new ArrayList<Listener>();
         this.acceptedRequests = new RideRequestList();
+        this.postedRequests = new RideRequestList();
         addUpdateListener(this);
     }
 
@@ -218,7 +219,7 @@ public class User {
      */
     public void postRideRequest(RideRequest request){
         request.setStatus("Posted");
-        RideRequestController.getRequestList().addRequest(request);
+        RideRequestController.addRequest(request);
         postedRequests.addRequest(request);
     }
 

@@ -63,6 +63,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * Test us 010401.
      */
     public void testUS010401() {
+        RideRequestController.loadRequestListFromServer();
+
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
         //UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;

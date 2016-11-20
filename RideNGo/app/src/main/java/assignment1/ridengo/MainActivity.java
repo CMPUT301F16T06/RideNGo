@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
 
 
         UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
         Toast.makeText(this, "Number of users: " + UserController.getUserList().getUsers().size(), Toast.LENGTH_LONG).show();
 
         Button signin = (Button) findViewById(R.id.button_MainSignIn);
