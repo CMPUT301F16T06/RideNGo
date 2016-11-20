@@ -102,7 +102,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             cancelRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RideRequestController.getRequestList().removeRequest(position);
+                    //RideRequestController.getRequestList().removeRequest(position);
+                    rideRequest.getRider().cancelRequest(rideRequest);
                     finish();
                 }
             });

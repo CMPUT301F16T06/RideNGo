@@ -114,10 +114,12 @@ public class RideRequestList {
      */
     public List<RideRequest> getRequestsWithDriver(String username){
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
-        User driver = UserController.getUserList().getUserByUsername(username);
         for(RideRequest request: requestList){
-            if(request.getAcceptions().contains(driver)){
-                rideRequests.add(request);
+            for(User user: request.getAcceptions()){
+                if(user.getUsername().equals(username)){
+                    rideRequests.add(request);
+                    break;
+                }
             }
         }
         return rideRequests;
@@ -165,10 +167,10 @@ public class RideRequestList {
     /**
      * Remove a request from list.
      *
-     * @param index the index
+     * @param request the request
      */
-    public void removeRequest(int index){
-        requestList.remove(index);
+    public void removeRequest(RideRequest request){
+        requestList.remove(request);
         notifyListeners();
     }
 

@@ -92,6 +92,17 @@ class RideRequestController {
         }
     }
 
+    public static void removeRequest(RideRequest request) {
+        requestList.removeRequest(request);
+        DeleteRequestsTask deleteRequestsTask = new DeleteRequestsTask();
+        try{
+            deleteRequestsTask.execute(request);
+        }catch(RuntimeException e){
+            Log.i("Error", "Not able to add user to elasticsearch server.");
+            e.printStackTrace();
+        }
+    }
+
     /**
      * The type Get users task.
      */

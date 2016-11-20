@@ -240,6 +240,7 @@ public class User {
      */
     public void cancelRequest(RideRequest request){
         request.setStatus("Cancelled");
+        RideRequestController.removeRequest(request);
     }
 
     /**
