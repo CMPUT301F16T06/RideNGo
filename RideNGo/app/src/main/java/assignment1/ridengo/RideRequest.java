@@ -183,11 +183,16 @@ public class RideRequest {
     /**
      * Check whether the driver had accepted the request
      *
-     * @param driver the driver
+     * @param username the driver's username
      * @return the boolean
      */
-    public boolean isAccepted(User driver){
-        return getAcceptions().contains(driver);
+    public boolean isAccepted(String username){
+         for(User user: getAcceptions()){
+             if(user.getUsername().equals(username)){
+                 return true;
+             }
+         }
+        return false;
     }
 
     /**

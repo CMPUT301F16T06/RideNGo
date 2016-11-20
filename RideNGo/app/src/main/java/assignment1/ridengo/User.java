@@ -239,7 +239,7 @@ public class User {
      * @param request the request
      */
     public void cancelRequest(RideRequest request){
-        request.setStatus("Cancelled");
+        RideRequestController.removeRequest(request);
     }
 
     /**
