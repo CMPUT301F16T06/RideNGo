@@ -165,10 +165,10 @@ public class RideRequestList {
     /**
      * Remove a request from list.
      *
-     * @param index the index
+     * @param request the request
      */
-    public void removeRequest(int index){
-        requestList.remove(index);
+    public void removeRequest(RideRequest request){
+        requestList.remove(request);
         notifyListeners();
     }
 

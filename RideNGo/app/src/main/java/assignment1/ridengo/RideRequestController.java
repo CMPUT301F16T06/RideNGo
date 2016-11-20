@@ -92,6 +92,12 @@ class RideRequestController {
         }
     }
 
+    public static void removeRequest(RideRequest request) {
+        requestList.removeRequest(request);
+        DeleteRequestsTask deleteRequestTask = new DeleteRequestsTask();
+        deleteRequestTask.execute(request);
+    }
+
     /**
      * The type Get users task.
      */

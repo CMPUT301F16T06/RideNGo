@@ -24,7 +24,6 @@ import static android.graphics.Color.GRAY;
  */
 public class DriverAcceptedListActivity extends AppCompatActivity {
 
-    private String username;
     /**
      * The Activity.
      */
@@ -34,7 +33,7 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_accepted_list);
 
-        username = getIntent().getStringExtra("username");
+        final String username = getIntent().getStringExtra("username");
 
         ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
         final List<RideRequest> requestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
