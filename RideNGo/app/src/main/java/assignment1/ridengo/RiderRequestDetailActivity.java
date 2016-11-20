@@ -34,7 +34,11 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         String username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
         position = getIntent().getIntExtra("position", 0);
 
         rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);

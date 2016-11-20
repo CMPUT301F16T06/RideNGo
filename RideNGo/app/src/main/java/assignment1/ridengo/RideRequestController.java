@@ -1,7 +1,9 @@
 package assignment1.ridengo;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -103,6 +105,19 @@ class RideRequestController {
         }
     }
 
+    public static void notifyUser(String username, Activity activity){
+        for(RideRequest request : requestList.getRequests()) {
+            if(request.isNotifyDriver() && request.getDriver().getUsername().equals(username)) {
+                Toast.makeText(activity, "You Are Confirmed As A Driver", Toast.LENGTH_SHORT).show();
+                request.setNotifyDriver(false);
+            }
+            if(request.isNotifyRider() && request.getRider().getUsername().equals(username)) {
+                Toast.makeText(activity, "Someone Accepted Your Ride Application", Toast.LENGTH_SHORT).show();
+                request.setNotifyRider(false);
+            }
+        }
+    }
+
     /**
      * The type Get users task.
      */
@@ -181,7 +196,7 @@ class RideRequestController {
             for (RideRequest request: requests) {
                 final String query = "{\n" +
                         "    \"query\": {\n" +
-                        "        \"match\": { \"id\" : \"" + request.getId() + "\" }\n" +
+                        "        \"match\": { \"id\" : " + request.getId() + " }\n" +
                         "    }\n" +
                         "}";
                 DeleteByQuery index = new DeleteByQuery.Builder(query).addIndex("t06").addType("request").build();

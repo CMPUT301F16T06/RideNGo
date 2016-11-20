@@ -17,7 +17,6 @@ import java.util.ArrayList;
  */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
-    private int hash;
     private RideRequest rideRequest;
     private ArrayList<String> info = new ArrayList<String>();
 
@@ -26,10 +25,15 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_request_detail);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         String username = getIntent().getStringExtra("username");
-        hash = getIntent().getIntExtra("hash",0);
+        RideRequestController.notifyUser(username, this);
+
+        final int id = getIntent().getIntExtra("id", 0);
         final User driver = UserController.getUserList().getUserByUsername(username);
-        rideRequest = RideRequestController.getRequestList().getRequestWithHash(hash);
+        rideRequest = RideRequestController.getRequestList().getRequestById(id);
         getInfo();
 
         ListView requestDetailListView = (ListView)findViewById(R.id.RequestDetailListView);
@@ -47,7 +51,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(DriverRequestDetailActivity.this, "Give him/her a ride!", Toast.LENGTH_SHORT).show();
-                    RideRequestController.getRequestList().getRequestWithHash(hash).addAcception(driver);
+                    driver.acceptRequest(rideRequest);
                     finish();
                 }
             });
