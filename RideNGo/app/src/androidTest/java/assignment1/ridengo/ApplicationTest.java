@@ -207,7 +207,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
         RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
 
-<<<<<<< HEAD
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
         request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
@@ -248,7 +247,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
         assertTrue(request.getStatus().equals("Completed"));
-=======
+
 //        rider1.postRideRequest(newRequest);
 //        assertTrue(rider1.getRequests().contains(newRequest));
 //        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Posted"));
@@ -274,7 +273,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //        rider1.riderCompleteRide(newRequest);
 //        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Completed"));
 //        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Completed"));
->>>>>>> c1ce14f89ffd72fa839cf0bda2e161955f49d7d8
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
