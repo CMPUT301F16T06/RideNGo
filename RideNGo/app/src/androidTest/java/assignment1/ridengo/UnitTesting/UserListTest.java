@@ -1,12 +1,14 @@
-package assignment1.ridengo;
+package assignment1.ridengo.UnitTesting;
 
 import junit.framework.TestCase;
 
-import java.security.spec.ECField;
 import java.util.ArrayList;
 
+import assignment1.ridengo.User;
+import assignment1.ridengo.UserList;
+
 /**
- * Created by Rui on 2016-11-12.
+ * Created by Rui on 2016-11-19.
  */
 public class UserListTest extends TestCase {
 
@@ -20,8 +22,7 @@ public class UserListTest extends TestCase {
         assertTrue(userList.contains(newUser));
     }
 
-
-    public void testContainByUserName() throws Exception {
+    public void testContainsByUsername() throws Exception {
         UserList userList = new UserList();
         User newUser = new User("test", "", "");
 
@@ -30,7 +31,6 @@ public class UserListTest extends TestCase {
         userList.addUser(newUser);
         assertTrue(userList.contains(newUser.getUsername()));
     }
-
 
     public void testGetUsers() throws Exception {
         UserList oldUserList = new UserList();
@@ -47,10 +47,10 @@ public class UserListTest extends TestCase {
         assertEquals(newList.get(0).getUsername(), newUser1.getUsername());
         assertEquals(newList.get(1).getUsername(), newUser2.getUsername());
         assertEquals(newList.get(2).getUsername(), newUser3.getUsername());
+
     }
 
-
-    public void testAddUsers() throws Exception {
+    public void testAddUser() throws Exception {
         UserList userList= new UserList();
 
         User newUser = new User("test1", "", "");
@@ -66,7 +66,6 @@ public class UserListTest extends TestCase {
         }
     }
 
-
     public void testGetUserByUsername() throws Exception {
         UserList userList = new UserList();
 
@@ -81,7 +80,6 @@ public class UserListTest extends TestCase {
         assertEquals(user.getPhoneNum(), "1234567891");
 
     }
-
 
     public void testClear() throws Exception {
         UserList userList = new UserList();

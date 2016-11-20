@@ -1,12 +1,14 @@
-package assignment1.ridengo;
+package assignment1.ridengo.UnitTesting;
 
 import junit.framework.TestCase;
 
+import assignment1.ridengo.RideRequest;
+import assignment1.ridengo.User;
+
 /**
- * Created by Rui on 2016-11-12.
+ * Created by Rui on 2016-11-19.
  */
 public class RideRequestTest extends TestCase {
-
 
     public void testGetAcceptions() throws Exception {
         User driver = new User("test2","", "");
@@ -36,18 +38,6 @@ public class RideRequestTest extends TestCase {
         assertFalse(newRequest.isAccepted(driver));
         newRequest.addAcception(driver);
         assertTrue(newRequest.isAccepted(driver));
-    }
-
-    public void testIsDriver() throws Exception {
-        User rider = new User("rider", "","");
-        User driver = new User("driver","", "");
-        RideRequest newRequest = new RideRequest("","","",rider, 0.00);
-
-        assertFalse(newRequest.isDriver("rider"));
-        assertFalse(newRequest.isDriver("driver"));
-        newRequest.setDriver(driver);
-        assertTrue(newRequest.isDriver("rider"));
-        assertFalse(newRequest.isDriver("driver"));
     }
 
     public void testCompleteTrip() throws Exception {

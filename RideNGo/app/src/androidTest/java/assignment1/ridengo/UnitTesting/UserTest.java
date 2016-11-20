@@ -1,9 +1,13 @@
-package assignment1.ridengo;
+package assignment1.ridengo.UnitTesting;
 
 import junit.framework.TestCase;
 
+import assignment1.ridengo.RideRequest;
+import assignment1.ridengo.User;
+import assignment1.ridengo.Vehicle;
+
 /**
- * Created by Rui on 2016-11-12.
+ * Created by Rui on 2016-11-19.
  */
 public class UserTest extends TestCase {
 
@@ -15,7 +19,6 @@ public class UserTest extends TestCase {
     public void testGetEmail() throws Exception {
         User user = new User("test1", "test@example.com", "1234567890");
         assertEquals(user.getEmail(), "test@example.com");
-
     }
 
     public void testSetEmail() throws Exception {
@@ -23,41 +26,46 @@ public class UserTest extends TestCase {
         assertFalse(user.getEmail().equals("test@example.com"));
         user.setEmail("test@example.com");
         assertEquals(user.getEmail(), "test@example.com");
+    }
 
+    public void testSetVehicle() throws Exception {
+        User user = new User("","","");
+        Vehicle vehicle = new Vehicle("",0,"","","");
+        assertEquals(user.getVehicle(), null);
+
+        user.setVehicle(vehicle);
+        assertEquals(user.getVehicle(), vehicle);
+    }
+
+    public void testRmVehicle() throws Exception {
+        User user = new User("","","");
+        Vehicle vehicle = new Vehicle("",0,"","","");
+
+        user.setVehicle(vehicle);
+        assertEquals(user.getVehicle(), vehicle);
+
+        user.rmVehicle();
+        assertEquals(user.getVehicle(), null);
+    }
+
+    public void testHaveVehicle() throws Exception {
+        User user = new User("","","");
+        Vehicle vehicle = new Vehicle("",0,"","","");
+        assertEquals(user.getVehicle(), null);
+
+        user.setVehicle(vehicle);
+        assertTrue(user.getVehicle()!= null);
     }
 
     public void testGetPhoneNum() throws Exception {
         User user = new User("test1", "test@example.com", "1234567890");
         assertEquals(user.getPhoneNum(), "1234567890");
-
     }
 
     public void testSetPhoneNum() throws Exception {
         User user = new User("test1", "test@example.com", "");
         user.setPhoneNum("1234567890");
         assertEquals(user.getPhoneNum(), "1234567890");
-    }
-
-    public void testSetId() throws Exception {
-        User user = new User("test1", "test@example.com", "1234567890");
-        user.setId("1");
-        assertEquals(user.getId(), "1");
-    }
-
-    public void testAcceptRequest() throws Exception {
-        fail("Never been used, re-confirmed");
-    }
-
-    public void testDriverCompleteRide() throws Exception {
-        fail("Never been used, re-confirmed");
-    }
-
-    public void testGetRequests() throws Exception {
-        fail("Never been used, re-confirmed");
-    }
-
-    public void testPostRideRequest() throws Exception {
-        fail("Never been used, re-confirmed");
     }
 
     public void testConfirmAcception() throws Exception {
@@ -70,10 +78,7 @@ public class UserTest extends TestCase {
         assertEquals(newRequest.getDriver().getUsername(), driver.getUsername());
         assertEquals(newRequest.getDriver().getEmail(), driver.getEmail());
         assertEquals(newRequest.getDriver().getPhoneNum(), driver.getPhoneNum());
-    }
 
-    public void testCancelRequest() throws Exception {
-        fail("Never been used, re-confirmed");
     }
 
     public void testRiderCompleteRide() throws Exception {
@@ -81,10 +86,23 @@ public class UserTest extends TestCase {
         RideRequest newRequest = new RideRequest("","","",rider, 0.00);
 
         rider.riderCompleteRide(newRequest);
+
     }
 
     public void testToString() throws Exception {
         User user = new User("test1", "test@example.com", "1234567890");
         assertEquals(user.toString(), "test1");
+    }
+
+    public void testGetPendingRequests() throws Exception {
+        fail("Not Implement yet");
+    }
+
+    public void testGetRequestsByKeyword() throws Exception {
+        fail("Not Implement yet");
+    }
+
+    public void testGetRequestsByGeoLocation() throws Exception {
+        fail("Not Implement yet");
     }
 }

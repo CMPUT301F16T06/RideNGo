@@ -25,7 +25,7 @@ import io.searchbox.core.SearchResult;
  * 3. Load from file
  * 4. Save to file
  */
-class RideRequestController {
+public class RideRequestController {
 
     private static JestDroidClient client;
     private static RideRequestList requestList = null;
@@ -43,21 +43,6 @@ class RideRequestController {
         return requestList;
     }
 
-
-    /**
-     * Save request list.
-     */
-// Save current request list
-    static public void saveRequestList(){
-
-    }
-
-    /**
-     * Load reqeust list.
-     */
-    static public void loadReqeustList(){
-
-    }
 
     static public void loadRequestListFromServer(){
         if(requestList == null) {
