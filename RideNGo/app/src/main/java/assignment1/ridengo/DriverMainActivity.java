@@ -27,7 +27,11 @@ public class DriverMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
 
         /*
         Set up all buttons, ListView, and adapter here
@@ -37,7 +41,7 @@ public class DriverMainActivity extends Activity {
         Button searchButton = (Button) findViewById(R.id.SearchButton);
         Button findNearbyButton = (Button) findViewById(R.id.FindNearbyButton);
         Button viewAcceptedButton = (Button) findViewById(R.id.ViewAcceptedButton);
-        ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
+        final ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
         rideRequestList = RideRequestController.getRequestList().getRequests(); //.getTestRequests();
         ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
         requestListView.setAdapter(adapter);
@@ -70,9 +74,9 @@ public class DriverMainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent intent = new Intent(activity, DriverRequestDetailActivity.class);
-                int hash = rideRequestList.get((int)id).hashCode();
                 intent.putExtra("username",username);
-                intent.putExtra("hash", hash);
+                RideRequest request = (RideRequest) requestListView.getItemAtPosition(position);
+                intent.putExtra("id", request.getId());
                 startActivity(intent);
             }
         });

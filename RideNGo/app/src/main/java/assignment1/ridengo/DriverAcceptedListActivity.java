@@ -33,7 +33,11 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_accepted_list);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         final String username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
 
         ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
         final List<RideRequest> requestList = RideRequestController.getRequestList().getRequestsWithDriver(username);

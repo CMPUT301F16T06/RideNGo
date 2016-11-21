@@ -27,6 +27,9 @@ public class UserInfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         final TextView usernameTextView = (TextView) findViewById(R.id.UserNameTextView);
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
@@ -48,6 +51,8 @@ public class UserInfoActivity extends Activity {
                 vehicleInfoText.setText(currentUser.getVehicle().toString());
                 addVehicleButton.setText("Edit Vehicle");
             }
+
+            RideRequestController.notifyUser(user, this);
         }
 
 
@@ -73,6 +78,9 @@ public class UserInfoActivity extends Activity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                UserController.loadUserListFromServer();
+                RideRequestController.loadRequestListFromServer();
+
                 String username = usernameText.getText().toString().trim();
                 String email = emailText.getText().toString().trim();
                 String phoneNum = phoneNumText.getText().toString();

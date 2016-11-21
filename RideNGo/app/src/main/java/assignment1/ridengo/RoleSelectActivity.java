@@ -19,7 +19,11 @@ public class RoleSelectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_select);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         final String username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
         final Activity activity = this;
 
         Button editInfoButton = (Button) findViewById(R.id.button_EditInfo);

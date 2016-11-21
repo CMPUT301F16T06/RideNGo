@@ -186,6 +186,7 @@ public class User {
         request.addAcception(this);
         request.setStatus("Accepted By Driver");
         acceptedRequests.add(request.getId());
+        request.setNotifyRider(true);
     }
 
     /**
@@ -218,8 +219,8 @@ public class User {
      * @param request the request
      */
     public void postRideRequest(RideRequest request){
-        request.setStatus("Posted");
         RideRequestController.addRequest(request);
+        request.setStatus("Posted");
         postedRequests.add(request.getId());
     }
 
@@ -231,6 +232,7 @@ public class User {
      */
     public void confirmAcception(RideRequest request, User driver){
         request.setDriver(driver);
+        request.setNotifyRider(true);
     }
 
     /**

@@ -35,6 +35,27 @@ public class RideRequest {
     private List<User> acceptions = null;
     private ArrayList<Listener> listeners;
 
+    public boolean isNotifyRider() {
+        return notifyRider;
+    }
+
+    public void setNotifyRider(boolean notifyRider) {
+        this.notifyRider = notifyRider;
+        notifyListeners();
+    }
+
+    public boolean isNotifyDriver() {
+        return notifyDriver;
+    }
+
+    public void setNotifyDriver(boolean notifyDriver) {
+        this.notifyDriver = notifyDriver;
+        notifyListeners();
+    }
+
+    private boolean notifyRider;
+    private boolean notifyDriver;
+
     /**
      * Instantiates a new Ride request.
      *
@@ -53,6 +74,8 @@ public class RideRequest {
         this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
         this.id = this.hashCode();
+        this.notifyRider = false;
+        this.notifyDriver = false;
         addUpdateListener(this);
     }
 

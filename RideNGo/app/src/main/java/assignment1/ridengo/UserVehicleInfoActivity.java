@@ -31,7 +31,11 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_vehicle_info);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
         final User user = UserController.getUserList().getUserByUsername(username);
 
         final Spinner yearSpinner = (Spinner) findViewById(R.id.YearSpinner);

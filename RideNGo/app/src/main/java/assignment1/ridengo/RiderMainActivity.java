@@ -32,7 +32,11 @@ public class RiderMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_main);
 
+        UserController.loadUserListFromServer();
+        RideRequestController.loadRequestListFromServer();
+
         username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
 
         ListView requestListView = (ListView) findViewById(R.id.RiderRequestListView);
         final List<RideRequest> rideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
