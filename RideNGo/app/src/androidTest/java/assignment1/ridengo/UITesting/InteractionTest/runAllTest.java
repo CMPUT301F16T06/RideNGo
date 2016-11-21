@@ -9,8 +9,8 @@ import junit.framework.TestSuite;
 /**
  * Created by Rui on 2016-11-20.
  */
-public class allTest extends ActivityInstrumentationTestCase2<Activity> {
-    public allTest(){
+public class runAllTest extends ActivityInstrumentationTestCase2<Activity> {
+    public runAllTest(){
         super(Activity.class);
     }
 

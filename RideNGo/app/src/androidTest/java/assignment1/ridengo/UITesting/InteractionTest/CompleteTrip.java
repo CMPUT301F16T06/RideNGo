@@ -2,6 +2,7 @@ package assignment1.ridengo.UITesting.InteractionTest;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
@@ -37,18 +38,21 @@ public class CompleteTrip extends ActivityInstrumentationTestCase2<MainActivity>
         solo.clickOnView(solo.getView(R.id.button_Rider));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 
-        solo.clickInList(1);
-        assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
+        ListView listView = (ListView)solo.getView(R.id.RiderRequestListView);
+        for(int i = 0; i<listView.getCount(); i++) {
+            solo.clickInList(i+1);
+            assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
 
-        TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
-        assertTrue(textView.getText().toString().equals("Driver Confirmed"));
+            TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
+            if (textView.getText().toString().equals("Driver Confirmed")) {
+                solo.clickOnView(solo.getView(R.id.RequestDetailConfirmButton));
 
-        solo.clickOnView(solo.getView(R.id.RequestDetailConfirmButton));
-
-        solo.clickInList(1);
-        assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
-        textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
-        assertTrue(textView.getText().toString().equals("Trip Completed"));
+                solo.clickInList(i + 1);
+                textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
+                assertTrue(textView.getText().toString().equals("Trip Completed"));
+            }
+            solo.goBack();
+        }
     }
     @Override
     public void tearDown() throws Exception{

@@ -1,6 +1,7 @@
 package assignment1.ridengo.UITesting.InteractionTest;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,27 +32,29 @@ public class acceptRequest extends ActivityInstrumentationTestCase2<MainActivity
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testAddDriver(){
+    public void testAcceptByDriver(){
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.usernameMain), "IamRich");
+        solo.enterText((EditText) solo.getView(R.id.usernameMain), "IamDriver");
         solo.clickOnView(solo.getView(R.id.button_MainSignIn));
         assertTrue(solo.waitForActivity(RoleSelectActivity.class));
 
         solo.clickOnView(solo.getView(R.id.button_Driver));
         assertTrue(solo.waitForActivity(DriverMainActivity.class));
 
-        ListView listView = (ListView)solo.getView(R.id.DriverRequestListView);
-        for(int i = 0; i<listView.getCount(); i++){
-            solo.clickInList(i + 1);
+        final ListView listView = (ListView)solo.getView(R.id.DriverRequestListView);
+        final int count = listView.getCount();
+        for(int i = 0; i<count; i++){
+            solo.clickInList(i);
             assertTrue(solo.waitForActivity(DriverRequestDetailActivity.class));
-            String riderName = listView.getItemAtPosition(2).toString();
-            if(riderName.trim().equals("Name: IamRider")){
+            String riderName = solo.clickInList(3).get(0).getText().toString().trim();
+            Button button = (Button) solo.getView(R.id.AcceptButton);
+            String buttonStr = button.getText().toString().trim();
+            if(riderName.equals("Name: IamRider") && buttonStr.equals("Give him a ride!")){
                 solo.clickOnView(solo.getView(R.id.AcceptButton));
-                fail();
+                continue;
             }
             solo.goBack();
         }
-
     }
 
     @Override
