@@ -31,8 +31,8 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_vehicle_info);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
+        //UserController.loadUserListFromServer();
+        //RideRequestController.loadRequestListFromServer();
 
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
@@ -45,8 +45,10 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
         final EditText pNumText = (EditText) findViewById(R.id.PNumEditText);
         Button confirmButton = (Button) findViewById(R.id.confirmButton);
         Button removeButton = (Button) findViewById(R.id.RemoveButton);
+        Toast.makeText(this,username,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,user.haveVehicle()+"",Toast.LENGTH_SHORT).show();
 
-
+/*
         if(user.haveVehicle()){
             Vehicle userVehicle = user.getVehicle();
             yearSpinner.setSelection(2017-userVehicle.getYear());
@@ -58,7 +60,7 @@ public class UserVehicleInfoActivity extends AppCompatActivity {
         }
         else{
             removeButton.setEnabled(false);
-        }
+        }*/
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
