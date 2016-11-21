@@ -2,12 +2,14 @@ package assignment1.ridengo.UITesting.InteractionTest;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
 import assignment1.ridengo.MainActivity;
 import assignment1.ridengo.R;
 import assignment1.ridengo.RiderMainActivity;
+import assignment1.ridengo.RiderRequestDetailActivity;
 import assignment1.ridengo.RoleSelectActivity;
 
 /**
@@ -36,7 +38,13 @@ public class confirmDriver extends ActivityInstrumentationTestCase2<MainActivity
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 
         solo.clickInList(1);
-        
+        assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
+
+        TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
+        assertTrue(textView.getText().toString().equals("Accepted By Driver"));
+
+        solo.clickInList(1);
+        solo.clickOnButton("Confirm Driver");
     }
     @Override
     public void tearDown() throws Exception{
@@ -45,4 +53,3 @@ public class confirmDriver extends ActivityInstrumentationTestCase2<MainActivity
 
 }
 
-}

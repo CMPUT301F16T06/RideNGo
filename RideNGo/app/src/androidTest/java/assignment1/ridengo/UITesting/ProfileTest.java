@@ -134,7 +134,10 @@ public class ProfileTest extends ActivityInstrumentationTestCase2<MainActivity> 
         solo.clearEditText((EditText) solo.getView(R.id.PNumEditText));
         solo.enterText((EditText) solo.getView(R.id.PNumEditText), "008");
         solo.clickOnView(solo.getView(R.id.confirmButton));
-        solo.clickOnButton("Confirm");
+
+        //solo.clickOnButton("Confirm");
+        fail();
+
         assertTrue(solo.waitForActivity(RoleSelectActivity.class));
 
         //Delete Vehicle

@@ -80,7 +80,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 driverEmail.setText(driverList.get(pos).getEmail());
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
-                if (!rideRequest.getStatus().equals("Waiting for Confirmation")) {
+                if (!rideRequest.getStatus().equals("Accepted By Driver")) {
                     okButton.setEnabled(false);
                 }
                 else{
