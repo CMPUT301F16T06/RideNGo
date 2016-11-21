@@ -98,7 +98,7 @@
         android:layout_alignStart="@+id/editText_EnterEmail" />
 
     <TextView
-        android:hint="No vehicle information\nPlease add vehicle if you want to be a driver"
+        android:text="No vehicle information\nPlease add vehicle if you want to be a driver"
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

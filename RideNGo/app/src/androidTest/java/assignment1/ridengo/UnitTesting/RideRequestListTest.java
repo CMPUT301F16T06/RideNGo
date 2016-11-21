@@ -131,7 +131,7 @@ public class RideRequestListTest extends TestCase {
         rideRequestList.addRequest(newRequest);
         assertTrue(rideRequestList.contains(newRequest));
 
-        rideRequestList.removeRequest(0);
+        rideRequestList.removeRequest(newRequest);
         assertFalse(rideRequestList.contains(newRequest));
     }
 }
