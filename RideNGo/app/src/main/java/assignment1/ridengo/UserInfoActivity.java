@@ -41,7 +41,9 @@ public class UserInfoActivity extends Activity {
 
         user = getIntent().getStringExtra("username");
         if(!user.isEmpty()){
-            User currentUser = UserController.getUserList().getUserByUsername(user);
+
+            User currentUser = null;
+            currentUser = UserController.getUserList().getUserByUsername(user);
             usernameTextView.setText("Username:");
             usernameText.setText(currentUser.getUsername());
             usernameText.setEnabled(false);
@@ -160,8 +162,8 @@ public class UserInfoActivity extends Activity {
             return false;
         }
         else{
-            currentUser.setEmail(email);
-            currentUser.setPhoneNum(phoneNum);
+//            currentUser.setEmail(email);
+//            currentUser.setPhoneNum(phoneNum);
         }
         return true;
     }

@@ -118,7 +118,7 @@ public class UserList {
      */
     public User getUserByUsername(String name) {
         for(User user : userList){
-            if(user.getUsername().equals(name)){
+            if(user.getUsername().trim().equals(name.trim())){
                 return user;
             }
         }
