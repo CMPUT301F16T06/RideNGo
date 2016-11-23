@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Driver Username:"
+        android:clickable="true"
         android:id="@+id/driverUserText" />
 
     <TextView
@@ -42,6 +43,27 @@
         android:layout_height="wrap_content"
         android:autoLink="email"
         android:textColor="#0086b3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vehicle:"
+        android:id="@+id/driverVehicleText" />
+
+    <TextView
+        android:id="@+id/driverVehicle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#0086b3" />
+
+    <RatingBar
+        android:id="@+id/avgRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.01"
+        android:isIndicator="true" />
+
 
     <Button
         android:id="@+id/okButton"
