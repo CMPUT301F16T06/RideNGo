@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="assignment1.ridengo.RoleSelectActivity">
+    tools:context="assignment1.ridengo.RoleSelectActivity"
+    android:background="@drawable/background_main_activity3">
 
     <Button
         android:layout_width="wrap_content"
@@ -45,5 +46,6 @@
         android:id="@+id/textView4"
         android:layout_below="@+id/button_EditInfo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="72dp" />
+        android:layout_marginTop="72dp"
+        android:textColor="@android:color/white"/>
 </RelativeLayout>

@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * The type Role select activity.
  * The user can select to be a driver or to be a rider
  */
 public class RoleSelectActivity extends Activity {
+    final Activity activity = this;
+    private int mBackKeyPressedTimes = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,7 @@ public class RoleSelectActivity extends Activity {
 
         final String username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
-        final Activity activity = this;
+
 
         Button editInfoButton = (Button) findViewById(R.id.button_EditInfo);
         editInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +36,6 @@ public class RoleSelectActivity extends Activity {
                 Intent intent = new Intent(activity, UserInfoActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -63,7 +65,7 @@ public class RoleSelectActivity extends Activity {
                     adb.setPositiveButton("Add a vehicle", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity,UserVehicleInfoActivity.class);
+                            Intent intent = new Intent(activity,UserInfoActivity.class);
                             intent.putExtra("username",username);
                             startActivity(intent);
                             finish();
@@ -77,5 +79,33 @@ public class RoleSelectActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (mBackKeyPressedTimes == 0) {
+            Toast.makeText(this, "Press again to sign out.", Toast.LENGTH_SHORT).show();
+            mBackKeyPressedTimes = 1;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        mBackKeyPressedTimes = 0;
+                    }
+                }
+            }.start();
+            return;
+        }
+        else{
+            Intent intent = new Intent(activity,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 }

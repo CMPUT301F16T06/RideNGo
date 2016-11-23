@@ -6,17 +6,12 @@ import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
-import assignment1.ridengo.DriverMainActivity;
 import assignment1.ridengo.MainActivity;
-import assignment1.ridengo.MapsRiderActivity;
 import assignment1.ridengo.R;
 import assignment1.ridengo.RiderMainActivity;
 import assignment1.ridengo.RiderPostRequestActivity;
 import assignment1.ridengo.RiderRequestDetailActivity;
 import assignment1.ridengo.RoleSelectActivity;
-import assignment1.ridengo.UserVehicleInfoActivity;
-
-import static assignment1.ridengo.R.id.place_autocomplete_fragment;
 
 /**
  * Created by Rui on 2016-11-20.

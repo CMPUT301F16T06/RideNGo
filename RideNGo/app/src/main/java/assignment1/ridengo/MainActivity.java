@@ -14,6 +14,7 @@ import android.widget.Toast;
  * Able to let the user to select to sign in or sign up
  */
 public class MainActivity extends Activity {
+    private int mBackKeyPressedTimes = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class MainActivity extends Activity {
                     Intent intent = new Intent(activity, RoleSelectActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "User does not exist.", Toast.LENGTH_SHORT).show();
@@ -51,7 +53,34 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(activity, UserInfoActivity.class);
                 intent.putExtra("username", "");
                 startActivity(intent);
+                finish();
             }
         });
+    }
+
+    //http://blog.csdn.net/caesardadi/article/details/8241305
+    @Override
+    public void onBackPressed() {
+        if (mBackKeyPressedTimes == 0) {
+            Toast.makeText(this, "Press again to exit.", Toast.LENGTH_SHORT).show();
+            mBackKeyPressedTimes = 1;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        mBackKeyPressedTimes = 0;
+                    }
+                }
+            }.start();
+            return;
+        }
+        else{
+            super.onBackPressed();
+        }
+
     }
 }

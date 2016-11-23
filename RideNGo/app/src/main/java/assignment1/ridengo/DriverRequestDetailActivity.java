@@ -43,14 +43,17 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         requestDetailListView.setAdapter(adapter);
 
         if(rideRequest.isAccepted(username)){
-            acceptButton.setText("Accepted");
+            acceptButton.setText("You've Accepted");
+            acceptButton.setEnabled(false);
+        }
+        else if(rideRequest.getStatus().equals("Driver Confirmed")||rideRequest.getStatus().equals("Trip Completed")){
+            acceptButton.setText("Not available");
             acceptButton.setEnabled(false);
         }
         else {
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(DriverRequestDetailActivity.this, "Give him/her a ride!", Toast.LENGTH_SHORT).show();
                     driver.acceptRequest(rideRequest);
                     finish();
                 }

@@ -9,7 +9,6 @@ import com.robotium.solo.Solo;
 import assignment1.ridengo.MainActivity;
 import assignment1.ridengo.R;
 import assignment1.ridengo.RoleSelectActivity;
-import assignment1.ridengo.UserVehicleInfoActivity;
 
 /**
  * Created by Rui on 2016-11-20.

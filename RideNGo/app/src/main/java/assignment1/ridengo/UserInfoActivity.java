@@ -1,6 +1,7 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +10,12 @@ import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -19,8 +23,11 @@ import java.util.regex.Pattern;
  * Able to let user to update his/her information
  */
 public class UserInfoActivity extends Activity {
-    protected String user;
+    private String user;
+    private Vehicle vehicle;
     final Activity activity = this;
+    final List<String> colorList = Arrays.asList("Black","White","Silver","Brown","Grey","Red","Blue","Yellow","Green","Other");
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +51,6 @@ public class UserInfoActivity extends Activity {
 
         if(!user.isEmpty()){
 
-            User currentUser = null;
             currentUser = UserController.getUserList().getUserByUsername(user);
             usernameTextView.setText("Username:");
             usernameText.setText(currentUser.getUsername());
@@ -52,6 +58,7 @@ public class UserInfoActivity extends Activity {
             emailText.setText(currentUser.getEmail());
             phoneNumText.setText(currentUser.getPhoneNum());
             if(currentUser.haveVehicle()) {
+                vehicle = currentUser.getVehicle();
                 vehicleInfoText.setText(currentUser.getVehicle().toString());
                 addVehicleButton.setText("Edit Vehicle");
             }
@@ -59,11 +66,93 @@ public class UserInfoActivity extends Activity {
             RideRequestController.notifyUser(user, this);
         }
 
-
         addVehicleButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                final Dialog dialog = new Dialog(UserInfoActivity.this);
+                dialog.setTitle("Vehicle Information");
+                dialog.setContentView(R.layout.dialog_user_vehicle_info);
 
+                final Spinner yearSpinner = (Spinner) dialog.findViewById(R.id.YearSpinner);
+                final Spinner colorSpinner = (Spinner) dialog.findViewById(R.id.ColorSpinner);
+                final EditText makeText = (EditText) dialog.findViewById(R.id.MakeEditText);
+                final EditText modelText = (EditText) dialog.findViewById(R.id.ModelEditText);
+                final EditText pNumText = (EditText) dialog.findViewById(R.id.PNumEditText);
+                Button saveButton = (Button) dialog.findViewById(R.id.SaveButton);
+                Button deleteButton = (Button) dialog.findViewById(R.id.DeleteButton);
+
+                if(!(vehicle == null)){
+                    yearSpinner.setSelection(2017-vehicle.getYear());
+                    colorSpinner.setSelection(colorList.indexOf(vehicle.getColor()));
+                    makeText.setText(vehicle.getMake());
+                    modelText.setText(vehicle.getModel());
+                    pNumText.setText(vehicle.getPlateNum());
+                    deleteButton.setEnabled(true);
+                }
+                else{
+                    deleteButton.setEnabled(false);
+                }
+                /*
+                if(!user.isEmpty()){
+                    if(currentUser.haveVehicle()){
+                        Vehicle userVehicle = currentUser.getVehicle();
+                        yearSpinner.setSelection(2017-userVehicle.getYear());
+                        colorSpinner.setSelection(colorList.indexOf(userVehicle.getColor()));
+                        makeText.setText(userVehicle.getMake());
+                        modelText.setText(userVehicle.getModel());
+                        pNumText.setText(userVehicle.getPlateNum());
+                        deleteButton.setEnabled(true);
+                    }
+                    else{
+                        deleteButton.setEnabled(false);
+                    }
+
+                }*/
+
+                saveButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        String pNum = pNumText.getText().toString().trim();
+                        String year = yearSpinner.getSelectedItem().toString();
+                        int y;
+                        if(year.equals("2005/before")){
+                            y = 2005;
+                        }
+                        else{
+                            y = Integer.parseInt(year);
+                        }
+                        String color = colorSpinner.getSelectedItem().toString();
+                        String make = makeText.getText().toString().trim();
+                        String model = modelText.getText().toString().trim();
+                        vehicle = new Vehicle(pNum,y,make,model,color);
+                        vehicleInfoText.setText(vehicle.toString());
+                        dialog.cancel();
+                    }
+                });
+
+                deleteButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        AlertDialog.Builder adb = new AlertDialog.Builder(activity);
+                        adb.setMessage("Do you want to delete this vehicle?");
+                        adb.setCancelable(true);
+                        adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                vehicle = null;
+                                dialog.cancel();
+                                vehicleInfoText.setText("No vehicle information\nPlease add vehicle if you want to be a driver");
+                            }
+                        });
+                        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {}
+                        });
+                        adb.show();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
@@ -82,9 +171,6 @@ public class UserInfoActivity extends Activity {
                     return;
                 }
 
-                Intent intent = new Intent(activity, RoleSelectActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
                 finish();
             }
         });
@@ -104,9 +190,6 @@ public class UserInfoActivity extends Activity {
                     finish();
                 }
                 else {
-                    Intent intent = new Intent(UserInfoActivity.this, RoleSelectActivity.class);
-                    intent.putExtra("username", user);
-                    startActivity(intent);
                     finish();
                 }
             }
@@ -122,6 +205,10 @@ public class UserInfoActivity extends Activity {
 
         String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
 
+        if(username.equals("")||email.equals("")||phoneNum.equals("")){
+            Toast.makeText(UserInfoActivity.this,"Username, phone number, and email cannot be empty",Toast.LENGTH_SHORT).show();
+        }
+
         if(username.contains(" ")){
             Toast.makeText(UserInfoActivity.this,"Invalid username, please try again",Toast.LENGTH_SHORT).show();
             return false;
@@ -135,17 +222,18 @@ public class UserInfoActivity extends Activity {
             return false;
         }
 
-        User currentUser = UserController.getUserList().getUserByUsername(username);
         if(currentUser == null) {
             currentUser = new User(username, email, phoneNum);
+            currentUser.setVehicle(vehicle);
             UserController.addUser(currentUser);
         } else if(user.isEmpty()) {
             Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
             return false;
         }
         else{
-//            currentUser.setEmail(email);
-//            currentUser.setPhoneNum(phoneNum);
+            currentUser.setEmail(email);
+            currentUser.setPhoneNum(phoneNum);
+            currentUser.setVehicle(vehicle);
         }
         return true;
     }

@@ -1,27 +1,15 @@
 package assignment1.ridengo.UITesting;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
-
-import java.util.List;
-
 import assignment1.ridengo.MainActivity;
 import assignment1.ridengo.R;
 import assignment1.ridengo.RoleSelectActivity;
-import assignment1.ridengo.User;
-import assignment1.ridengo.UserController;
 import assignment1.ridengo.UserInfoActivity;
-import assignment1.ridengo.UserList;
-import assignment1.ridengo.UserVehicleInfoActivity;
 
 /**
  * Test for MainActivity
