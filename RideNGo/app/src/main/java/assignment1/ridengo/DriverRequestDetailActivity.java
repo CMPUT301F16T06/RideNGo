@@ -80,5 +80,6 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         info.add("Name: " + rider.getUsername());
         info.add("Email: " + rider.getEmail());
         info.add("Phone: " + rider.getPhoneNum());
+        info.add("Status: " + rideRequest.getStatus().toString());
     }
 }

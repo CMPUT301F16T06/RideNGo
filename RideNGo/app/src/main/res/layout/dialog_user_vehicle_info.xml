@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/yearTextView" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/YearSpinner"
+        android:entries="@array/vehicle_year"/>
+
+    <TextView
+        android:text="Make"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/MakeTextView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/MakeEditText"
+        android:hint="Ford/Honda/VW..."/>
+
+    <TextView
+        android:text="Model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ModelTextView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/ModelEditText"
+        android:hint="Fusion/Civic/Jetta..."/>
+
+    <TextView
+        android:text="Color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ColorTextView" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ColorSpinner"
+        android:entries="@array/vehicle_color"/>
+
+    <TextView
+        android:text="Plate Number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/PNumTextView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/PNumEditText" />
+
+    <Button
+        android:text="Save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SaveButton" />
+
+    <Button
+        android:text="DELETE THIS VEHICLE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/DeleteButton" />
+
+</LinearLayout>

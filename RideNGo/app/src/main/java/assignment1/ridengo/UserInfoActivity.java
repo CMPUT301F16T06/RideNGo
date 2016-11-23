@@ -30,16 +30,18 @@ public class UserInfoActivity extends Activity {
         UserController.loadUserListFromServer();
         RideRequestController.loadRequestListFromServer();
 
+        user = getIntent().getStringExtra("username");
+
         final TextView usernameTextView = (TextView) findViewById(R.id.UserNameTextView);
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
         final EditText emailText = (EditText) findViewById(R.id.editText_EnterEmail);
         final EditText phoneNumText = (EditText) findViewById(R.id.editText_EnterPhoneNum);
         final TextView vehicleInfoText = (TextView) findViewById(R.id.vehicleInfoTextView);
         final Button addVehicleButton = (Button) findViewById(R.id.button_add_vehicle);
+        Button signUpButton = (Button) findViewById(R.id.button_SignUpMain);
 
         phoneNumText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        user = getIntent().getStringExtra("username");
         if(!user.isEmpty()){
             User currentUser = UserController.getUserList().getUserByUsername(user);
             usernameTextView.setText("Username:");
@@ -59,22 +61,11 @@ public class UserInfoActivity extends Activity {
         addVehicleButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                String username = usernameText.getText().toString().trim();
-                String email = emailText.getText().toString().trim();
-                String phoneNum = phoneNumText.getText().toString();
 
-                if(!signUp(username,email,phoneNum)){
-                    return;
-                }
-
-                Intent intent = new Intent(activity, UserVehicleInfoActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
-                finish();
             }
         });
 
-        Button signUpButton = (Button) findViewById(R.id.button_SignUpMain);
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,22 +84,6 @@ public class UserInfoActivity extends Activity {
                 intent.putExtra("username", username);
                 startActivity(intent);
                 finish();
-//
-//                try{
-//                    UserController.addUser(currentUser);
-//
-//                }
-//                catch (RuntimeException e){
-//                    if(user.isEmpty()) {
-//                        Toast.makeText(getApplicationContext(), "User Already Exists.", Toast.LENGTH_SHORT).show();
-//                    }
-//                    else {
-//                        if(currentUser.getId() != null)
-//                            Toast.makeText(activity, currentUser.getId(), Toast.LENGTH_SHORT).show();
-//                        UserController.updateUser(currentUser);
-//
-//                    }
-//                }
             }
         });
     }
