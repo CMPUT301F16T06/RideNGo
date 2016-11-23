@@ -39,7 +39,7 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         final String username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
-        ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
+        final ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
         final List<RideRequest> requestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
 
         ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(this, android.R.layout.simple_list_item_1, requestList) {
@@ -73,9 +73,9 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Intent intent = new Intent(activity, DriverRequestDetailActivity.class);
-                int hash = requestList.get((int)id).hashCode();
+                RideRequest request = (RideRequest) acceptedListView.getItemAtPosition(position);
                 intent.putExtra("username",username);
-                intent.putExtra("hash", hash);
+                intent.putExtra("id", request.getId());
                 startActivity(intent);
             }
         });

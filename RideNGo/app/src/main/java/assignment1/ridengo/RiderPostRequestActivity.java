@@ -29,6 +29,8 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private String endPoint;
     private String description;
     private Double fare;
+    private LatLng startCoord;
+    private LatLng endCoord;
     final private Activity activity = this;
 
     /**
@@ -63,7 +65,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
-                RideRequest rideRequest = new RideRequest(startPoint, endPoint, description, rider,fare);
+                RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, fare);
                 rider.postRideRequest(rideRequest);
                 Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
                 finish();
@@ -96,6 +98,8 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 // Then search option used when picking points
                 if (returnedAddresses == null) {
                     ArrayList<LatLng> searchedReturnAddressLatLng = data.getParcelableArrayListExtra("ARRAY_LIST_ADDRESS_SEARCHED");
+                    startCoord = searchedReturnAddressLatLng.get(0);
+                    endCoord = searchedReturnAddressLatLng.get(1);
                     String fromLocationName = data.getStringExtra("FROM_LOCATION");
                     String toLocationName = data.getStringExtra("TO_LOCATION");
                     //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
@@ -105,6 +109,8 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 } else {
                     //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
                     //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
+                    startCoord = markerLatLng.get(0);
+                    endCoord = markerLatLng.get(1);
                     start.setText(returnedAddresses.get(0));
                     end.setText(returnedAddresses.get(1));
                 }

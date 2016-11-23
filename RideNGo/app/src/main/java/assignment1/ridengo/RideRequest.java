@@ -1,5 +1,7 @@
 package assignment1.ridengo;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +10,8 @@ import java.util.List;
  */
 public class RideRequest {
 
-    //private LatLng startPoint;
-    //private LatLng endPoint;
+    private LatLng startCoord;
+    private LatLng endCoord;
     private String startPoint;
     private String endPoint;
     final private String waitForDriver="Waiting for Driver";
@@ -56,6 +58,14 @@ public class RideRequest {
     private boolean notifyRider;
     private boolean notifyDriver;
 
+    public LatLng getEndCoord() {
+        return this.endCoord;
+    }
+
+    public LatLng getStartCoord() {
+        return this.startCoord;
+    }
+
     /**
      * Instantiates a new Ride request.
      *
@@ -65,7 +75,9 @@ public class RideRequest {
      * @param rider       the rider
      * @param fare        the fare
      */
-    public RideRequest(String startPoint, String endPoint, String description, User rider, Double fare){
+    public RideRequest(LatLng startCoord, LatLng endCoord, String startPoint, String endPoint, String description, User rider, Double fare){
+        this.startCoord = startCoord;
+        this.endCoord = endCoord;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
@@ -87,7 +99,7 @@ public class RideRequest {
                 deleteRequestsTask.execute(request);
                 RideRequestController.AddRequestsTask addRequestsTask = new RideRequestController.AddRequestsTask();
                 addRequestsTask.execute(request);
-        }
+            }
         };
         addListener(l);
     }
@@ -210,11 +222,11 @@ public class RideRequest {
      * @return the boolean
      */
     public boolean isAccepted(String username){
-         for(User user: getAcceptions()){
-             if(user.getUsername().equals(username)){
-                 return true;
-             }
-         }
+        for(User user: getAcceptions()){
+            if(user.getUsername().equals(username)){
+                return true;
+            }
+        }
         return false;
     }
 
