@@ -123,10 +123,17 @@ public class UserInfoActivity extends Activity {
         adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(UserInfoActivity.this,RoleSelectActivity.class);
-                intent.putExtra("username",user);
-                startActivity(intent);
-                finish();
+                if(user.isEmpty()){
+                    Intent intent = new Intent(UserInfoActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Intent intent = new Intent(UserInfoActivity.this, RoleSelectActivity.class);
+                    intent.putExtra("username", user);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

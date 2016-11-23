@@ -1,15 +1,15 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
-
 import android.app.Dialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -74,10 +74,12 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
                 TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
                 TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
+                TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
 
                 driverUsername.setText(driverList.get(pos).getUsername());
                 driverPhone.setText(driverList.get(pos).getPhoneNum());
                 driverEmail.setText(driverList.get(pos).getEmail());
+                driverVehicle.setText(driverList.get(pos).getVehicle().toString());
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 if (!rideRequest.getStatus().equals("Accepted By Driver")) {
@@ -122,7 +124,31 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     rideRequest.getRider().riderCompleteRide(rideRequest);
-                    finish();
+
+                    Dialog rateDialog = new Dialog(RiderRequestDetailActivity.this);
+                    rateDialog.setTitle("Rate this driver!");
+                    rateDialog.setContentView(R.layout.dialog_rate_driver);
+
+                    Button rateButton = (Button) findViewById(R.id.rateButton);
+                    RatingBar rateDriver = (RatingBar) findViewById(R.id.rateDriverBar);
+
+                    // User has to input 1-5 stars
+                    int rating = rateDriver.getNumStars();
+//                    if (rating.equals(0)) {
+//                        rateButton.setEnabled(false);
+//                    }
+//                    else{
+//                        // Average the input with the total rating
+//                        float ratingDriver = rateDriver.getRating();
+//                        float avgRating = ratingDriver+rating;
+//                        float setRating = rateDriver.setRating();
+//                    }
+
+
+
+
+                    rateDialog.show();
+                    //finish();
                 }
 
             });
