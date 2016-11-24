@@ -84,20 +84,12 @@ public class User {
         notifyListeners();
     }
 
-    /**
-     *
-     * @return number of total ratings
-     */
-    public int getTotalOfRating() {
-        return totalOfRating;
+    public int getNumRatings() {
+        return numRatings;
     }
 
-    /**
-     *
-     * @param totalOfRating keep total ratings
-     */
-    public void setTotalOfRating(int totalOfRating) {
-        this.totalOfRating = totalOfRating;
+    public int getTotalOfRating() {
+        return totalOfRating;
     }
 
     /**
@@ -105,7 +97,9 @@ public class User {
      * @param newRating the driver's rating
      */
     public void setRating(float newRating) {
-        this.rating = newRating;
+        this.numRatings +=1;
+        this.totalOfRating += newRating;
+        this.rating = totalOfRating/numRatings;
         notifyListeners();
     }
 
@@ -115,23 +109,6 @@ public class User {
      */
     public float getRating() {
         return rating;
-    }
-
-    /**
-     *
-     * @param numRatings Total number of ratings
-     */
-    public void setNumRatings(int numRatings) {
-        this.numRatings = numRatings;
-        notifyListeners();
-    }
-
-    /**
-     *
-     * @return total number of ratings
-     */
-    public int getNumRatings() {
-        return numRatings;
     }
 
     /**

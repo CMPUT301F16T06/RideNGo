@@ -264,9 +264,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(v.getMake().equals("Rolls Royce"));
         assertTrue(v.getModel().equals("Ghost"));
         assertTrue(v.getColor().equals("Black"));
-
-
-
     }
 
     /**
@@ -285,7 +282,11 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(rider.getRequests().contains(rideRequest.getId()));
         driver.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)));
 
-        fail("Not Implement yet!");
+        User acceptDriver = rideRequest.getDriver();
+
+        assertNotNull(acceptDriver.getRating());
+        assertNotNull(acceptDriver.getTotalOfRating());
+        assertNotNull(acceptDriver.getNumRatings());
     }
 
     /**
@@ -305,7 +306,11 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         rider.riderCompleteRide(rideRequest);
 
         //Should able to rate rider
-        fail("Not Implement yet!");
+        RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)).getDriver().setRating(5);
+
+        assertEquals(driver.getRating(), 5);
+        assertEquals(driver.getNumRatings(), 1);
+        assertEquals(driver.getTotalOfRating(), 5);
     }
 
     /**
@@ -342,61 +347,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         rider1.riderCompleteRide(riderRequest);
         assertTrue(riderRequest.getStatus().equals("Trip Completed"));
         assertTrue(driverRequest.getStatus().equals("Trip Completed"));
-
-//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Accepted By Driver"));
-//        assertTrue(driver2.getRequests().contains(newRequest));
-//
-//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Accepted By Driver"));
-//
-//        rider1.confirmAcception(newRequest, driver2);
-//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Driver Confirmed"));
-//
-//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Driver Confirmed"));
-//
-//        driver2.driverCompleteRide(newRequest);
-//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
-//
-//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
-//
-//        rider1.riderCompleteRide(newRequest);
-//
-//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Completed"));
-//
-//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-//        assertTrue(request.getStatus().equals("Completed"));
-
-//        rider1.postRideRequest(newRequest);
-//        assertTrue(rider1.getRequests().contains(newRequest));
-//        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Posted"));
-//
-//        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-//        //UserDriver driver2 = new UserDriver(user2);
-//        driver2.acceptRequest(newRequest);
-//        assertTrue(rider1.isNotified());
-//
-//        assertTrue(rider1.getRequests().contains(newRequest));
-//        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Accepted By Driver"));
-//        assertTrue(driver2.getRequests().contains(newRequest));
-//        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Accepted By Driver"));
-//
-//        rider1.confirmAcception(newRequest, driver2);
-//        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed"));
-//        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed"));
-//
-//        driver2.driverCompleteRide(newRequest);
-//        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed Completion"));
-//        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Driver Confirmed Completion"));
-//
-//        rider1.riderCompleteRide(newRequest);
-//        assertTrue(rider1.getRequests().getRequests().get(0).getStatus().equals("Completed"));
-//        assertTrue(driver2.getRequests().getRequests().get(0).getStatus().equals("Completed"));
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -478,7 +428,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Vehicle vehicle = new Vehicle("001", 2017, "Rolls Royce", "Ghost", "Black");
         driver.setVehicle(vehicle);
 
-        assertTrue(driver.getVehicle() != null);
+        assertNotNull(driver.getVehicle());
         assertTrue(driver.getVehicle().getPlateNum().equals("001"));
         assertTrue(driver.getVehicle().getYear() == 2017);
         assertTrue(driver.getVehicle().getMake().equals("Rolls Royce"));
@@ -488,7 +438,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         vehicle = new Vehicle("008", 2017, "Mercedes Benz", "GT AMG", "Yellow");
         driver.setVehicle(vehicle);
 
-        assertTrue(driver.getVehicle() != null);
+        assertNotNull(driver.getVehicle());
         assertTrue(driver.getVehicle().getPlateNum().equals("008"));
         assertTrue(driver.getVehicle().getYear() == 2017);
         assertTrue(driver.getVehicle().getMake().equals("Mercedes Benz"));
@@ -732,8 +682,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         LatLng start = getRequest.getStartCoord();
         LatLng end = getRequest.getEndCoord();
 
-        assertTrue(start != null);
-        assertTrue(end != null);
+        assertNotNull(start);
+        assertNotNull(end);
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
