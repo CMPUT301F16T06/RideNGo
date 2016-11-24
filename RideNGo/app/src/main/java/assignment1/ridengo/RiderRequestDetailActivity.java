@@ -135,7 +135,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
 
                     // Existing rating
-                    final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getRating();
+                    final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
                     final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
 
 
@@ -147,6 +147,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                             float avgRating = (driverRating + userRating)/(float)(numRatings + 1);
 
                             UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(avgRating);
+                            UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
                             UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
 
                             rideRequest.getRider().riderCompleteRide(rideRequest);
