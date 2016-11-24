@@ -90,33 +90,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
-<<<<<<< HEAD
-                final int id = (int)arg;
-                Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_driver_info);
 
-                TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
-                TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
-                TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
-                TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
-                TextView driverRate = (TextView) dialog.findViewById(R.id.driverRating);
-
-                String driverUserName = driverList.get(pos).getUsername();
-                User driverUser = userList.getUserByUsername(driverUserName);
-
-                driverUsername.setText(driverUserName);
-                driverPhone.setText(driverUser.getPhoneNum());
-                driverEmail.setText(driverUser.getEmail());
-                driverVehicle.setText(driverUser.getVehicle().toString());
-
-                int numRatings = driverUser.getNumRatings();
-                driverRate.setText(String.format("%.2f", driverUser.getRating()) + "/5 from " + numRatings + " users");
-
-                Button okButton = (Button) dialog.findViewById(R.id.okButton);
-                if (!rideRequest.getStatus().equals("Accepted By Driver")) {
-                    okButton.setEnabled(false);
-=======
                 if(isConnected()) {
                     final int id = (int) arg;
                     Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
@@ -136,7 +110,9 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     driverPhone.setText(driverUser.getPhoneNum());
                     driverEmail.setText(driverUser.getEmail());
                     driverVehicle.setText(driverUser.getVehicle().toString());
-                    driverRate.setText(String.valueOf(driverUser.getRating()));
+
+                    int numRatings = driverUser.getNumRatings();
+                    driverRate.setText(String.format("%.2f", driverUser.getRating()) + "/5 from " + numRatings + " users");
 
                     Button okButton = (Button) dialog.findViewById(R.id.okButton);
                     if (!rideRequest.getStatus().equals("Accepted By Driver")) {
@@ -150,7 +126,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                             }
                         });
                     }
->>>>>>> f1764e5db68a1976745a75b291c19550a0de2d32
+
                 }
                 else{
                     Toast.makeText(RiderRequestDetailActivity.this,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();
