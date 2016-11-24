@@ -2,10 +2,7 @@ package assignment1.ridengo;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.sql.Driver;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * The type User.
@@ -19,6 +16,8 @@ public class User {
     private String email;
     private String phoneNum;
     private Vehicle vehicle;
+    private float rating;
+    private int numRatings;
     private ArrayList<Listener> listeners;
     private ArrayList<Integer> acceptedRequests;
     private ArrayList<Integer> postedRequests;
@@ -30,10 +29,12 @@ public class User {
      * @param email    the email
      * @param phoneNum the phone num
      */
-    public User(String username, String email, String phoneNum){
+    public User(String username, String email, String phoneNum, float rating, int numRatings){
         this.username = username;
         this.email = email;
         this.phoneNum = phoneNum;
+        this.rating = rating;
+        this.numRatings = numRatings;
         this.listeners = new ArrayList<Listener>();
         this.acceptedRequests = new ArrayList<Integer>();
         this.postedRequests = new ArrayList<Integer>();
@@ -79,6 +80,40 @@ public class User {
     public void setEmail(String newEmail){
         this.email = newEmail;
         notifyListeners();
+    }
+
+    /**
+     *
+     * @param newRating the driver's rating
+     */
+    public void setRating(float newRating) {
+        this.rating = newRating;
+        notifyListeners();
+    }
+
+    /**
+     * Get driver's rating
+     * @return Driver's rating
+     */
+    public float getRating() {
+        return rating;
+    }
+
+    /**
+     *
+     * @param numRatings Total number of ratings
+     */
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
+        notifyListeners();
+    }
+
+    /**
+     *
+     * @return total number of ratings
+     */
+    public int getNumRatings() {
+        return numRatings;
     }
 
     /**
