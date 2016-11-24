@@ -42,6 +42,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("position", 0);
 
         rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
+        final UserList userList = UserController.getUserList();
 
         TextView startPoint = (TextView) findViewById(R.id.RequestDetailStartPointTextView);
         startPoint.setText(rideRequest.getStartPoint());
@@ -73,11 +74,14 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
                 TextView driverRate = (TextView) dialog.findViewById(R.id.driverRating);
 
-                driverUsername.setText(driverList.get(pos).getUsername());
-                driverPhone.setText(driverList.get(pos).getPhoneNum());
-                driverEmail.setText(driverList.get(pos).getEmail());
-                driverVehicle.setText(driverList.get(pos).getVehicle().toString());
-                driverRate.setText(String.valueOf(driverList.get(pos).getRating()));
+                String driverUserName = driverList.get(pos).getUsername();
+                User driverUser = userList.getUserByUsername(driverUserName);
+
+                driverUsername.setText(driverUserName);
+                driverPhone.setText(driverUser.getPhoneNum());
+                driverEmail.setText(driverUser.getEmail());
+                driverVehicle.setText(driverUser.getVehicle().toString());
+                driverRate.setText(String.valueOf(driverUser.getRating()));
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 if (!rideRequest.getStatus().equals("Accepted By Driver")) {
@@ -125,7 +129,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     final Dialog rateDialog = new Dialog(RiderRequestDetailActivity.this);
                     rateDialog.setContentView(R.layout.dialog_rate_driver);
 
-                    TextView driverUser = (TextView) rateDialog.findViewById(R.id.driverUser);
+                    final TextView driverUser = (TextView) rateDialog.findViewById(R.id.driverUser);
                     driverUser.setText(rideRequest.getDriver().getUsername());
 
                     Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
@@ -144,7 +148,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                             //rideRequest.getDriver().setRating(avgRating);
                             //rideRequest.getDriver().setNumRatings(numRatings + 1);
                             //UserController.getUserList().getUserByUsername().setRating();
-
+                            //driverUser
 
                             // Uncomment later
                             //rideRequest.getRider().riderCompleteRide(rideRequest);
