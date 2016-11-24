@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RideNGo</string>
     <string name="title_activity_maps_rider">Map</string>
+    <string name="contact_info"><u>Driver Contact Information</u></string>
+    <string name="rate_driver"><u><b>Rate this driver!</b></u></string>
     <string-array name="vehicle_year">
         <item>2017</item>
         <item>2016</item>

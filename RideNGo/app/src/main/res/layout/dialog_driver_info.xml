@@ -6,10 +6,19 @@
     android:minHeight="100dp">
 
     <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="@string/contact_info"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Driver Username:"
+        android:textStyle="bold"
         android:clickable="true"
+        android:layout_marginTop="10dp"
         android:id="@+id/driverUserText" />
 
     <TextView
@@ -22,6 +31,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Phone #:"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
         android:id="@+id/driverPhoneText" />
 
     <TextView
@@ -35,6 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email:"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
         android:id="@+id/driverEmailText" />
 
     <TextView
@@ -48,6 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vehicle:"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
         android:id="@+id/driverVehicleText" />
 
     <TextView
@@ -56,14 +71,19 @@
         android:layout_height="wrap_content"
         android:textColor="#0086b3" />
 
-    <RatingBar
-        android:id="@+id/avgRatingBar"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize="0.01"
-        android:isIndicator="true" />
+        android:text="Rating:"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:id="@+id/driverRateText" />
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/driverRating"
+        android:textColor="#0086b3" />
 
     <Button
         android:id="@+id/okButton"

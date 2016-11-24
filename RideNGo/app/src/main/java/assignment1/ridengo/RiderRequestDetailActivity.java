@@ -42,6 +42,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("position", 0);
 
         rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
+        final UserList userList = UserController.getUserList();
 
         TextView startPoint = (TextView) findViewById(R.id.RequestDetailStartPointTextView);
         startPoint.setText(rideRequest.getStartPoint());
@@ -65,21 +66,22 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
                 final int id = (int)arg;
                 Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
-                dialog.setTitle("Driver Information");
                 dialog.setContentView(R.layout.dialog_driver_info);
-
-                // get info on that driver at that position
-                // fill in username, phone, email
 
                 TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
                 TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
                 TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
                 TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
+                TextView driverRate = (TextView) dialog.findViewById(R.id.driverRating);
 
-                driverUsername.setText(driverList.get(pos).getUsername());
-                driverPhone.setText(driverList.get(pos).getPhoneNum());
-                driverEmail.setText(driverList.get(pos).getEmail());
-                driverVehicle.setText(driverList.get(pos).getVehicle().toString());
+                String driverUserName = driverList.get(pos).getUsername();
+                User driverUser = userList.getUserByUsername(driverUserName);
+
+                driverUsername.setText(driverUserName);
+                driverPhone.setText(driverUser.getPhoneNum());
+                driverEmail.setText(driverUser.getEmail());
+                driverVehicle.setText(driverUser.getVehicle().toString());
+                driverRate.setText(String.valueOf(driverUser.getRating()));
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 if (!rideRequest.getStatus().equals("Accepted By Driver")) {
@@ -123,32 +125,37 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    rideRequest.getRider().riderCompleteRide(rideRequest);
 
-                    Dialog rateDialog = new Dialog(RiderRequestDetailActivity.this);
-                    rateDialog.setTitle("Rate this driver!");
+                    final Dialog rateDialog = new Dialog(RiderRequestDetailActivity.this);
                     rateDialog.setContentView(R.layout.dialog_rate_driver);
 
-                    Button rateButton = (Button) findViewById(R.id.rateButton);
-                    RatingBar rateDriver = (RatingBar) findViewById(R.id.rateDriverBar);
+                    final TextView driverUser = (TextView) rateDialog.findViewById(R.id.driverUser);
+                    driverUser.setText(rideRequest.getDriver().getUsername());
 
-                    // User has to input 1-5 stars
-                    int rating = rateDriver.getNumStars();
-//                    if (rating.equals(0)) {
-//                        rateButton.setEnabled(false);
-//                    }
-//                    else{
-//                        // Average the input with the total rating
-//                        float ratingDriver = rateDriver.getRating();
-//                        float avgRating = ratingDriver+rating;
-//                        float setRating = rateDriver.setRating();
-//                    }
+                    Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
+
+                    // Existing rating
+                    final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
+                    final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
 
 
+                    rateButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            RatingBar rateDriver = (RatingBar) rateDialog.findViewById(R.id.rateDriverBar);
+                            // User rates driver
+                            float userRating = rateDriver.getRating();
+                            float avgRating = (driverRating + userRating)/(float)(numRatings + 1);
 
+                            UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(avgRating);
+                            UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
+                            UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
+
+                            rideRequest.getRider().riderCompleteRide(rideRequest);
+                            rateDialog.cancel();
+                        }
+                    });
 
                     rateDialog.show();
-                    //finish();
                 }
 
             });
