@@ -83,7 +83,9 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 driverPhone.setText(driverUser.getPhoneNum());
                 driverEmail.setText(driverUser.getEmail());
                 driverVehicle.setText(driverUser.getVehicle().toString());
-                driverRate.setText(String.valueOf(driverUser.getRating()));
+
+                int numRatings = driverUser.getNumRatings();
+                driverRate.setText(String.format("%.2f", driverUser.getRating()) + "/5 from " + numRatings + " users");
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 if (!rideRequest.getStatus().equals("Accepted By Driver")) {
