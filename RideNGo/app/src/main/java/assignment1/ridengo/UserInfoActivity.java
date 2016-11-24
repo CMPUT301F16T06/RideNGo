@@ -223,7 +223,7 @@ public class UserInfoActivity extends Activity {
         }
 
         if(currentUser == null) {
-            currentUser = new User(username, email, phoneNum, (float)0, 0, 0);
+            currentUser = new User(username, email, phoneNum);
             currentUser.setVehicle(vehicle);
             UserController.addUser(currentUser);
         } else if(user.isEmpty()) {

@@ -16,9 +16,9 @@ public class User {
     private String email;
     private String phoneNum;
     private Vehicle vehicle;
-    private float rating;
-    private int totalOfRating;
-    private int numRatings;
+    private float rating = 0;
+    private int totalOfRating = 0;
+    private int numRatings = 0;
     private ArrayList<Listener> listeners;
     private ArrayList<Integer> acceptedRequests;
     private ArrayList<Integer> postedRequests;
@@ -30,13 +30,10 @@ public class User {
      * @param email    the email
      * @param phoneNum the phone num
      */
-    public User(String username, String email, String phoneNum, float rating, int totalOfRating, int numRatings){
+    public User(String username, String email, String phoneNum){
         this.username = username;
         this.email = email;
         this.phoneNum = phoneNum;
-        this.rating = rating;
-        this.totalOfRating = totalOfRating;
-        this.numRatings = numRatings;
         this.listeners = new ArrayList<Listener>();
         this.acceptedRequests = new ArrayList<Integer>();
         this.postedRequests = new ArrayList<Integer>();

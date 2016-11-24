@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -65,7 +66,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
                 final int id = (int)arg;
-                Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
+                final Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_driver_info);
 
                 TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
@@ -127,12 +129,14 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     final Dialog rateDialog = new Dialog(RiderRequestDetailActivity.this);
+                    rateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     rateDialog.setContentView(R.layout.dialog_rate_driver);
+
 
                     final TextView driverUser = (TextView) rateDialog.findViewById(R.id.driverUser);
                     driverUser.setText(rideRequest.getDriver().getUsername());
 
-                    Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
+                    final Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
 
                     // Existing rating
                     final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
@@ -151,7 +155,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                             UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
 
                             rideRequest.getRider().riderCompleteRide(rideRequest);
-                            rateDialog.cancel();
+                            rateButton.setEnabled(false);
+                            finish();
                         }
                     });
 
