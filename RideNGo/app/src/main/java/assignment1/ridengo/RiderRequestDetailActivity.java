@@ -135,8 +135,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
 
                     // Existing rating
-                    final float driverRating = rideRequest.getDriver().getRating();
-                    final int numRatings = rideRequest.getDriver().getNumRatings();
+                    final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getRating();
+                    final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
 
 
                     rateButton.setOnClickListener(new View.OnClickListener() {
@@ -145,13 +145,11 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                             // User rates driver
                             float userRating = rateDriver.getRating();
                             float avgRating = (driverRating + userRating)/(float)(numRatings + 1);
-                            //rideRequest.getDriver().setRating(avgRating);
-                            //rideRequest.getDriver().setNumRatings(numRatings + 1);
-                            //UserController.getUserList().getUserByUsername().setRating();
-                            //driverUser
 
-                            // Uncomment later
-                            //rideRequest.getRider().riderCompleteRide(rideRequest);
+                            UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(avgRating);
+                            UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
+
+                            rideRequest.getRider().riderCompleteRide(rideRequest);
                             rateDialog.cancel();
                         }
                     });
