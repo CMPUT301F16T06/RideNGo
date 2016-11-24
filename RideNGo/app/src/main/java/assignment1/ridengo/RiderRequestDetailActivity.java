@@ -126,6 +126,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    dialog.show();
 
                 }
                 else{
@@ -172,19 +173,19 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                         final Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
 
                         // Existing rating
-                        final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
-                        final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
+                        //final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
+                        //final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
 
                         rateButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 RatingBar rateDriver = (RatingBar) rateDialog.findViewById(R.id.rateDriverBar);
                                 // User rates driver
                                 float userRating = rateDriver.getRating();
-                                float avgRating = (driverRating + userRating) / (float) (numRatings + 1);
+                                //float avgRating = (driverRating + userRating) / (float) (numRatings + 1);
 
-                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(avgRating);
-                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
-                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
+                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(userRating);
+                                //UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
+                                //UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
 
                                 rideRequest.getRider().riderCompleteRide(rideRequest);
                                 rateButton.setEnabled(false);
