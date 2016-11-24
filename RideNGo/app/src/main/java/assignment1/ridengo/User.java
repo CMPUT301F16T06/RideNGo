@@ -99,7 +99,7 @@ public class User {
     public void setRating(float newRating) {
         this.numRatings +=1;
         this.totalOfRating += newRating;
-        this.rating = totalOfRating/numRatings;
+        this.rating = totalOfRating/(float)numRatings;
         notifyListeners();
     }
 
