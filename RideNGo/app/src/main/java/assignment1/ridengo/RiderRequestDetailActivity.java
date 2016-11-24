@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -92,6 +93,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 if(isConnected()) {
                     final int id = (int) arg;
                     Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.dialog_driver_info);
 
                     TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
@@ -115,14 +117,12 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     } else {
                         okButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
-                                User driver = driverList.get(id); //UserController.getUserList().getUserByUsername(username).getDriver();
+                                User driver = driverList.get(id);
                                 rideRequest.getRider().confirmAcception(rideRequest, driver);
                                 finish();
                             }
                         });
                     }
-
-                    dialog.show();
                 }
                 else{
                     Toast.makeText(RiderRequestDetailActivity.this,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();
@@ -159,17 +159,17 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if(isConnected()) {
                         final Dialog rateDialog = new Dialog(RiderRequestDetailActivity.this);
+                        rateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         rateDialog.setContentView(R.layout.dialog_rate_driver);
 
                         final TextView driverUser = (TextView) rateDialog.findViewById(R.id.driverUser);
                         driverUser.setText(rideRequest.getDriver().getUsername());
 
-                        Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
+                        final Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
 
                         // Existing rating
-                        final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getRating();
+                        final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
                         final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
-
 
                         rateButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
@@ -179,13 +179,14 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                                 float avgRating = (driverRating + userRating) / (float) (numRatings + 1);
 
                                 UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(avgRating);
+                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
                                 UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
 
                                 rideRequest.getRider().riderCompleteRide(rideRequest);
-                                rateDialog.cancel();
+                                rateButton.setEnabled(false);
+                                finish();
                             }
                         });
-
                         rateDialog.show();
                     }
                     else{

@@ -1,5 +1,7 @@
 package assignment1.ridengo.UnitTesting;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import junit.framework.TestCase;
 
 import assignment1.ridengo.RideRequest;
@@ -72,7 +74,7 @@ public class UserTest extends TestCase {
         User rider = new User("test1", "test@example.com", "1234567890");
         User driver = new User("test2", "test2@example.com", "1234567891");
 
-        RideRequest newRequest = new RideRequest("","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
         driver.confirmAcception(newRequest, driver);
 
         assertEquals(newRequest.getDriver().getUsername(), driver.getUsername());
@@ -83,7 +85,7 @@ public class UserTest extends TestCase {
 
     public void testRiderCompleteRide() throws Exception {
         User rider = new User("test1", "test@example.com", "1234567890");
-        RideRequest newRequest = new RideRequest("","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
 
         rider.riderCompleteRide(newRequest);
 

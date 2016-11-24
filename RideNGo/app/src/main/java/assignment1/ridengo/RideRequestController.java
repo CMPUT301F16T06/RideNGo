@@ -69,7 +69,8 @@ public class RideRequestController {
     }
 
     static public void addRequest(RideRequest request) {
-        requestList.addRequest(request);
+        getRequestList().addRequest(request);
+        //requestList.addRequest(request);
         AddRequestsTask addRequestsTask = new AddRequestsTask();
         try{
             addRequestsTask.execute(request);

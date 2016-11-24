@@ -1,9 +1,12 @@
 package assignment1.ridengo;
 
 import android.app.Application;
+import android.location.Location;
 import android.test.ApplicationTestCase;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Locale;
 
 /**
  * The type Application test.
@@ -18,14 +21,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 010101.
+     * As a rider, I want to request ride between two location
      */
     public void testUS010101() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //User rider1 = new User(user1);
+
         Double fare = 50.0;
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+
+        UserController.getUserList().addUser(rider1);
         rider1.postRideRequest(newRequest);
+
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
 
         UserController.getUserList().clear();
@@ -34,26 +40,51 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 010201.
+     * As a rider, I want to see current requests I have opened
      */
     public void testUS010201() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //User rider1 = new User(user1);
+        UserController.getUserList().addUser(rider1);
+
+        User rider2= new User("User2", "user2@gmail.com","");
+        UserController.getUserList().addUser(rider2);
+
         Double fare = 50.0;
-        //RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start1 to end", rider1, fare);
-        RideRequest newRequest1 = new RideRequest("", "", "From start to end", rider1, fare);
-
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
+        assertTrue(rider1.getRequests().contains(newRequest1.getId()));
 
+        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest2);
+        assertTrue(rider1.getRequests().contains(newRequest2.getId()));
 
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
-        //RideRequest newRequest = new RideRequest(new LatLng(1, 1), new LatLng(1, 1), "From start1 to end", rider1, fare);
-        rider1.postRideRequest(newRequest);
-        assertTrue(rider1.getRequests().contains(newRequest));
+        RideRequest newRequest3 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider2, fare);
+        assertFalse(rider2.getRequests().contains(newRequest3));
+        rider2.postRideRequest(newRequest3);
+        assertTrue(rider2.getRequests().contains(newRequest3.getId()));
 
-        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //User driver2 = new UserDriver(user2);
-        driver2.acceptRequest(newRequest);
-        assertTrue(rider1.isNotified());
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    /**
+     *Test us 010301
+     * As a rider, I want to be notified if my request is accepted
+     */
+    public void testUS010301(){
+        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserController.getUserList().addUser(rider1);
+
+        User driver1= new User("User2", "user2@gmail.com","");
+        UserController.getUserList().addUser(driver1);
+
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest1);
+        assertTrue(rider1.getRequests().contains(newRequest1.getId()));
+
+        driver1.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0)));
+        assertTrue(newRequest1.isNotifyRider());
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -61,21 +92,20 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 010401.
+     * As a rider, I want to cancel requests
      */
     public void testUS010401() {
-        RideRequestController.loadRequestListFromServer();
-
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
+        UserController.getUserList().addUser(rider1);
+
         Double fare = 50.0;
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
 
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
 
         rider1.cancelRequest(newRequest);
-        assertTrue(newRequest.getStatus().equals("Cancelled"));
+        assertFalse(rider1.getRequests().contains(newRequest.getId()));
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -83,21 +113,23 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 010501.
+     * As a rider, I want to be able to phone or email the driver who accepted a request.
      */
     public void testUS010501() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
+        UserController.getUserList().addUser(rider1);
+
+        User driver2 = new User("User2", "user2@gmail.com", "11234567890");
+        UserController.getUserList().addUser(driver2);
+
         Double fare = 50.0;
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
 
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
 
-        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
-        driver2.acceptRequest(newRequest);
-        assertTrue(rider1.isNotified());
+        driver2.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0)));
+        assertTrue(newRequest.isNotifyRider());
 
         assertTrue(newRequest.getAcceptions().get(0).getPhoneNum().equals(driver2.getPhoneNum()));
         assertTrue(newRequest.getAcceptions().get(0).getEmail().equals(driver2.getEmail()));
@@ -108,27 +140,34 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 010601.
+     * As a rider, I want an estimate of a fair fare to offer to drivers.
      */
     public void testUS010601() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
-        Double fare = 50.0;
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        UserController.getUserList().addUser(rider1);
 
-        rider1.postRideRequest(newRequest);
-        assertTrue(rider1.getRequests().contains(newRequest.getId()));
+        Location start = new Location("");
+        start.setLatitude(0.00);
+        start.setLongitude(50.00);
 
-        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
-        driver2.acceptRequest(newRequest);
-        assertTrue(rider1.isNotified());
+        Location end = new Location("");
+        end.setLatitude(50.00);
+        end.setLongitude(0.00);
 
-        rider1.confirmAcception(newRequest, newRequest.getAcceptions().get(0));
-        driver2.driverCompleteRide(newRequest);
-        assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
-        rider1.riderCompleteRide(newRequest);
-        assertTrue(newRequest.getStatus().equals("Completed"));
+        float distance = (start.distanceTo(end))/1000;
+        double fare = (double) distance * 2;
+        RideRequest newRequest = new RideRequest(new LatLng(0,50), new LatLng(50,0),"", "", "From start to end", rider1, fare);
+
+        start.setLatitude(0.00);
+        start.setLongitude(100.00);
+        end.setLatitude(100.00);
+        end.setLongitude(0.00);
+        distance = (start.distanceTo(end))/1000;
+        fare = (double) distance * 2;
+
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,100), new LatLng(100,0),"", "", "From start to end", rider1, fare);
+
+        assertTrue(newRequest1.getFare()>newRequest.getFare());
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -136,53 +175,89 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 010701.
+     * As a rider, I want to confirm the completion of a request and enable payment.
      */
     public void testUS010701() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
-        Double fare = 50.0;
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        UserController.getUserList().addUser(rider1);
 
+        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserController.getUserList().addUser(driver2);
+
+        //Add Request
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
 
-        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
-        driver2.acceptRequest(newRequest);
-        assertTrue(rider1.isNotified());
+        driver2.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0)));
+        assertTrue(newRequest.isNotifyRider());
 
-        User driver3 = new User("User3", "user3@gmail.com", "8888888888");
-        //UserDriver driver3 = new UserDriver(user3);
-        driver3.acceptRequest(newRequest);
-        assertTrue(rider1.isNotified());
-
-        rider1.confirmAcception(newRequest, newRequest.getAcceptions().get(0));
-        assertTrue(newRequest.getDriver().equals(driver2));
+        rider1.riderCompleteRide(newRequest);
+        assertTrue(newRequest.getStatus().trim().equals("Trip Completed"));
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
     }
 
-    public void testUS010901(){
-        /**
-         * test getvehicle info
-         */
+    /**
+     * Test us 01.08.01
+     * As a rider, I want to confirm a driver's acceptance.
+     * This allows us to choose from a list of acceptances if more than 1 driver accepts simultaneously.
+     */
+    public void testUS010801(){
+        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
+        UserController.getUserList().addUser(rider1);
 
+        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
+        UserController.getUserList().addUser(driver2);
+
+        User driver3 = new User("User3", "user3@gmail.com", "8888888888");
+        UserController.getUserList().addUser(driver3);
+
+        //Add Request
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest);
+        assertTrue(rider1.getRequests().contains(newRequest.getId()));
+
+        driver2.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0)));
+        assertTrue(newRequest.isNotifyRider());
+
+        driver3.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0)));
+        assertTrue(newRequest.isNotifyRider());
+
+        assertTrue(newRequest.getAcceptions().contains(driver2));
+        assertTrue(newRequest.getAcceptions().contains(driver3));
+
+        rider1.confirmAcception(newRequest, driver2);
+
+        assertTrue(newRequest.getDriver().getUsername().equals(driver2.getUsername()));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
+    }
+
+    /**
+     * Test us 010901
+     * As a rider, I should see a description of the driver's vehicle.
+     */
+    public void testUS010901(){
         User rider = new User("rider", "rider@gmail.com", "0000000000");
+        UserController.getUserList().addUser(rider);
         User driver = new User("driver", "driver@gmail.com", "1111111111");
+        UserController.getUserList().addUser(driver);
+
         Vehicle vehicle = new Vehicle("001", 2017, "Rolls Royce", "Ghost", "Black");
         driver.setVehicle(vehicle);
 
-        RideRequest rideRequest = new RideRequest("start", "end", "", rider, 50.00);
+        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
         rider.postRideRequest(rideRequest);
 
         assertTrue(rider.getRequests().contains(rideRequest.getId()));
+        driver.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)));
 
-        rider.confirmAcception(rideRequest, driver);
-
-        RideRequest request = RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0));
-        Vehicle v = request.getDriver().getVehicle();
+        Vehicle v = rideRequest.getAcceptions().get(0).getVehicle();
 
         assertTrue(v.getPlateNum().equals("001"));
         assertTrue(v.getYear() == 2017);
@@ -194,59 +269,108 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     }
 
+    /**
+     * Test US 1.10.01 (added 2016-11-14)
+     * As a rider, I want to see some summary rating of the drivers who accepted my offers.
+    */
+    public void testUS011001(){
+        User rider = new User("rider", "rider@gmail.com", "0000000000");
+        UserController.getUserList().addUser(rider);
+        User driver = new User("driver", "driver@gmail.com", "1111111111");
+        UserController.getUserList().addUser(driver);
+
+        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
+        rider.postRideRequest(rideRequest);
+
+        assertTrue(rider.getRequests().contains(rideRequest.getId()));
+        driver.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)));
+
+        fail("Not Implement yet!");
+    }
+
+    /**
+     * US 1.11.01 (added 2016-11-14)
+     * As a rider, I want to rate a driver for his/her service (1-5).
+     */
+    public void testUS011101(){
+        User rider = new User("rider", "rider@gmail.com", "0000000000");
+        UserController.getUserList().addUser(rider);
+        User driver = new User("driver", "driver@gmail.com", "1111111111");
+        UserController.getUserList().addUser(driver);
+
+        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
+        rider.postRideRequest(rideRequest);
+        driver.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)));
+        rider.confirmAcception(rideRequest, rideRequest.getAcceptions().get(0));
+        rider.riderCompleteRide(rideRequest);
+
+        //Should able to rate rider
+        fail("Not Implement yet!");
+    }
 
     /**
      * Test us 020101.
+     * As a rider or driver, I want to see the status of a request that I am involved in
      */
     public void testUS020101() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
-        Double fare = 50.0;
-        RideRequest request;
-
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
-
-        rider1.postRideRequest(newRequest);
-        assertTrue(rider1.getRequests().contains(newRequest.getId()));
-        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Posted"));
-
+        UserController.getUserList().addUser(rider1);
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
-        driver2.acceptRequest(newRequest);
-        assertTrue(rider1.isNotified());
+        UserController.getUserList().addUser(driver2);
 
-        assertTrue(rider1.getRequests().contains(newRequest));
+        Double fare = 50.0;
+        RideRequest riderRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest driverRequest;
+        //Post Request
+        rider1.postRideRequest(riderRequest);
+        assertTrue(rider1.getRequests().contains(riderRequest.getId()));
+        assertTrue(riderRequest.getStatus().equals("Posted"));
+        //Accepted By Driver
+        driverRequest = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
+        driver2.acceptRequest(driverRequest);
 
-        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Accepted By Driver"));
-        assertTrue(driver2.getRequests().contains(newRequest));
+        assertTrue(driver2.getAcceptedRequests().contains(driverRequest.getId()));
+        assertTrue(driverRequest.getStatus().equals("Accepted By Driver"));
+        assertTrue(riderRequest.getStatus().equals("Accepted By Driver"));
+        //Confirm driver
+        rider1.confirmAcception(riderRequest, riderRequest.getAcceptions().get(0));
 
-        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Accepted By Driver"));
+        assertTrue(riderRequest.getStatus().equals("Driver Confirmed"));
+        //assertTrue(driverRequest.isNotifyDriver());
+        assertTrue(driverRequest.getStatus().equals("Driver Confirmed"));
 
-        rider1.confirmAcception(newRequest, driver2);
-        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Driver Confirmed"));
+        rider1.riderCompleteRide(riderRequest);
+        assertTrue(riderRequest.getStatus().equals("Trip Completed"));
+        assertTrue(driverRequest.getStatus().equals("Trip Completed"));
 
-        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Driver Confirmed"));
-
-        driver2.driverCompleteRide(newRequest);
-        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
-
-        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
-
-        rider1.riderCompleteRide(newRequest);
-
-        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Completed"));
-
-        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
-        assertTrue(request.getStatus().equals("Completed"));
+//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Accepted By Driver"));
+//        assertTrue(driver2.getRequests().contains(newRequest));
+//
+//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Accepted By Driver"));
+//
+//        rider1.confirmAcception(newRequest, driver2);
+//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Driver Confirmed"));
+//
+//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Driver Confirmed"));
+//
+//        driver2.driverCompleteRide(newRequest);
+//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
+//
+//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Driver Confirmed Completion"));
+//
+//        rider1.riderCompleteRide(newRequest);
+//
+//        request = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Completed"));
+//
+//        request = RideRequestController.getRequestList().getRequestWithHash(driver2.getRequests().get(0));
+//        assertTrue(request.getStatus().equals("Completed"));
 
 //        rider1.postRideRequest(newRequest);
 //        assertTrue(rider1.getRequests().contains(newRequest));
@@ -280,6 +404,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 030101.
+     * As a user, I want a profile with a unique username and my contact information.
      */
     public void testUS030101() {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
@@ -300,6 +425,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 030201.
+     * As a user, I want to edit the contact information in my profile.
      */
     public void testUS030201() {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
@@ -319,6 +445,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 030301.
+     * As a user, I want to, when a username is presented for a thing, retrieve and show its contact information.
      */
     public void testUS030301() {
         User user1 = new User("User1", "user1@gmail.com", "8888888888");
@@ -338,6 +465,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         RideRequestController.getRequestList().clear();
     }
 
+    /**
+     * Test us 030401
+     * As a driver, in my profile I can provide details about the vehicle I drive.
+     */
     public void testUS030401() {
         User driver = new User("User1", "user1@gmail.com", "0000000000");
         UserList users = UserController.getUserList();
@@ -370,18 +501,18 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 040101.
+     * As a driver, I want to browse and search for open requests by geo-location.
      */
     public void testUS040101() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
+        UserController.getUserList().addUser(rider1);
+
         Double fare = 50.0;
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
 
         rider1.postRideRequest(newRequest);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
 
         RideRequestList requests = driver2.getRequestsByGeoLocation(new LatLng(0, 0));
         assertTrue(requests.contains(newRequest));
@@ -392,6 +523,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 040201.
+     * As a driver, I want to browse and search for open requests by keyword.
      */
     public void testUS040201() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
@@ -399,7 +531,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Double fare = 50.0;
 
         //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest("", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
 
         rider1.postRideRequest(newRequest);
 
@@ -414,49 +546,59 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 
     /**
+     * Test 040301
+     * As a driver, I should be able filter request searches by price per KM and price.
+     */
+    public void testUS040301(){
+        fail();
+    }
+
+    /**
      * Test us 050101.
+     * As a driver,  I want to accept a request I agree with and accept that offered payment upon completion.
      */
     public void testUS050101() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
-        Double fare = 50.0;
-        //RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest1 = new RideRequest("", "", "From start to end", rider1, fare);
+        UserController.getUserList().addUser(rider1);
 
-        rider1.postRideRequest(newRequest1);
+        Double fare = 50.0;
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+
+        rider1.postRideRequest(newRequest);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
-        driver2.acceptRequest(newRequest1);
+        UserController.getUserList().addUser(driver2);
+        driver2.acceptRequest(newRequest);
 
-        rider1.confirmAcception(newRequest1, driver2);
-        driver2.driverCompleteRide(newRequest1);
-        rider1.riderCompleteRide(newRequest1);
+        rider1.confirmAcception(newRequest, driver2);
+        driver2.driverCompleteRide(newRequest);
+        assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
 
-        assertTrue("Payment not implemented", false);
+
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
+
+        fail("Rider still need to confirm completion");
     }
 
     /**
      * Test us 050201.
+     * As a driver, I want to view a list of things I have accepted that are pending,
+     * each request with its description, and locations.
      */
     public void testUS050201() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
+        UserController.getUserList().addUser(rider1);
+
         Double fare = 50.0;
-        //RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest1 = new RideRequest("", "", "From start to end", rider1, fare);
-
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
-        //RideRequest newRequest2 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest2 = new RideRequest("", "", "From start to end", rider1, fare);
 
+        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest2);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
         driver2.acceptRequest(newRequest1);
         driver2.acceptRequest(newRequest2);
 
@@ -469,19 +611,18 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 050301.
+     * As a driver, I want to see if my acceptance was accepted.
      */
     public void testUS050301() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
         //UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
 
-        //RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest1 = new RideRequest("", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
 
         rider1.postRideRequest(newRequest1);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
         driver2.acceptRequest(newRequest1);
 
         rider1.confirmAcception(newRequest1, driver2);
@@ -493,22 +634,21 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 050401.
+     * US 05.04.01
+     * As a driver, I want to be notified if my ride offer was accepted.
      */
     public void testUS050401() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
-        Double fare = 50.0;
-        //RideRequest newRequest1 = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest1 = new RideRequest("", "", "From start to end", rider1, fare);
 
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
         rider1.postRideRequest(newRequest1);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
         driver2.acceptRequest(newRequest1);
 
         rider1.confirmAcception(newRequest1, driver2);
-        assertTrue(driver2.isNotified());
+        assertTrue(newRequest1.isNotifyDriver());
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -516,6 +656,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 080101.
+     * As an driver, I want to see requests that I already accepted while offline.
      */
     public void testUS080101() {
         // Without actually building code for server, runnable test for offline behavior is hard
@@ -525,6 +666,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 080201.
+     * As a rider, I want to see requests that I have made while offline.
      */
     public void testUS080201() {
         // Without actually building code for server, runnable test for offline behavior is hard
@@ -534,6 +676,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 080301.
+     * As a rider, I want to make requests that will be sent once I get connectivity again.
      */
     public void testUS080301() {
         // Without actually building code for server, runnable test for offline behavior is hard
@@ -543,6 +686,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 080401.
+     * As a driver, I want to accept requests that will be sent once I get connectivity again.
      */
     public void testUS080401() {
         // Without actually building code for server, runnable test for offline behavior is hard
@@ -552,19 +696,46 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     /**
      * Test us 100101.
+     * As a rider, I want to specify a start and end geo locations on a map for a request.
      */
     public void testUS100101() {
-        // Without knowledge of google map api, runnable test for selecting and showing location
-        // on a map
-        assertTrue(false);
+        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+
+        //The rider able select a point on map activity. And then the point will be convert to LatLng()
+        LatLng newStart = new LatLng(50, 100);
+        LatLng newEnd = new LatLng(-50, -100);
+
+        newRequest1.setStartCoord(newStart);
+        newRequest1.setEndCoord(newEnd);
+        rider1.postRideRequest(newRequest1);
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
     /**
      * Test us 100201.
+     * As a driver, I want to view start and end geo locations on a map for a request.
      */
     public void testUS100201() {
-        // Without knowledge of google map api, runnable test for selecting and showing location
-        // on a map
-        assertTrue(false);
+        //When a driver view on a map, map activity will extract the start and end coordinate point and display on map
+        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
+        Double fare = 50.0;
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        rider1.postRideRequest(newRequest1);
+
+        User driver = new User("User2", "user2@gmail.com", "888888888");
+        RideRequest getRequest = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
+
+        LatLng start = getRequest.getStartCoord();
+        LatLng end = getRequest.getEndCoord();
+
+        assertTrue(start != null);
+        assertTrue(end != null);
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 }
