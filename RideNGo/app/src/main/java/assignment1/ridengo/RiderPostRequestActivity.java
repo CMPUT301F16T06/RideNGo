@@ -1,7 +1,10 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,6 +46,9 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private LatLng startCoord;
     private LatLng endCoord;
     final private Activity activity = this;
+    private RideRequest offlinePostedRequest;
+    private static final String PR_FILE = "offlinePostedRequest";
+    private static final String T = ".sav";
 
     /**
      * The Ride request controller.
@@ -46,6 +63,17 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         RideRequestController.loadRequestListFromServer();
 
         final String username = getIntent().getStringExtra("username");
+
+        if(isConnected()) {
+            checkOfflinePostedRequest(username);
+            if (offlinePostedRequest != null) {
+                User r = offlinePostedRequest.getRider();
+                r.postRideRequest(offlinePostedRequest);
+                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                offlinePostedRequest = null;
+            }
+        }
+
         RideRequestController.notifyUser(username, this);
         final User rider = UserController.getUserList().getUserByUsername(username);
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
@@ -66,8 +94,16 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
                 RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, fare);
-                rider.postRideRequest(rideRequest);
-                Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
+                if(isConnected()) {
+                    rider.postRideRequest(rideRequest);
+                    Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    offlinePostedRequest = rideRequest;
+                    saveOffLinePostedRequest(username);
+                    offlinePostedRequest = null;
+                    Toast.makeText(activity, "You are offline now, your request will be post once you get online again.", Toast.LENGTH_SHORT).show();
+                }
                 finish();
             }
         });
@@ -75,8 +111,13 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         findPointsOnMapButton.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                Intent intent = new Intent(RiderPostRequestActivity.this, MapsRiderActivity.class);
-                startActivityForResult(intent,RESULT_SUCCESS);
+                if(isConnected()) {
+                    Intent intent = new Intent(RiderPostRequestActivity.this, MapsRiderActivity.class);
+                    startActivityForResult(intent, RESULT_SUCCESS);
+                }
+                else{
+                    Toast.makeText(activity, "You are offline now, please check your network status.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -124,11 +165,55 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
                 Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
                 estimatedFare.setText("$" + roundedFare);
-
-
-
             }
         }
     }//onActivityResult
+
+    public boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
+    }
+
+    private void saveOffLinePostedRequest(String username){
+        String FILENAME = PR_FILE+username+T;
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME,Context.MODE_PRIVATE);
+
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            Gson gson = new Gson();
+            gson.toJson(offlinePostedRequest, out);
+            out.flush();
+
+            fos.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    public void checkOfflinePostedRequest(String username){
+        String FILENAME = PR_FILE+username+T;
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+
+            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            deleteFile(FILENAME);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            offlinePostedRequest = null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
 
 }

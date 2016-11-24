@@ -1,7 +1,6 @@
 package assignment1.ridengo;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 /**
@@ -22,6 +21,7 @@ public class User {
     private ArrayList<Listener> listeners;
     private ArrayList<Integer> acceptedRequests;
     private ArrayList<Integer> postedRequests;
+
 
     /**
      * Instantiates a new User.
@@ -237,7 +237,6 @@ public class User {
      */
     public void acceptRequest(RideRequest request){
         request.addAcception(this);
-        request.setStatus("Accepted By Driver");
         acceptedRequests.add(request.getId());
         request.setNotifyRider(true);
     }
@@ -277,7 +276,7 @@ public class User {
      */
     public void postRideRequest(RideRequest request){
         RideRequestController.addRequest(request);
-        request.setStatus("Posted");
+        request.setStatus("Waiting for Driver");
         postedRequests.add(request.getId());
     }
 
@@ -340,4 +339,6 @@ public class User {
     public RideRequestList getRequestsByGeoLocation(LatLng latLng) {
         return null;
     }
+
+
 }

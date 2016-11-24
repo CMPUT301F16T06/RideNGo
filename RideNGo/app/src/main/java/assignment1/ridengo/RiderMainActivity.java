@@ -2,6 +2,8 @@ package assignment1.ridengo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +11,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import java.sql.Array;
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +32,10 @@ import java.util.List;
 public class RiderMainActivity extends AppCompatActivity {
 
     private String username;
+    private RideRequest offlinePostedRequest;
+    private List<RideRequest> offlineRequestList;
+    private static final String PR_FILE = "offlinePostedRequest";
+    private static final String T = ".sav";
     /**
      * The Activity.
      */
@@ -32,23 +46,42 @@ public class RiderMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_main);
 
+
         UserController.loadUserListFromServer();
         RideRequestController.loadRequestListFromServer();
 
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
+        if(isConnected()) {
+            checkOfflinePostedRequest();
+            if (offlinePostedRequest != null) {
+                User r = offlinePostedRequest.getRider();
+                r.postRideRequest(offlinePostedRequest);
+                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                offlinePostedRequest = null;
+            }
+        }
+
+
+
         ListView requestListView = (ListView) findViewById(R.id.RiderRequestListView);
         final List<RideRequest> rideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
         adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
         requestListView.setAdapter(adapter);
+
         Button addRequestButton = (Button) findViewById(R.id.AddRequestButton);
         addRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, RiderPostRequestActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+                if(isConnected()) {
+                    Intent intent = new Intent(activity, RiderPostRequestActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(RiderMainActivity.this,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -81,5 +114,31 @@ public class RiderMainActivity extends AppCompatActivity {
         final List<RideRequest> rideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
         adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
         requestListView.setAdapter(adapter);
+    }
+
+    public boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
+    }
+
+    public void checkOfflinePostedRequest(){
+        String FILENAME = PR_FILE+username+T;
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+
+            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            deleteFile(FILENAME);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            offlinePostedRequest = null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
     }
 }

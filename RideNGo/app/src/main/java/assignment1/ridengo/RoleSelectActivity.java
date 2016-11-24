@@ -3,11 +3,23 @@ package assignment1.ridengo;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 
 /**
  * The type Role select activity.
@@ -16,6 +28,13 @@ import android.widget.Toast;
 public class RoleSelectActivity extends Activity {
     final Activity activity = this;
     private int mBackKeyPressedTimes = 0;
+    private String username;
+    private RideRequest offlinePostedRequest;
+    private RideRequest offlineAcceptedRequest;
+    private static final String AR_FILE = "offlineAcceptedRequest";
+    private static final String PR_FILE = "offlinePostedRequest";
+    private static final String T = ".sav";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +44,8 @@ public class RoleSelectActivity extends Activity {
         UserController.loadUserListFromServer();
         RideRequestController.loadRequestListFromServer();
 
-        final String username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
-
 
         Button editInfoButton = (Button) findViewById(R.id.button_EditInfo);
         editInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +99,33 @@ public class RoleSelectActivity extends Activity {
         });
     }
 
+    public void onResume(){
+        super.onResume();
+        User user = UserController.getUserList().getUserByUsername(username);
+        if(isConnected()) {
+            checkOfflinePostRequest(username);
+            if (offlinePostedRequest != null) {
+                user.postRideRequest(offlinePostedRequest);
+                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+            }
+
+            checkOfflineAcceptedRequest(username);
+            if(offlineAcceptedRequest != null){
+                int offlineRequestId = offlineAcceptedRequest.getId();
+                RideRequest refreshedOfflineRequest = RideRequestController.getRequestList().getRequestById(offlineRequestId);
+                if(refreshedOfflineRequest.getStatus().equals("Waiting for Driver") || refreshedOfflineRequest.getStatus().equals("Waiting for Confirmation") ) {
+                    user.acceptRequest(refreshedOfflineRequest);
+                    offlineAcceptedRequest = null;
+                    Toast.makeText(this, "The request you accepted while offline is now accepted. You can check it in VIEW ACCEPTED.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    offlineAcceptedRequest = null;
+                    Toast.makeText(this, "Sorry, the request you accepted while offline is no longer available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
 
@@ -107,5 +152,51 @@ public class RoleSelectActivity extends Activity {
             finish();
         }
 
+    }
+
+    public boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
+    }
+
+    public void checkOfflinePostRequest(String username){
+        String FILENAME = PR_FILE+username+T;
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+
+            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            deleteFile(FILENAME);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            offlinePostedRequest = null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    public void checkOfflineAcceptedRequest(String username){
+        String FILENAME = AR_FILE+username+T;
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+
+            offlineAcceptedRequest = gson.fromJson(in, rideRequestType);
+            deleteFile(FILENAME);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            offlineAcceptedRequest = null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
     }
 }
