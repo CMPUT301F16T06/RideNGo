@@ -1,7 +1,6 @@
 package assignment1.ridengo;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 /**
@@ -21,6 +20,7 @@ public class User {
     private ArrayList<Listener> listeners;
     private ArrayList<Integer> acceptedRequests;
     private ArrayList<Integer> postedRequests;
+
 
     /**
      * Instantiates a new User.
@@ -316,4 +316,6 @@ public class User {
     public RideRequestList getRequestsByGeoLocation(LatLng latLng) {
         return null;
     }
+
+
 }
