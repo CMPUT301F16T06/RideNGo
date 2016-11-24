@@ -42,6 +42,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("position", 0);
 
         rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
+        final UserList userList = UserController.getUserList();
 
         TextView startPoint = (TextView) findViewById(R.id.RequestDetailStartPointTextView);
         startPoint.setText(rideRequest.getStartPoint());
@@ -76,10 +77,13 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
                 TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
 
-                driverUsername.setText(driverList.get(pos).getUsername());
-                driverPhone.setText(driverList.get(pos).getPhoneNum());
-                driverEmail.setText(driverList.get(pos).getEmail());
-                driverVehicle.setText(driverList.get(pos).getVehicle().toString());
+                String driverUserName = driverList.get(pos).getUsername();
+                User driver = userList.getUserByUsername(driverUserName);
+
+                driverUsername.setText(driverUserName);
+                driverPhone.setText(driver.getPhoneNum());
+                driverEmail.setText(driver.getEmail());
+                driverVehicle.setText(driver.getVehicle().toString());
 
                 Button okButton = (Button) dialog.findViewById(R.id.okButton);
                 if (!rideRequest.getStatus().equals("Accepted By Driver")) {
