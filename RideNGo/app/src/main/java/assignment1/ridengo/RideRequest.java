@@ -14,7 +14,6 @@ public class RideRequest {
     private LatLng endCoord;
     private String startPoint;
     private String endPoint;
-    final private String notPosted = "Not posted";
     final private String waitForDriver = "Waiting for Driver";
     final private String waitForConfirmation = "Waiting for Confirmation";
     final private String tripConfirmed = "Driver Confirmed";
@@ -217,7 +216,7 @@ public class RideRequest {
             acceptions = new ArrayList<User>();
         }
         acceptions.add(driver);
-        if(status == waitForDriver){
+        if(status.equals(waitForDriver)){
             setStatus(waitForConfirmation);
         }
         notifyListeners();
