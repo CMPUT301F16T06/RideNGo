@@ -234,7 +234,6 @@ public class User {
      */
     public void acceptRequest(RideRequest request){
         request.addAcception(this);
-        request.setStatus("Accepted By Driver");
         acceptedRequests.add(request.getId());
         request.setNotifyRider(true);
     }
@@ -274,7 +273,7 @@ public class User {
      */
     public void postRideRequest(RideRequest request){
         RideRequestController.addRequest(request);
-        request.setStatus("Posted");
+        request.setStatus("Waiting for Driver");
         postedRequests.add(request.getId());
     }
 
