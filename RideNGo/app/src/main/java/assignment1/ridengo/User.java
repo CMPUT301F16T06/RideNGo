@@ -213,6 +213,10 @@ public class User {
         return this.postedRequests;
     }
 
+    public ArrayList<Integer> getAcceptedRequests(){
+        return this.acceptedRequests;
+    }
+
     /**
      * Post ride request.
      *
@@ -242,6 +246,8 @@ public class User {
      */
     public void cancelRequest(RideRequest request){
         RideRequestController.removeRequest(request);
+        postedRequests.remove((Integer)request.getId());
+
     }
 
     /**

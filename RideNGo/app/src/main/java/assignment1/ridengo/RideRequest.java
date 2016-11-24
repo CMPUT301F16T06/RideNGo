@@ -66,6 +66,13 @@ public class RideRequest {
         return this.startCoord;
     }
 
+    public void setStartCoord(LatLng newStart){
+        this.startCoord = newStart;
+    }
+
+    public void setEndCoord(LatLng newEnd){
+        this.endCoord = newEnd;
+    }
     /**
      * Instantiates a new Ride request.
      *
