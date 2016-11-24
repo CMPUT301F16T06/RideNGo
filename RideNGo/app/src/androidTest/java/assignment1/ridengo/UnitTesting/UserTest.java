@@ -107,4 +107,8 @@ public class UserTest extends TestCase {
     public void testGetRequestsByGeoLocation() throws Exception {
         fail("Not Implement yet");
     }
+
+    public void testGetRequestsByGeoLocation1() throws Exception {
+
+    }
 }

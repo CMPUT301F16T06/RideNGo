@@ -16,9 +16,9 @@ public class User {
     private String email;
     private String phoneNum;
     private Vehicle vehicle;
-    private float rating = 0;
-    private int totalOfRating = 0;
-    private int numRatings = 0;
+    private float rating;
+    private int totalOfRating;
+    private int numRatings;
     private ArrayList<Listener> listeners;
     private ArrayList<Integer> acceptedRequests;
     private ArrayList<Integer> postedRequests;
@@ -34,6 +34,9 @@ public class User {
         this.username = username;
         this.email = email;
         this.phoneNum = phoneNum;
+        this.rating = 0;
+        this.totalOfRating = 0;
+        this.numRatings = 0;
         this.listeners = new ArrayList<Listener>();
         this.acceptedRequests = new ArrayList<Integer>();
         this.postedRequests = new ArrayList<Integer>();
