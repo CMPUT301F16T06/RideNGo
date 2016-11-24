@@ -66,7 +66,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
                 final int id = (int)arg;
-                final Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
+                Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_driver_info);
 
@@ -92,7 +92,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 else{
                     okButton.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View v){
-                            User driver = driverList.get(id); //UserController.getUserList().getUserByUsername(username).getDriver();
+                            User driver = driverList.get(id);
                             rideRequest.getRider().confirmAcception(rideRequest,driver);
                             finish();
                         }
