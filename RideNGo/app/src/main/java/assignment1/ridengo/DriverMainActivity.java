@@ -42,13 +42,12 @@ public class DriverMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
-
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()){
+            UserController.loadUserListFromServer();
+            RideRequestController.loadRequestListFromServer();
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){
                 int offlineRequestId = offlineAcceptedRequest.getId();
@@ -107,6 +106,7 @@ public class DriverMainActivity extends Activity {
                 RideRequest request = (RideRequest) requestListView.getItemAtPosition(position);
                 intent.putExtra("id", request.getId());
                 startActivity(intent);
+                finish();
             }
         });
 
