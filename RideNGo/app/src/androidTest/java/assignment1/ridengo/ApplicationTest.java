@@ -264,6 +264,9 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(v.getMake().equals("Rolls Royce"));
         assertTrue(v.getModel().equals("Ghost"));
         assertTrue(v.getColor().equals("Black"));
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
     /**
@@ -275,6 +278,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(rider);
         User driver = new User("driver", "driver@gmail.com", "1111111111");
         UserController.getUserList().addUser(driver);
+        driver.setRating(5);
 
         RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
         rider.postRideRequest(rideRequest);
@@ -282,11 +286,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(rider.getRequests().contains(rideRequest.getId()));
         driver.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)));
 
-        User acceptDriver = rideRequest.getDriver();
+        User acceptDriver = rideRequest.getAcceptions().get(0);
 
-        assertNotNull(acceptDriver.getRating());
-        assertNotNull(acceptDriver.getTotalOfRating());
-        assertNotNull(acceptDriver.getNumRatings());
+        assertEquals(acceptDriver.getRating(), (float)5.00);
+        assertEquals(acceptDriver.getNumRatings(), 1);
+        assertEquals(acceptDriver.getTotalOfRating(), 5);
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
     /**
@@ -308,9 +314,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         //Should able to rate rider
         RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)).getDriver().setRating(5);
 
-        assertEquals(driver.getRating(), 5);
+        assertEquals(driver.getRating(), (float)5);
         assertEquals(driver.getNumRatings(), 1);
         assertEquals(driver.getTotalOfRating(), 5);
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
     /**
@@ -318,6 +327,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * As a rider or driver, I want to see the status of a request that I am involved in
      */
     public void testUS020101() {
+        String waitForDriver = "Waiting for Driver";
+        String waitForConfirmation = "Waiting for Confirmation";
+        String tripConfirmed = "Driver Confirmed";
+        String tripCompleted = "Trip Completed";
+        String requestCanceled = "Request canceled";
+
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
         UserController.getUserList().addUser(rider1);
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
@@ -329,24 +344,24 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         //Post Request
         rider1.postRideRequest(riderRequest);
         assertTrue(rider1.getRequests().contains(riderRequest.getId()));
-        assertTrue(riderRequest.getStatus().equals("Posted"));
+        assertTrue(riderRequest.getStatus().equals(waitForDriver));
         //Accepted By Driver
         driverRequest = RideRequestController.getRequestList().getRequestWithHash(rider1.getRequests().get(0));
         driver2.acceptRequest(driverRequest);
 
         assertTrue(driver2.getAcceptedRequests().contains(driverRequest.getId()));
-        assertTrue(driverRequest.getStatus().equals("Accepted By Driver"));
-        assertTrue(riderRequest.getStatus().equals("Accepted By Driver"));
+        assertTrue(driverRequest.getStatus().equals(waitForConfirmation));
+        assertTrue(riderRequest.getStatus().equals(waitForConfirmation));
         //Confirm driver
         rider1.confirmAcception(riderRequest, riderRequest.getAcceptions().get(0));
 
-        assertTrue(riderRequest.getStatus().equals("Driver Confirmed"));
+        assertTrue(riderRequest.getStatus().equals(tripConfirmed));
         //assertTrue(driverRequest.isNotifyDriver());
-        assertTrue(driverRequest.getStatus().equals("Driver Confirmed"));
+        assertTrue(driverRequest.getStatus().equals(tripConfirmed));
 
         rider1.riderCompleteRide(riderRequest);
-        assertTrue(riderRequest.getStatus().equals("Trip Completed"));
-        assertTrue(driverRequest.getStatus().equals("Trip Completed"));
+        assertTrue(riderRequest.getStatus().equals(tripCompleted));
+        assertTrue(driverRequest.getStatus().equals(tripCompleted));
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -446,6 +461,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertTrue(driver.getVehicle().getColor().equals("Yellow"));
 
         UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
 
     }
 
@@ -454,21 +470,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * As a driver, I want to browse and search for open requests by geo-location.
      */
     public void testUS040101() {
-        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        UserController.getUserList().addUser(rider1);
+        fail("Not implement yet");
 
-        Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
-
-        rider1.postRideRequest(newRequest);
-
-        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-
-        RideRequestList requests = driver2.getRequestsByGeoLocation(new LatLng(0, 0));
-        assertTrue(requests.contains(newRequest));
-
-        UserController.getUserList().clear();
-        RideRequestController.getRequestList().clear();
     }
 
     /**
@@ -476,23 +479,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * As a driver, I want to browse and search for open requests by keyword.
      */
     public void testUS040201() {
-        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
-        Double fare = 50.0;
-
-        //RideRequest newRequest = new RideRequest(new LatLng(0, 0), new LatLng(0, 0), "From start to end", rider1, fare);
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
-
-        rider1.postRideRequest(newRequest);
-
-        User driver2 = new User("User2", "user2@gmail.com", "8888888888");
-        //UserDriver driver2 = new UserDriver(user2);
-
-        RideRequestList requests = driver2.getRequestsByKeyword("start");
-        assertTrue(requests.contains(newRequest));
-
-        UserController.getUserList().clear();
-        RideRequestController.getRequestList().clear();
+        fail("Not implement yet");
     }
 
     /**
@@ -500,7 +487,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * As a driver, I should be able filter request searches by price per KM and price.
      */
     public void testUS040301(){
-        fail();
+
+        fail("Not implemenet yet");
     }
 
     /**
@@ -552,8 +540,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         driver2.acceptRequest(newRequest1);
         driver2.acceptRequest(newRequest2);
 
-        assertTrue(driver2.getPendingRequests().contains(newRequest1));
-        assertTrue(driver2.getPendingRequests().contains(newRequest2));
+        assertTrue(driver2.getAcceptedRequests().contains(newRequest1.getId()));
+        assertTrue(driver2.getAcceptedRequests().contains(newRequest2.getId()));
 
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
@@ -611,7 +599,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS080101() {
         // Without actually building code for server, runnable test for offline behavior is hard
         // to write. The basic idea is to use local data to store data and retrieve when offline.
-        assertTrue(false);
+        fail("Not Implement yet");
     }
 
     /**
@@ -621,7 +609,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS080201() {
         // Without actually building code for server, runnable test for offline behavior is hard
         // to write. The basic idea is to use local data to store data and retrieve when offline.
-        assertTrue(false);
+        fail("Not Implement yet");
     }
 
     /**
@@ -631,7 +619,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS080301() {
         // Without actually building code for server, runnable test for offline behavior is hard
         // to write. The basic idea is to use local data to store data and retrieve when offline.
-        assertTrue(false);
+        fail("Not Implement yet");
     }
 
     /**
@@ -641,7 +629,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS080401() {
         // Without actually building code for server, runnable test for offline behavior is hard
         // to write. The basic idea is to use local data to store data and retrieve when offline.
-        assertTrue(false);
+        fail("Not Implement yet");
     }
 
     /**

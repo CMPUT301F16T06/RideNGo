@@ -45,7 +45,6 @@ public class addDriver extends ActivityInstrumentationTestCase2<MainActivity> {
 
         if(textView.getText().equals("No vehicle information\nPlease add vehicle if you want to be a driver")) {
             solo.clickOnButton("Add Vehicle");
-            //assertTrue(solo.waitForActivity(UserVehicleInfoActivity.class));
 
             solo.clickOnView(solo.getView(R.id.YearSpinner));
             solo.clickOnText("2016");
@@ -56,7 +55,6 @@ public class addDriver extends ActivityInstrumentationTestCase2<MainActivity> {
             solo.clickOnText("Black");
 
             solo.enterText((EditText) solo.getView(R.id.PNumEditText), "001");
-            //solo.clickOnView(solo.getView(R.id.confirmButton));
         }
         solo.clickOnButton("Confirm");
         assertTrue(solo.waitForActivity(RoleSelectActivity.class));
