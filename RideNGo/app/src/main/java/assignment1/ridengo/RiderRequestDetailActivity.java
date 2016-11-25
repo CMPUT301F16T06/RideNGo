@@ -187,8 +187,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                                 //UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
                                 //UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
 
-                                //rideRequest.getRider().riderCompleteRide(rideRequest);
-                                //rateButton.setEnabled(false);
+                                rideRequest.getRider().riderCompleteRide(rideRequest);
+                                rateButton.setEnabled(false);
                                 finish();
                             }
                         });
