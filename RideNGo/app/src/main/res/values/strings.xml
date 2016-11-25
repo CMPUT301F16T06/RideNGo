@@ -30,4 +30,5 @@
         <item>Green</item>
         <item>Other</item>
     </string-array>
+    <string name="title_activity_maps_driver_search">Map</string>
 </resources>

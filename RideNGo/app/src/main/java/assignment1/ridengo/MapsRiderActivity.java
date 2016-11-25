@@ -180,8 +180,6 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
          */
         doneButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                // Add things to save the start and end location data. Doing this for now as
-                // I don't know how to save to elastic search yet.
                 ArrayList<LatLng> searchedReturnAddresses = new ArrayList<LatLng>();
                 Intent intent = new Intent(MapsRiderActivity.this, RiderPostRequestActivity.class);
                 Bundle extras = new Bundle();

@@ -91,12 +91,14 @@ public class DriverMainActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-         findNearbyButton.setOnClickListener(new View.OnClickListener(){
+            */
+          findNearbyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //TODO
+                Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
+                startActivity(intent);
             }
-         });*/
+         });
 
         requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
