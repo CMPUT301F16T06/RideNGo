@@ -50,10 +50,10 @@
         android:text="Trip Finished!"
         android:id="@+id/RequestDetailConfirmButton"
 
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/RequestDetailEndPointTextView"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,9 +81,9 @@
         android:layout_height="wrap_content"
         android:text="Cancel Request"
         android:id="@+id/RequestDetailCancelRequestButton"
-        android:layout_alignTop="@+id/RequestDetailConfirmButton"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:layout_width="wrap_content"

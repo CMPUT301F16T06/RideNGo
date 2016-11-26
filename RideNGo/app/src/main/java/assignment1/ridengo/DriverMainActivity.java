@@ -37,7 +37,7 @@ public class DriverMainActivity extends Activity {
     private static final String AR_FILE = "offlineAcceptedRequest";
     private static final String T = ".sav";
 
-    private List<RideRequest> rideRequestList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,31 +74,42 @@ public class DriverMainActivity extends Activity {
         Button searchButton = (Button) findViewById(R.id.SearchButton);
         Button findNearbyButton = (Button) findViewById(R.id.FindNearbyButton);
         Button viewAcceptedButton = (Button) findViewById(R.id.ViewAcceptedButton);
-        EditText 
+        final EditText searchText = (EditText) findViewById(R.id.SearchTextView);
         final ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
-        rideRequestList = RideRequestController.getRequestList().getRequests(); //.getTestRequests();
-        ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
+        final List<RideRequest> rideRequestList = new ArrayList<>();
+        final ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
         requestListView.setAdapter(adapter);
 
         viewAcceptedButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                Intent intent = new Intent(activity, DriverAcceptedListActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
             }
         });
 
-        /*Search part:
-        searchButton.setOnClickListener(new View.OnClickListener(){
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-            */
-          findNearbyButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                rideRequestList.clear();
+                String search = searchText.getText().toString().trim().toLowerCase();
+                for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
+                    if(request.toString().toLowerCase().contains(search)) {
+                        rideRequestList.add(request);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        findNearbyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
                 startActivity(intent);
             }
-         });
+        });
 
         requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
