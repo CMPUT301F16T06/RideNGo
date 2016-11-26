@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -46,7 +47,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
     private final Activity activity = this;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
 
@@ -82,7 +83,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.RequestDetailListView);
 
         final List<User> driverList = rideRequest.getAcceptions();
-        ArrayAdapter<User> adapter = new ArrayAdapter<User>(activity, android.R.layout.simple_list_item_1, driverList);
+        final ArrayAdapter<User> adapter = new ArrayAdapter<User>(activity, android.R.layout.simple_list_item_1, driverList);
         listView.setAdapter(adapter);
 
 
@@ -201,6 +202,17 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
             });
         }
+        Button refreshButton = (Button) findViewById(R.id.button_Refresh);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RideRequestController.loadRequestListFromServer();
+                rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
+                driverList.clear();
+                driverList.addAll(rideRequest.getAcceptions());
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     public boolean isConnected(){
