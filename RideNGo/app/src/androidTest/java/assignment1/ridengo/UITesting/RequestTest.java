@@ -2,6 +2,7 @@ package assignment1.ridengo.UITesting;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
@@ -32,33 +33,24 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testPostRequests() throws Exception{
         solo.assertCurrentActivity("Wrong Activiry", MainActivity.class);
 
-        solo.enterText((EditText) solo.getView(R.id.usernameMain), "IamRich");
+        solo.enterText((EditText) solo.getView(R.id.usernameMain), "RequestTest");
         solo.clickOnView(solo.getView(R.id.button_MainSignIn));
-        assertTrue(solo.waitForActivity(RoleSelectActivity.class));
+        if(solo.searchText("User does not exist.")){
+            solo.clickOnView(solo.getView(R.id.button_SignUpMain));
 
+            solo.enterText((EditText) solo.getView(R.id.editText_EnterUsername), "RequestTest");
+            solo.enterText((EditText) solo.getView(R.id.editText_EnterEmail), "RequestTest@gmail.com");
+            solo.enterText((EditText) solo.getView(R.id.editText_EnterPhoneNum), "18001234567");
+
+            solo.clickOnView(solo.getView(R.id.button_SignUpMain));
+        }
+
+        assertTrue(solo.waitForActivity(RoleSelectActivity.class));
         solo.clickOnView(solo.getView(R.id.button_Rider));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 
         solo.clickOnView(solo.getView(R.id.AddRequestButton));
         assertTrue(solo.waitForActivity(RiderPostRequestActivity.class));
-//
-//        solo.clickOnView(solo.getView(R.id.FindPointOnMapButton));
-//        assertTrue(solo.waitForActivity(MapsRiderActivity.class));
-//
-//        solo.clickOnButton("Enable map");
-//        solo.clickInList(2);
-//
-//        solo.clickOnView(solo.getView(place_autocomplete_fragment));
-//        solo.enterText(0, "University of Alberta");
-//        solo.enterText(1, "University of Alberta");
-//        solo.clickInList(1);
-//
-//        solo.clickOnView(solo.getView(R.id.place_autocomplete_fragment_from));
-//        solo.enterText(0, "Edmonton International Airport");
-//        solo.clickInList(1);
-//
-//        solo.clickOnView(solo.getView(R.id.doneButton));
-//        assertTrue(solo.waitForActivity(RiderPostRequestActivity.class));
 
         solo.clickOnView(solo.getView(R.id.postRequestButton));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
@@ -67,7 +59,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
 
         TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
-        assertTrue(textView.getText().toString().equals("Posted"));
+        assertTrue(textView.getText().toString().equals("Waiting for Driver"));
 
         solo.goBack();
 
@@ -76,12 +68,8 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
         solo.clickOnView(solo.getView(R.id.RequestDetailCancelRequestButton));
         solo.waitForActivity(RiderMainActivity.class);
 
-        try{
-            solo.clickInList(1);
-            fail("Should not reach here");
-        }catch (Exception e){
-            assertTrue(true);
-        }
+        ListView listView = (ListView) solo.getView(R.id.RiderRequestListView);
+        assertEquals(listView.getCount(), 0);
     }
 
     public void tearDown() throws Exception{

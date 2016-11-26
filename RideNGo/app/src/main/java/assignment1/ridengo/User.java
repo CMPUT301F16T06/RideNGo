@@ -15,9 +15,9 @@ public class User {
     private String email;
     private String phoneNum;
     private Vehicle vehicle;
-    private float rating = 0;
-    private int totalOfRating = 0;
-    private int numRatings = 0;
+    private float rating;
+    private int totalOfRating;
+    private int numRatings;
     private ArrayList<Listener> listeners;
     private ArrayList<Integer> acceptedRequests;
     private ArrayList<Integer> postedRequests;
@@ -34,6 +34,9 @@ public class User {
         this.username = username;
         this.email = email;
         this.phoneNum = phoneNum;
+        this.rating = 0;
+        this.totalOfRating = 0;
+        this.numRatings = 0;
         this.listeners = new ArrayList<Listener>();
         this.acceptedRequests = new ArrayList<Integer>();
         this.postedRequests = new ArrayList<Integer>();
@@ -81,20 +84,12 @@ public class User {
         notifyListeners();
     }
 
-    /**
-     *
-     * @return number of total ratings
-     */
-    public int getTotalOfRating() {
-        return totalOfRating;
+    public int getNumRatings() {
+        return numRatings;
     }
 
-    /**
-     *
-     * @param totalOfRating keep total ratings
-     */
-    public void setTotalOfRating(int totalOfRating) {
-        this.totalOfRating = totalOfRating;
+    public int getTotalOfRating() {
+        return totalOfRating;
     }
 
     /**
@@ -102,7 +97,9 @@ public class User {
      * @param newRating the driver's rating
      */
     public void setRating(float newRating) {
-        this.rating = newRating;
+        this.numRatings +=1;
+        this.totalOfRating += newRating;
+        this.rating = totalOfRating/(float)numRatings;
         notifyListeners();
     }
 
@@ -112,23 +109,6 @@ public class User {
      */
     public float getRating() {
         return rating;
-    }
-
-    /**
-     *
-     * @param numRatings Total number of ratings
-     */
-    public void setNumRatings(int numRatings) {
-        this.numRatings = numRatings;
-        notifyListeners();
-    }
-
-    /**
-     *
-     * @return total number of ratings
-     */
-    public int getNumRatings() {
-        return numRatings;
     }
 
     /**

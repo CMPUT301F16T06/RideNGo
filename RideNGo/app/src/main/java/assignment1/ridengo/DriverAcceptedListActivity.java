@@ -44,21 +44,23 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
     private final Activity activity = this;
     private RideRequest offlineAcceptedRequest;
     private static final String AR_FILE = "offlineAcceptedRequest";
+    private static final String DRL_FILE = "driverOfflineRequestList";
     private static final String T = ".sav";
+    private String username;
+    private List<RideRequest> rideRequestList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_accepted_list);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
-
-        final String username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()){
-            checkOfflineAcceptedRequest(username);
+            UserController.loadUserListFromServer();
+            RideRequestController.loadRequestListFromServer();
+            checkOfflineAcceptedRequest();
             if(offlineAcceptedRequest != null){
                 int offlineRequestId = offlineAcceptedRequest.getId();
                 RideRequest refreshedOfflineRequest = RideRequestController.getRequestList().getRequestById(offlineRequestId);
@@ -73,12 +75,17 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
                     Toast.makeText(this, "Sorry, the request you accepted while offline is no longer available.", Toast.LENGTH_SHORT).show();
                 }
             }
+            rideRequestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
+            saveAcceptedRequestList();
+        }
+        else{
+            offlineLoadDriverRequestList();
         }
 
         final ListView acceptedListView = (ListView) findViewById(R.id.AcceptedListView);
-        final List<RideRequest> requestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
 
-        ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(this, android.R.layout.simple_list_item_1, requestList) {
+
+        ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(this, android.R.layout.simple_list_item_1, rideRequestList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TwoLineListItem row;
@@ -88,7 +95,7 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
                 } else {
                     row = (TwoLineListItem) convertView;
                 }
-                RideRequest request = requestList.get(position);
+                RideRequest request = rideRequestList.get(position);
                 row.getText1().setText(request.toString());
                 if (!request.isDriver(username)) {
                     row.getText1().setTextColor(GRAY);
@@ -124,7 +131,7 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
-    public void checkOfflineAcceptedRequest(String username){
+    public void checkOfflineAcceptedRequest(){
         String FILENAME = AR_FILE+username+T;
         try {
             FileInputStream fis = openFileInput(FILENAME);
@@ -138,6 +145,47 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             offlineAcceptedRequest = null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    private void saveAcceptedRequestList(){
+        String FILENAME = DRL_FILE+username+T;
+        try {
+            deleteFile(FILENAME);
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            Gson gson = new Gson();
+            gson.toJson(rideRequestList, out);
+            out.flush();
+
+            fos.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    public void offlineLoadDriverRequestList(){
+        String FILENAME = DRL_FILE+username+T;
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+            Type rideRequestListType = new TypeToken<List<RideRequest>>(){}.getType();
+
+            rideRequestList = gson.fromJson(in, rideRequestListType);
+        } catch (FileNotFoundException e) {
+            //rideRequestList = null;
+            throw new RuntimeException();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();

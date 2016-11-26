@@ -1,6 +1,7 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -15,11 +16,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * The type Role select activity.
@@ -33,7 +38,12 @@ public class RoleSelectActivity extends Activity {
     private RideRequest offlineAcceptedRequest;
     private static final String AR_FILE = "offlineAcceptedRequest";
     private static final String PR_FILE = "offlinePostedRequest";
+    private static final String DRL_FILE = "driverOfflineRequestList";
+    private static final String RRL_FILE = "riderOfflineRequestList";
     private static final String T = ".sav";
+    private List<RideRequest> driverRideRequestList;
+    private List<RideRequest> riderRideRequestList;
+
 
 
     @Override
@@ -41,8 +51,14 @@ public class RoleSelectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_select);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
+        if(isConnected()) {
+            UserController.loadUserListFromServer();
+            RideRequestController.loadRequestListFromServer();
+            driverRideRequestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
+            riderRideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
+            saveAcceptedRequestList();
+            savePostedRequestList();
+        }
 
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
@@ -51,9 +67,14 @@ public class RoleSelectActivity extends Activity {
         editInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, UserInfoActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+                if(isConnected()) {
+                    Intent intent = new Intent(activity, UserInfoActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(activity,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -128,7 +149,6 @@ public class RoleSelectActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-
         if (mBackKeyPressedTimes == 0) {
             Toast.makeText(this, "Press again to sign out.", Toast.LENGTH_SHORT).show();
             mBackKeyPressedTimes = 1;
@@ -151,7 +171,6 @@ public class RoleSelectActivity extends Activity {
             startActivity(intent);
             finish();
         }
-
     }
 
     public boolean isConnected(){
@@ -194,6 +213,50 @@ public class RoleSelectActivity extends Activity {
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             offlineAcceptedRequest = null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    private void saveAcceptedRequestList(){
+        String FILENAME = DRL_FILE+username+T;
+        try {
+            deleteFile(FILENAME);
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            Gson gson = new Gson();
+            gson.toJson(driverRideRequestList, out);
+            out.flush();
+
+            fos.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    private void savePostedRequestList(){
+        String FILENAME = RRL_FILE+username+T;
+        try {
+            deleteFile(FILENAME);
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            Gson gson = new Gson();
+            gson.toJson(riderRideRequestList, out);
+            out.flush();
+
+            fos.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();

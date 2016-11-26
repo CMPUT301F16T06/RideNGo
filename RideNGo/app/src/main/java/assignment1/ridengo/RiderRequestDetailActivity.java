@@ -91,31 +91,42 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int pos, long arg) {
 
-                final int id = (int)arg;
-                Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_driver_info);
+                if(isConnected()) {
+                    final int id = (int) arg;
+                    Dialog dialog = new Dialog(RiderRequestDetailActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_driver_info);
 
-                TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
-                TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
-                TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
-                TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
-                TextView driverRate = (TextView) dialog.findViewById(R.id.driverRating);
+                    TextView driverUsername = (TextView) dialog.findViewById(R.id.driverUsername);
+                    TextView driverPhone = (TextView) dialog.findViewById(R.id.driverPhone);
+                    TextView driverEmail = (TextView) dialog.findViewById(R.id.driverEmail);
+                    TextView driverVehicle = (TextView) dialog.findViewById(R.id.driverVehicle);
+                    TextView driverRate = (TextView) dialog.findViewById(R.id.driverRating);
 
-                String driverUserName = driverList.get(pos).getUsername();
-                User driverUser = userList.getUserByUsername(driverUserName);
+                    String driverUserName = driverList.get(pos).getUsername();
+                    User driverUser = userList.getUserByUsername(driverUserName);
 
-                driverUsername.setText(driverUserName);
-                driverPhone.setText(driverUser.getPhoneNum());
-                driverEmail.setText(driverUser.getEmail());
-                driverVehicle.setText(driverUser.getVehicle().toString());
+                    driverUsername.setText(driverUserName);
+                    driverPhone.setText(driverUser.getPhoneNum());
+                    driverEmail.setText(driverUser.getEmail());
+                    driverVehicle.setText(driverUser.getVehicle().toString());
 
-                int numRatings = driverUser.getNumRatings();
-                driverRate.setText(String.format("%.2f", driverUser.getRating()) + "/5 from " + numRatings + " users");
+                    int numRatings = driverUser.getNumRatings();
+                    driverRate.setText(String.format("%.2f", driverUser.getRating()) + "/5 from " + numRatings + " users");
 
-                Button okButton = (Button) dialog.findViewById(R.id.okButton);
-                if (!rideRequest.getStatus().equals("Accepted By Driver")) {
-                    okButton.setEnabled(false);
+                    Button okButton = (Button) dialog.findViewById(R.id.okButton);
+                    if (!rideRequest.getStatus().equals("Waiting for Confirmation")) {
+                        okButton.setEnabled(false);
+                    } else {
+                        okButton.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                User driver = driverList.get(id);
+                                rideRequest.getRider().confirmAcception(rideRequest, driver);
+                                finish();
+                            }
+                        });
+                    }
+                    dialog.show();
 
                 }
                 else{
@@ -162,19 +173,19 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                         final Button rateButton = (Button) rateDialog.findViewById(R.id.rateButton);
 
                         // Existing rating
-                        final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
-                        final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
+                        //final float driverRating = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getTotalOfRating();
+                        //final int numRatings = UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).getNumRatings();
 
                         rateButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 RatingBar rateDriver = (RatingBar) rateDialog.findViewById(R.id.rateDriverBar);
                                 // User rates driver
                                 float userRating = rateDriver.getRating();
-                                float avgRating = (driverRating + userRating) / (float) (numRatings + 1);
+                                //float avgRating = (driverRating + userRating) / (float) (numRatings + 1);
 
-                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(avgRating);
-                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
-                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
+                                UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setRating(userRating);
+                                //UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setTotalOfRating((int)(driverRating + userRating));
+                                //UserController.getUserList().getUserByUsername(rideRequest.getDriver().getUsername()).setNumRatings(numRatings + 1);
 
                                 rideRequest.getRider().riderCompleteRide(rideRequest);
                                 rateButton.setEnabled(false);

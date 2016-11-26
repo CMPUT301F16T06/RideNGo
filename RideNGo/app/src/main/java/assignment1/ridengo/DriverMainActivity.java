@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,13 +43,12 @@ public class DriverMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
-
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()){
+            UserController.loadUserListFromServer();
+            RideRequestController.loadRequestListFromServer();
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){
                 int offlineRequestId = offlineAcceptedRequest.getId();
@@ -74,6 +74,7 @@ public class DriverMainActivity extends Activity {
         Button searchButton = (Button) findViewById(R.id.SearchButton);
         Button findNearbyButton = (Button) findViewById(R.id.FindNearbyButton);
         Button viewAcceptedButton = (Button) findViewById(R.id.ViewAcceptedButton);
+        EditText 
         final ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
         rideRequestList = RideRequestController.getRequestList().getRequests(); //.getTestRequests();
         ArrayAdapter<RideRequest> adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
@@ -82,9 +83,7 @@ public class DriverMainActivity extends Activity {
         viewAcceptedButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(activity, DriverAcceptedListActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+
             }
         });
 
@@ -92,12 +91,14 @@ public class DriverMainActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-         findNearbyButton.setOnClickListener(new View.OnClickListener(){
+            */
+          findNearbyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //TODO
+                Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
+                startActivity(intent);
             }
-         });*/
+         });
 
         requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -107,6 +108,7 @@ public class DriverMainActivity extends Activity {
                 RideRequest request = (RideRequest) requestListView.getItemAtPosition(position);
                 intent.putExtra("id", request.getId());
                 startActivity(intent);
+                finish();
             }
         });
 

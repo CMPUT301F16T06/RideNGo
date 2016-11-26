@@ -1,6 +1,7 @@
 package assignment1.ridengo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
  */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
+    private String username;
     private RideRequest rideRequest;
     private ArrayList<String> info = new ArrayList<String>();
     private RideRequest offlineAcceptedRequest;
@@ -43,20 +45,20 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_request_detail);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
-
-        final String username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
+        final int id = getIntent().getIntExtra("id", 0);
         RideRequestController.notifyUser(username, this);
+        final User user = UserController.getUserList().getUserByUsername(username);
 
         if(isConnected()){
+            UserController.loadUserListFromServer();
+            RideRequestController.loadRequestListFromServer();
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){
                 int offlineRequestId = offlineAcceptedRequest.getId();
                 RideRequest refreshedOfflineRequest = RideRequestController.getRequestList().getRequestById(offlineRequestId);
                 if(refreshedOfflineRequest.getStatus().equals("Waiting for Driver") || refreshedOfflineRequest.getStatus().equals("Waiting for Confirmation") ) {
-                    User r = UserController.getUserList().getUserByUsername(username);
-                    r.acceptRequest(refreshedOfflineRequest);
+                    user.acceptRequest(refreshedOfflineRequest);
                     offlineAcceptedRequest = null;
                     Toast.makeText(this, "The request you accepted while offline is now accepted. You can check it in VIEW ACCEPTED.", Toast.LENGTH_SHORT).show();
                 }
@@ -67,8 +69,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
             }
         }
 
-        final int id = getIntent().getIntExtra("id", 0);
-        final User driver = UserController.getUserList().getUserByUsername(username);
+
         rideRequest = RideRequestController.getRequestList().getRequestById(id);
         getInfo();
 
@@ -91,7 +92,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if(isConnected()) {
-                        driver.acceptRequest(rideRequest);
+                        user.acceptRequest(rideRequest);
                     }
                     else{
                         offlineAcceptedRequest = rideRequest;
@@ -114,6 +115,14 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this,DriverMainActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
+        finish();
     }
 
     /**

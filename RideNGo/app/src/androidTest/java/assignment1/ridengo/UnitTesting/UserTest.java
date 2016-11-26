@@ -4,7 +4,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import junit.framework.TestCase;
 
+import java.util.List;
+
 import assignment1.ridengo.RideRequest;
+import assignment1.ridengo.RideRequestController;
 import assignment1.ridengo.User;
 import assignment1.ridengo.Vehicle;
 
@@ -56,7 +59,7 @@ public class UserTest extends TestCase {
         assertEquals(user.getVehicle(), null);
 
         user.setVehicle(vehicle);
-        assertTrue(user.getVehicle()!= null);
+        assertTrue(user.getVehicle() != null);
     }
 
     public void testGetPhoneNum() throws Exception {
@@ -70,6 +73,85 @@ public class UserTest extends TestCase {
         assertEquals(user.getPhoneNum(), "1234567890");
     }
 
+    public void testSetRating() throws Exception{
+        User user = new User("test1", "test@example.com", "");
+        assertEquals(user.getNumRatings(), 0);
+
+        user.setRating((float)5);
+        assertEquals(user.getRating(), (float) 5);
+        assertEquals(user.getNumRatings(), 1);
+        assertEquals(user.getTotalOfRating(), 5);
+    }
+
+    public void testAcceptRequest() throws Exception{
+        User rider = new User("test1", "test@example.com", "1234567890");
+        User driver = new User("test2", "test2@example.com", "1234567891");
+
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        driver.acceptRequest(newRequest);
+
+        assertTrue(driver.getAcceptedRequests().contains(newRequest.getId()));
+        RideRequestController.getRequestList().clear();
+
+    }
+
+    public void testDriverCompleteRide() throws Exception{
+        User rider = new User("test1", "test@example.com", "1234567890");
+        User driver = new User("test2", "test2@example.com", "1234567891");
+
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        driver.driverCompleteRide(newRequest);
+
+        assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
+        RideRequestController.getRequestList().clear();
+
+    }
+
+    public void testReceivePay() throws Exception{
+        fail("Not implement yet");
+    }
+
+    public void testGetRequests() throws Exception{
+        User rider = new User("test1", "test@example.com", "1234567890");
+
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        rider.postRideRequest(newRequest);
+
+        List<Integer> requestList = rider.getRequests();
+        assertEquals((int)requestList.get(0), newRequest.getId());
+
+        RideRequestController.getRequestList().clear();
+    }
+
+    public void testGetAcceptedRequests() throws Exception{
+        User rider = new User("test1", "test@example.com", "1234567890");
+        User driver = new User("test2", "test2@example.com", "1234567891");
+
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        driver.acceptRequest(newRequest);
+
+        List<Integer> requestList = driver.getAcceptedRequests();
+        assertEquals((int)requestList.get(0), newRequest.getId());
+        RideRequestController.getRequestList().clear();
+
+    }
+
+    public void testPostRideRequest() throws Exception{
+        User rider = new User("test1", "test@example.com", "1234567890");
+
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        rider.postRideRequest(newRequest);
+
+        assertTrue(rider.getRequests().contains(newRequest.getId()));
+        assertNotNull(RideRequestController.getRequestList().getRequestWithHash(newRequest.getId()));
+
+        RideRequestController.getRequestList().clear();
+
+
+    }
+
+
+
     public void testConfirmAcception() throws Exception {
         User rider = new User("test1", "test@example.com", "1234567890");
         User driver = new User("test2", "test2@example.com", "1234567891");
@@ -81,6 +163,23 @@ public class UserTest extends TestCase {
         assertEquals(newRequest.getDriver().getEmail(), driver.getEmail());
         assertEquals(newRequest.getDriver().getPhoneNum(), driver.getPhoneNum());
 
+        RideRequestController.getRequestList().clear();
+
+
+    }
+
+    public void testCancelRequest() throws Exception{
+        User rider = new User("test1", "test@example.com", "1234567890");
+
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        rider.postRideRequest(newRequest);
+
+        assertTrue(rider.getRequests().contains(newRequest.getId()));
+
+        rider.cancelRequest(newRequest);
+        assertFalse(rider.getRequests().contains(newRequest.getId()));
+        RideRequestController.getRequestList().clear();
+
     }
 
     public void testRiderCompleteRide() throws Exception {
@@ -88,6 +187,8 @@ public class UserTest extends TestCase {
         RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
 
         rider.riderCompleteRide(newRequest);
+        RideRequestController.getRequestList().clear();
+
 
     }
 
@@ -95,6 +196,8 @@ public class UserTest extends TestCase {
         User user = new User("test1", "test@example.com", "1234567890");
         assertEquals(user.toString(), "test1");
     }
+
+
 
     public void testGetPendingRequests() throws Exception {
         fail("Not Implement yet");
@@ -107,4 +210,5 @@ public class UserTest extends TestCase {
     public void testGetRequestsByGeoLocation() throws Exception {
         fail("Not Implement yet");
     }
+
 }
