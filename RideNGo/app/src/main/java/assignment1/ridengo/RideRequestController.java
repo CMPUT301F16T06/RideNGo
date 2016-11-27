@@ -109,7 +109,7 @@ public class RideRequestController {
         for(RideRequest request : requestList.getRequests()) {
             if(request.isNotifyDriver() && request.getDriver().getUsername().equals(username)) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(activity);
-                adb.setMessage("Someone accepted your request.");
+                adb.setMessage("Rider has confirmed you as the driver.");
                 adb.show();
                 request.setNotifyDriver(false);
             }

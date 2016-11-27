@@ -85,6 +85,7 @@ public class RiderMainActivity extends AppCompatActivity {
                     Intent intent = new Intent(activity, RiderPostRequestActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     Toast.makeText(RiderMainActivity.this,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();

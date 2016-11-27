@@ -89,6 +89,7 @@ public class RideRequest {
         this.endPoint = endPoint;
         this.description = description;
         this.rider = rider;
+        this.driver = null;
         this.fare = fare;
         this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
