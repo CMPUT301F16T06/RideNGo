@@ -51,8 +51,6 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
 
-        UserController.loadUserListFromServer();
-
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
         position = getIntent().getIntExtra("position", 0);
@@ -69,7 +67,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         }
 
         rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
-        final UserList userList = UserController.getUserList();
+        //final UserList userList = UserController.getUserList();
 
         TextView startPoint = (TextView) findViewById(R.id.RequestDetailStartPointTextView);
         startPoint.setText(rideRequest.getStartPoint());
@@ -105,7 +103,8 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     TextView driverRate = (TextView) dialog.findViewById(R.id.driverRating);
 
                     String driverUserName = driverList.get(pos).getUsername();
-                    User driverUser = userList.getUserByUsername(driverUserName);
+                    UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + driverUserName + "\"}}}");
+                    User driverUser = UserController.getUserList().getUserByUsername(driverUserName);
 
                     driverUsername.setText(driverUserName);
                     driverPhone.setText(driverUser.getPhoneNum());

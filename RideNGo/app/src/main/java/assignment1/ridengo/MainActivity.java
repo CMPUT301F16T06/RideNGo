@@ -24,16 +24,13 @@ public class MainActivity extends Activity {
 
         final Activity activity = this;
 
-        RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000}");
-        UserController.loadUserListFromServer();
-        Toast.makeText(this, "Number of users: " + UserController.getUserList().getUsers().size(), Toast.LENGTH_LONG).show();
-
         Button signin = (Button) findViewById(R.id.button_MainSignIn);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText usernameText = (EditText) findViewById(R.id.usernameMain);
                 String username = usernameText.getText().toString();
+                UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\":{\"match\":{\"username\":\""+username+"\"}}}");
                 if(UserController.getUserList().contains(username)){
                     Intent intent = new Intent(activity, RoleSelectActivity.class);
                     intent.putExtra("username", username);

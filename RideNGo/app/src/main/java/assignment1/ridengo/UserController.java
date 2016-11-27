@@ -63,14 +63,14 @@ public class UserController {
     /**
      * Load user list from server.
      */
-    static public void loadUserListFromServer(){
+    static public void loadUserListFromServer(String query){
         if(userList == null) {
             userList = new UserList();
         }
         userList.clear();
 
         GetUsersTask getUsersTask = new GetUsersTask();
-        getUsersTask.execute("");
+        getUsersTask.execute(query);
 
         try {
             userList.getUsers().addAll(getUsersTask.get());
@@ -108,8 +108,8 @@ public class UserController {
             ArrayList<User> users = new ArrayList<User>();
 
 
-            String search_string = "{\"from\": 0, \"size\": 10000}";
-            //String search_string = search_parameters[0];
+
+            String search_string = search_parameters[0];
 
             // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(search_string)

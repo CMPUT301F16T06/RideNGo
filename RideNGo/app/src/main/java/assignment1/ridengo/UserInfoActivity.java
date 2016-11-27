@@ -34,10 +34,10 @@ public class UserInfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
-        UserController.loadUserListFromServer();
         RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
 
         user = getIntent().getStringExtra("username");
+        UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + user + "\"}}}");
 
         final TextView usernameTextView = (TextView) findViewById(R.id.UserNameTextView);
         final EditText usernameText = (EditText) findViewById(R.id.editText_EnterUsername);
@@ -160,12 +160,11 @@ public class UserInfoActivity extends Activity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserController.loadUserListFromServer();
-                RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
 
                 String username = usernameText.getText().toString().trim();
                 String email = emailText.getText().toString().trim();
                 String phoneNum = phoneNumText.getText().toString();
+                UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
 
                 if(!signUp(username,email,phoneNum)){
                     return;

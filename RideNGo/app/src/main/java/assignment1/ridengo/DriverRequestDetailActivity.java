@@ -48,10 +48,11 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         final int id = getIntent().getIntExtra("id", 0);
         RideRequestController.notifyUser(username, this);
+        UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
         final User user = UserController.getUserList().getUserByUsername(username);
 
         if(isConnected()){
-            UserController.loadUserListFromServer();
+            UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
             RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"id\": " + String.valueOf(id) + "}}}");
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){

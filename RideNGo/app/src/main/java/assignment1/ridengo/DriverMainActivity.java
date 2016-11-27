@@ -47,7 +47,7 @@ public class DriverMainActivity extends Activity {
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()){
-            UserController.loadUserListFromServer();
+            UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
             //RideRequestController.loadRequestListFromServer();
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){

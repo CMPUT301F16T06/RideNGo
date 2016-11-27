@@ -55,7 +55,6 @@ public class RiderMainActivity extends AppCompatActivity {
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()) {
-            UserController.loadUserListFromServer();
             RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
             checkOfflinePostedRequest();
             if (offlinePostedRequest != null) {

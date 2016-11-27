@@ -58,7 +58,7 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()){
-            UserController.loadUserListFromServer();
+            UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
             RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"acceptions.username\": \"" + username + "\"}}}");
             checkOfflineAcceptedRequest();
             if(offlineAcceptedRequest != null){
