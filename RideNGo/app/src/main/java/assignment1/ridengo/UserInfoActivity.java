@@ -224,7 +224,12 @@ public class UserInfoActivity extends Activity {
         if(currentUser == null) {
             currentUser = new User(username, email, phoneNum);
             currentUser.setVehicle(vehicle);
-            UserController.addUser(currentUser);
+            try{
+                UserController.addUser(currentUser);
+            }catch (RuntimeException e) {
+                Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         } else if(user.isEmpty()) {
             Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
             return false;
