@@ -26,8 +26,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS010101() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
 
-        Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
         UserController.getUserList().addUser(rider1);
         rider1.postRideRequest(newRequest);
@@ -50,15 +49,15 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(rider2);
 
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest1);
         assertTrue(rider1.getRequests().contains(newRequest1.getId()));
 
-        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest2);
         assertTrue(rider1.getRequests().contains(newRequest2.getId()));
 
-        RideRequest newRequest3 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider2, fare);
+        RideRequest newRequest3 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider2, 0);
         assertFalse(rider2.getRequests().contains(newRequest3));
         rider2.postRideRequest(newRequest3);
         assertTrue(rider2.getRequests().contains(newRequest3.getId()));
@@ -79,7 +78,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(driver1);
 
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest1);
         assertTrue(rider1.getRequests().contains(newRequest1.getId()));
 
@@ -99,7 +98,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(rider1);
 
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
@@ -123,7 +122,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(driver2);
 
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
@@ -146,29 +145,14 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
         UserController.getUserList().addUser(rider1);
 
-        Location start = new Location("");
-        start.setLatitude(0.00);
-        start.setLongitude(50.00);
 
-        Location end = new Location("");
-        end.setLatitude(50.00);
-        end.setLongitude(0.00);
+        float distance = 3000;//3km, the distance will be calculate on map activity
+        RideRequest newRequest = new RideRequest(new LatLng(0,50), new LatLng(50,0),"", "", "From start to end", rider1, distance);
 
-        float distance = (start.distanceTo(end))/1000;
-        double fare = (double) distance * 2;
-        RideRequest newRequest = new RideRequest(new LatLng(0,50), new LatLng(50,0),"", "", "From start to end", rider1, fare);
+        float newDistance = 4000; //4km, the distance will be calculate on map activity
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,100), new LatLng(100,0),"", "", "From start to end", rider1, newDistance);
 
-        start.setLatitude(0.00);
-        start.setLongitude(100.00);
-        end.setLatitude(100.00);
-        end.setLongitude(0.00);
-        distance = (start.distanceTo(end))/1000;
-        fare = (double) distance * 2;
-
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,100), new LatLng(100,0),"", "", "From start to end", rider1, fare);
-
-        assertTrue(newRequest1.getFare()>newRequest.getFare());
-
+        assertTrue(newRequest.getFare(distance) < newRequest1.getFare(newDistance));
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
     }
@@ -186,7 +170,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         //Add Request
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
 
@@ -217,7 +201,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         //Add Request
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest);
         assertTrue(rider1.getRequests().contains(newRequest.getId()));
 
@@ -251,7 +235,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Vehicle vehicle = new Vehicle("001", 2017, "Rolls Royce", "Ghost", "Black");
         driver.setVehicle(vehicle);
 
-        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
+        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50);
         rider.postRideRequest(rideRequest);
 
         assertTrue(rider.getRequests().contains(rideRequest.getId()));
@@ -280,7 +264,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(driver);
         driver.setRating(5);
 
-        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
+        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50);
         rider.postRideRequest(rideRequest);
 
         assertTrue(rider.getRequests().contains(rideRequest.getId()));
@@ -305,7 +289,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User driver = new User("driver", "driver@gmail.com", "1111111111");
         UserController.getUserList().addUser(driver);
 
-        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50.00);
+        RideRequest rideRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "", rider, 50);
         rider.postRideRequest(rideRequest);
         driver.acceptRequest(RideRequestController.getRequestList().getRequestWithHash(rider.getRequests().get(0)));
         rider.confirmAcception(rideRequest, rideRequest.getAcceptions().get(0));
@@ -339,7 +323,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(driver2);
 
         Double fare = 50.0;
-        RideRequest riderRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest riderRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         RideRequest driverRequest;
         //Post Request
         rider1.postRideRequest(riderRequest);
@@ -500,7 +484,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(rider1);
 
         Double fare = 50.0;
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
         rider1.postRideRequest(newRequest);
 
@@ -530,10 +514,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         UserController.getUserList().addUser(rider1);
 
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest1);
 
-        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest2);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
@@ -556,7 +540,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         //UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
 
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
         rider1.postRideRequest(newRequest1);
 
@@ -579,7 +563,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
 
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest1);
 
         User driver2 = new User("User2", "user2@gmail.com", "8888888888");
@@ -639,7 +623,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS100101() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
         //The rider able select a point on map activity. And then the point will be convert to LatLng()
         LatLng newStart = new LatLng(50, 100);
@@ -661,7 +645,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         //When a driver view on a map, map activity will extract the start and end coordinate point and display on map
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
         Double fare = 50.0;
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, fare);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest1);
 
         User driver = new User("User2", "user2@gmail.com", "888888888");
