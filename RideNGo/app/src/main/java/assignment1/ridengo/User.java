@@ -302,22 +302,4 @@ public class User {
     public String toString(){
         return username;
     }
-
-    public boolean isNotified() {
-        return false;
-    }
-
-    public RideRequestList getPendingRequests() {
-        return null;
-    }
-
-    public RideRequestList getRequestsByKeyword(String start) {
-        return null;
-    }
-
-    public RideRequestList getRequestsByGeoLocation(LatLng latLng) {
-        return null;
-    }
-
-
 }
