@@ -94,7 +94,12 @@ public class DriverMainActivity extends Activity {
             public void onClick(View view) {
                 rideRequestList.clear();
                 String search = searchText.getText().toString().trim().toLowerCase();
-                String query = "{\"from\":0,\"size\":10000,\"query\": { \"wildcard\": { \"description\": \"*" + search + "*\"}}}";
+                String query;
+                if(search.isEmpty()) {
+                    query = "{\"from\":0,\"size\":10000}";
+                } else {
+                    query = "{\"from\":0,\"size\":10000,\"query\": { \"wildcard\": { \"description\": \"*" + search + "*\"}}}";
+                }
                 RideRequestController.loadRequestListFromServer(query);
                 rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
                 adapter.notifyDataSetChanged();

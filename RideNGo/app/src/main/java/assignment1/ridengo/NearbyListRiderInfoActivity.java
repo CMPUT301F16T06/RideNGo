@@ -30,12 +30,14 @@ public class NearbyListRiderInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list_rider_info);
         UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
-        RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
+
         Toast.makeText(getBaseContext(), "TestRIDER:  " + rideRequests.get(5).getRider(), Toast.LENGTH_LONG).show();
 
         username = getIntent().getStringExtra("username");
         Toast.makeText(getBaseContext(), "Index of request:  " + username, Toast.LENGTH_SHORT).show();
-        //RideRequestController.notifyUser(username, this);
+        RideRequestController.notifyUser(username, this);
+
+        RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
 
         indexOfRequest = getIntent().getIntExtra("INDEX_OF_SEARCHED",0);
         Toast.makeText(getBaseContext(), "Index of request:  " + indexOfRequest, Toast.LENGTH_SHORT).show();
@@ -83,22 +85,22 @@ public class NearbyListRiderInfoActivity extends AppCompatActivity {
             }
         });
 
-//        showOnMapButton.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                ArrayList<LatLng> listOfPoints = new ArrayList<LatLng>();
-//                Bundle extras = new Bundle();
-//                startPoint = rideRequests.get(indexOfRequest).getStartCoord();
-//                endPoint = rideRequests.get(indexOfRequest).getEndCoord();
-//                listOfPoints.add(startPoint);
-//                listOfPoints.add(endPoint);
-//                Intent intent = new Intent(NearbyListRiderInfoActivity.this, ShowPointsOnMapActivity.class);
-//                extras.putParcelableArrayList("SHOW_POINTS",listOfPoints);
-//                intent.putExtras(extras);
-//                startActivity(intent);
-//
-//            }
-//        });
+        showOnMapButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                ArrayList<LatLng> listOfPoints = new ArrayList<LatLng>();
+                Bundle extras = new Bundle();
+                startPoint = rideRequests.get(indexOfRequest).getStartCoord();
+                endPoint = rideRequests.get(indexOfRequest).getEndCoord();
+                listOfPoints.add(startPoint);
+                listOfPoints.add(endPoint);
+                Intent intent = new Intent(NearbyListRiderInfoActivity.this, ShowPointsOnMapActivity.class);
+                extras.putParcelableArrayList("SHOW_POINTS",listOfPoints);
+                intent.putExtras(extras);
+                startActivity(intent);
+
+            }
+        });
 
     }
 
