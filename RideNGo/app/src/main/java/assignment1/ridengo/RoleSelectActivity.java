@@ -94,6 +94,7 @@ public class RoleSelectActivity extends Activity {
         driverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
                 if(UserController.getUserList().getUserByUsername(username).haveVehicle()){
                     Intent intent = new Intent(activity, DriverMainActivity.class);
                     intent.putExtra("username", username);
