@@ -102,6 +102,9 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                     offlinePostedRequest = null;
                     Toast.makeText(activity, "You are offline now, your request will be post once you get online again.", Toast.LENGTH_SHORT).show();
                 }
+                Intent intent = new Intent(activity, RiderMainActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
                 finish();
             }
         });

@@ -96,9 +96,30 @@ public class DriverMainActivity extends Activity {
                 String search = searchText.getText().toString().trim().toLowerCase();
                 String query;
                 if(search.isEmpty()) {
-                    query = "{\"from\":0,\"size\":10000}";
+                    query = "{  \n" +
+                            "   \"query\" : {\n" +
+                            "            \"bool\" : {\n" +
+                            "              \"should\" : [\n" +
+                            "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
+                            "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
+                            "              ]\n" +
+                            "           }\n" +
+                            "   }\n" +
+                            "}";
                 } else {
-                    query = "{\"from\":0,\"size\":10000,\"query\": { \"wildcard\": { \"description\": \"*" + search + "*\"}}}";
+                    query = "{  \n" +
+                            "   \"query\" : {\n" +
+                            "            \"bool\" : {\n" +
+                            "              \"must\" : [\n" +
+                            "                 { \"wildcard\" : {\"description\" : \"\"}}\n" +
+                            "              ],\n" +
+                            "              \"should\" : [\n" +
+                            "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
+                            "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
+                            "              ]\n" +
+                            "           }\n" +
+                            "   }\n" +
+                            "}";
                 }
                 RideRequestController.loadRequestListFromServer(query);
                 rideRequestList.addAll(RideRequestController.getRequestList().getRequests());

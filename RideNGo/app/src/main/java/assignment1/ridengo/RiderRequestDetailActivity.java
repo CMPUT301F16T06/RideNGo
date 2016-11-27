@@ -200,6 +200,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 driverList.clear();
                 driverList.addAll(rideRequest.getAcceptions());
                 adapter.notifyDataSetChanged();
+                Toast.makeText(RiderRequestDetailActivity.this,"Refreshed",Toast.LENGTH_SHORT).show();
             }
         });
     }

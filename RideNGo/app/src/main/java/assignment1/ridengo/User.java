@@ -166,7 +166,9 @@ public class User {
      * @param l the l
      */
     public void addListener(Listener l){
-        this.listeners.add(l);
+        if(l != null) {
+            this.listeners.add(l);
+        }
     }
 
     /**
