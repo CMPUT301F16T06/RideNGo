@@ -1,7 +1,9 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -96,7 +98,9 @@ public class RideRequestController {
         for(RideRequest request : requestList.getRequests()) {
 
             if(request.isNotifyRider() && request.getRider().getUsername().equals(username)) {
-                Toast.makeText(activity, "Someone Accepted Your Ride Application", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder adb = new AlertDialog.Builder(activity);
+                adb.setMessage("Someone accepted your request.");
+                adb.show();
                 request.setNotifyRider(false);
             }
         }
@@ -104,7 +108,9 @@ public class RideRequestController {
         loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"driver.username\": \"" + username + "\"}}}");
         for(RideRequest request : requestList.getRequests()) {
             if(request.isNotifyDriver() && request.getDriver().getUsername().equals(username)) {
-                Toast.makeText(activity, "You Are Confirmed As A Driver", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder adb = new AlertDialog.Builder(activity);
+                adb.setMessage("Someone accepted your request.");
+                adb.show();
                 request.setNotifyDriver(false);
             }
         }

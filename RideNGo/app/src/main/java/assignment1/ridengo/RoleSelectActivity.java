@@ -54,6 +54,8 @@ public class RoleSelectActivity extends Activity {
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
+        RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
+
         if(isConnected()) {
             UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
             RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
