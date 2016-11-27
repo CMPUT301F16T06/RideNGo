@@ -90,6 +90,10 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
+                if(startPoint.isEmpty() || endPoint.isEmpty()) {
+                    Toast.makeText(activity, "You Must Choose Two Points first.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 description = descText.getText().toString().toLowerCase().trim();
                 RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, fare);
                 if(isConnected()) {
