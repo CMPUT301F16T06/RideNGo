@@ -26,8 +26,7 @@
         android:id="@+id/button_Refresh"
         android:layout_alignRight="@+id/RequestDetailTextView"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_autorenew_black_24dp"/>
+        android:background="@drawable/ic_autorenew_black_24dp"/>
 
     <TextView
         android:layout_width="wrap_content"
