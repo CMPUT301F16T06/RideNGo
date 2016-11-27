@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="assignment1.ridengo.RoleSelectActivity"
-    android:background="@drawable/background_main_activity3">
+    android:background="@drawable/background">
 
     <Button
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit UserInfo"
+        android:text="Edit User Info"
         android:id="@+id/button_EditInfo"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
@@ -43,9 +43,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Select Your Role"
         android:textSize="30sp"
+        android:textStyle="bold"
         android:id="@+id/textView4"
         android:layout_below="@+id/button_EditInfo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="72dp"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/holo_orange_light" />
 </RelativeLayout>

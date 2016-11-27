@@ -20,6 +20,15 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_Refresh"
+        android:layout_alignRight="@+id/RequestDetailTextView"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
+        android:src="@drawable/ic_autorenew_black_24dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,8 +59,8 @@
         android:text="Trip Finished!"
         android:id="@+id/RequestDetailConfirmButton"
 
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="20dp"
+
+        android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
@@ -81,7 +90,7 @@
         android:layout_height="wrap_content"
         android:text="Cancel Request"
         android:id="@+id/RequestDetailCancelRequestButton"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
@@ -116,13 +125,7 @@
         android:layout_toEndOf="@+id/RequestDetailStatusTextView"
         android:layout_alignTop="@+id/RequestDetailStatusTextView" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:id="@+id/button_Refresh"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>
