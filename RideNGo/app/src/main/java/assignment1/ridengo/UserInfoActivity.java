@@ -169,7 +169,9 @@ public class UserInfoActivity extends Activity {
                 if(!signUp(username,email,phoneNum)){
                     return;
                 }
-
+                Intent intent = new Intent(activity,RoleSelectActivity.class);
+                intent.putExtra("username",username);
+                startActivity(intent);
                 finish();
             }
         });
