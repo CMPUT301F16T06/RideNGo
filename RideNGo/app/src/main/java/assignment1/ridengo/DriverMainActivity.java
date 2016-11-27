@@ -95,7 +95,7 @@ public class DriverMainActivity extends Activity {
                 rideRequestList.clear();
                 String search = searchText.getText().toString().trim().toLowerCase();
                 for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
-                    if(request.toString().toLowerCase().contains(search)) {
+                    if(request.getDescription().toLowerCase().contains(search)) {
                         rideRequestList.add(request);
                     }
                 }

@@ -78,9 +78,10 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         final User rider = UserController.getUserList().getUserByUsername(username);
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
         final EditText end = (EditText) findViewById(R.id.EndPointEditText);
+        final EditText descText = (EditText) findViewById(R.id.DescriptionEditText);
 
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-        description="Test";
+        description = descText.getText().toString().toLowerCase().trim();
         fare = 0.00;
 
         estimatedFare.setText("$"+fare);
