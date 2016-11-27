@@ -105,6 +105,7 @@ public class DriverMainActivity extends Activity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
+                intent.putExtra("username", username);
                 startActivity(intent);
             }
         });

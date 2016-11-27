@@ -33,6 +33,7 @@ import java.util.List;
 
 public class MapsDriverSearchActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private String username;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -55,11 +56,15 @@ public class MapsDriverSearchActivity extends FragmentActivity implements OnMapR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_driver_search);
+        UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
+        RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
+        Toast.makeText(getBaseContext(), "Test:  " + rideRequests, Toast.LENGTH_SHORT).show();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        username = getIntent().getStringExtra("username");
         Button findLocations = (Button) findViewById(R.id.findNearby);
 
         findLocations.setOnClickListener(new View.OnClickListener() {
@@ -72,13 +77,14 @@ public class MapsDriverSearchActivity extends FragmentActivity implements OnMapR
                 //Toast.makeText(getBaseContext(), "End:  " + pairRequests.get(1).getIndex(), Toast.LENGTH_LONG).show();
                 //Toast.makeText(getBaseContext(), "End:  " + pairRequests.get(1).getValue(), Toast.LENGTH_LONG).show();
                 for(int i = 0; i < pairRequests.size(); i++) {
-                    Toast.makeText(getBaseContext(), "End:  " + pairRequests.get(i).getIndex(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getBaseContext(), "End:  " + pairRequests.get(i).getValue(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "End:  " + pairRequests.get(i).getIndex(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "End:  " + pairRequests.get(i).getValue(), Toast.LENGTH_SHORT).show();
                 }
                 Intent intent = new Intent(MapsDriverSearchActivity.this, NearbyListActivity.class);
                 Bundle extras = new Bundle();
                 //extras.putParcelableArrayList("NEARBY_LOCATIONS",pairRequests);
                 extras.putSerializable("NEARBY_LOCATIONS", (Serializable)pairRequests);
+                extras.putString("username", username);
                 //extras.putStringArrayList("NEARBY_LOCATIONS", (ArrayList<String>)pairRequests);
                 intent.putExtras(extras);
                 startActivity(intent);
@@ -114,12 +120,12 @@ public class MapsDriverSearchActivity extends FragmentActivity implements OnMapR
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        LatLng edmonton = new LatLng(53.5444,-113.4909);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(edmonton,10));
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        // Add a marker in Sydney and move the camera
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(edmonton).title("Marker in Sydney"));
         //mMap.addMarker(new MarkerOptions().position(rideRequests.get(1).getStartCoord()).title("test"));
         //mMap.addMarker(new MarkerOptions().position(rideRequests.get(1).getEndCoord()).title("test2"));
         //mMap.addMarker(new MarkerOptions().position(rideRequests.get(4).getStartCoord()).title("test3"));
@@ -140,7 +146,6 @@ public class MapsDriverSearchActivity extends FragmentActivity implements OnMapR
 //
 //
 //        }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         /**
          * When the location button is clicked, make the map move to the lat/lng co-ordinates

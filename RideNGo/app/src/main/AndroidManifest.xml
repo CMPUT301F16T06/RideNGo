@@ -51,7 +51,11 @@
         <activity
             android:name=".MapsDriverSearchActivity"
             android:label="@string/title_activity_maps_driver_search" />
-        <activity android:name=".NearbyListActivity"></activity>
+        <activity android:name=".NearbyListActivity" />
+        <activity android:name=".NearbyListRiderInfoActivity" />
+        <activity
+            android:name=".ShowPointsOnMapActivity"
+            android:label="@string/title_activity_show_points_on_map"></activity>
     </application>
 
 </manifest>
