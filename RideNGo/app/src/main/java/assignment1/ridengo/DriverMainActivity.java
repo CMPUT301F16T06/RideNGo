@@ -96,28 +96,30 @@ public class DriverMainActivity extends Activity {
                 String search = searchText.getText().toString().trim().toLowerCase();
                 String query;
                 if(search.isEmpty()) {
-                    query = "{  \n" +
+                    query = "{\n" +
                             "   \"query\" : {\n" +
+                            "      \"filtered\" : { \n" +
+                            "         \"query\" : {\n" +
                             "            \"bool\" : {\n" +
-                            "              \"should\" : [\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
-                            "              ]\n" +
+                            "          \t  \"must\" :[{\"match\":{\"status\":\"Waiting\"}}\n" +
+                            "          \t  ]\n" +
                             "           }\n" +
+                            "         }\n" +
+                            "      }\n" +
                             "   }\n" +
                             "}";
                 } else {
-                    query = "{  \n" +
+                    query = "{\n" +
                             "   \"query\" : {\n" +
+                            "      \"filtered\" : { \n" +
+                            "         \"query\" : {\n" +
                             "            \"bool\" : {\n" +
-                            "              \"must\" : [\n" +
-                            "                 { \"wildcard\" : {\"description\" : \"\"}}\n" +
-                            "              ],\n" +
-                            "              \"should\" : [\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
-                            "              ]\n" +
+                            "          \t  \"must\" :[{\"match\":{\"status\":\"Waiting\"}},\n" +
+                            "          \t  \t{\"wildcard\":{\"description\":\"\"}}\n" +
+                            "          \t  ]\n" +
                             "           }\n" +
+                            "         }\n" +
+                            "      }\n" +
                             "   }\n" +
                             "}";
                 }
