@@ -6,12 +6,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -23,7 +23,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -192,7 +191,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
             });
         }
-        Button refreshButton = (Button) findViewById(R.id.button_Refresh);
+        ImageButton refreshButton = (ImageButton) findViewById(R.id.button_Refresh);
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,6 +200,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 driverList.clear();
                 driverList.addAll(rideRequest.getAcceptions());
                 adapter.notifyDataSetChanged();
+                Toast.makeText(RiderRequestDetailActivity.this,"Refreshed",Toast.LENGTH_SHORT).show();
             }
         });
     }
