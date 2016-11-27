@@ -78,7 +78,6 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         final EditText descText = (EditText) findViewById(R.id.DescriptionEditText);
 
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-        description = descText.getText().toString().toLowerCase().trim();
         fare = 0.00;
 
         estimatedFare.setText("$"+fare);
@@ -91,6 +90,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
+                description = descText.getText().toString().toLowerCase().trim();
                 RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, fare);
                 if(isConnected()) {
                     rider.postRideRequest(rideRequest);
