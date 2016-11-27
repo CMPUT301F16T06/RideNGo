@@ -115,7 +115,7 @@ public class DriverMainActivity extends Activity {
                             "         \"query\" : {\n" +
                             "            \"bool\" : {\n" +
                             "          \t  \"must\" :[{\"match\":{\"status\":\"Waiting\"}},\n" +
-                            "          \t  \t{\"wildcard\":{\"description\":\"\"}}\n" +
+                            "          \t  \t{\"wildcard\":{\"description\":\""+ search + "\"}}\n" +
                             "          \t  ]\n" +
                             "           }\n" +
                             "         }\n" +
