@@ -49,6 +49,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private RideRequest offlinePostedRequest;
     private static final String PR_FILE = "offlinePostedRequest";
     private static final String T = ".sav";
+    private String username;
 
     /**
      * The Ride request controller.
@@ -59,7 +60,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_post_request);
 
-        final String username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()) {
@@ -219,6 +220,13 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             // TODO Auto-generated catch block
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this,RiderMainActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
     }
 
 }
