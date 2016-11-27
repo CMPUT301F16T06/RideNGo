@@ -51,17 +51,17 @@ public class RoleSelectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_select);
 
+        username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
+
         if(isConnected()) {
             UserController.loadUserListFromServer();
-            RideRequestController.loadRequestListFromServer();
+            RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
             driverRideRequestList = RideRequestController.getRequestList().getRequestsWithDriver(username);
             riderRideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
             saveAcceptedRequestList();
             savePostedRequestList();
         }
-
-        username = getIntent().getStringExtra("username");
-        RideRequestController.notifyUser(username, this);
 
         Button editInfoButton = (Button) findViewById(R.id.button_EditInfo);
         editInfoButton.setOnClickListener(new View.OnClickListener() {

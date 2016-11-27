@@ -25,7 +25,7 @@ public class NearbyListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list);
         UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
+        RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
         pairRequests = (List<PairForSearch>)getIntent().getSerializableExtra("NEARBY_LOCATIONS");
         for(int i = 0; i < pairRequests.size(); i++){
             distanceArray.add(pairRequests.get(i).getValue());

@@ -48,7 +48,7 @@ public class DriverMainActivity extends Activity {
 
         if(isConnected()){
             UserController.loadUserListFromServer();
-            RideRequestController.loadRequestListFromServer();
+            //RideRequestController.loadRequestListFromServer();
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){
                 int offlineRequestId = offlineAcceptedRequest.getId();
@@ -94,11 +94,9 @@ public class DriverMainActivity extends Activity {
             public void onClick(View view) {
                 rideRequestList.clear();
                 String search = searchText.getText().toString().trim().toLowerCase();
-                for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
-                    if(request.getDescription().toLowerCase().contains(search)) {
-                        rideRequestList.add(request);
-                    }
-                }
+                String query = "{\"from\":0,\"size\":10000,\"query\": { \"wildcard\": { \"description\": \"*" + search + "*\"}}}";
+                RideRequestController.loadRequestListFromServer(query);
+                rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
                 adapter.notifyDataSetChanged();
             }
         });

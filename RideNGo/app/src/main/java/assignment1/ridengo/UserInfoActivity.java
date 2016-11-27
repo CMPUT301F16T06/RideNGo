@@ -35,7 +35,7 @@ public class UserInfoActivity extends Activity {
         setContentView(R.layout.activity_user_info);
 
         UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
+        RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
 
         user = getIntent().getStringExtra("username");
 
@@ -161,7 +161,7 @@ public class UserInfoActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UserController.loadUserListFromServer();
-                RideRequestController.loadRequestListFromServer();
+                RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
 
                 String username = usernameText.getText().toString().trim();
                 String email = emailText.getText().toString().trim();

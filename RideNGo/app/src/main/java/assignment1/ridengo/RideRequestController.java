@@ -46,14 +46,14 @@ public class RideRequestController {
     }
 
 
-    static public void loadRequestListFromServer(){
+    static public void loadRequestListFromServer(String query){
         if(requestList == null) {
             requestList = new RideRequestList();
         }
         requestList.clear();
 
         GetRequestsTask getRequestsTask = new GetRequestsTask();
-        getRequestsTask.execute("");
+        getRequestsTask.execute(query);
 
         try {
             requestList.getRequests().addAll(getRequestsTask.get());
@@ -92,14 +92,20 @@ public class RideRequestController {
     }
 
     public static void notifyUser(String username, Activity activity){
+        loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
+        for(RideRequest request : requestList.getRequests()) {
+
+            if(request.isNotifyRider() && request.getRider().getUsername().equals(username)) {
+                Toast.makeText(activity, "Someone Accepted Your Ride Application", Toast.LENGTH_SHORT).show();
+                request.setNotifyRider(false);
+            }
+        }
+
+        loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"driver.username\": \"" + username + "\"}}}");
         for(RideRequest request : requestList.getRequests()) {
             if(request.isNotifyDriver() && request.getDriver().getUsername().equals(username)) {
                 Toast.makeText(activity, "You Are Confirmed As A Driver", Toast.LENGTH_SHORT).show();
                 request.setNotifyDriver(false);
-            }
-            if(request.isNotifyRider() && request.getRider().getUsername().equals(username)) {
-                Toast.makeText(activity, "Someone Accepted Your Ride Application", Toast.LENGTH_SHORT).show();
-                request.setNotifyRider(false);
             }
         }
     }
@@ -115,7 +121,7 @@ public class RideRequestController {
             ArrayList<RideRequest> requests = new ArrayList<RideRequest>();
 
 
-            String search_string = "{\"from\": 0, \"size\": 10000}";
+            String search_string = search_parameters[0];
             //String search_string = search_parameters[0];
 
             // assume that search_parameters[0] is the only search term we are interested in using

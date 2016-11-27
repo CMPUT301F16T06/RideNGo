@@ -52,12 +52,12 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request_detail);
 
         UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
 
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
         position = getIntent().getIntExtra("position", 0);
 
+        RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
         if(isConnected()) {
             checkOfflinePostRequest();
             if (offlinePostedRequest != null) {
@@ -206,7 +206,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RideRequestController.loadRequestListFromServer();
+                RideRequestController.loadRequestListFromServer("{\"from\": 0, \"size\": 10000}");
                 rideRequest = RideRequestController.getRequestList().getRequestsWithRider(username).get(position);
                 driverList.clear();
                 driverList.addAll(rideRequest.getAcceptions());

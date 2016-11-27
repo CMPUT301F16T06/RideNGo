@@ -81,9 +81,6 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_rider);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
-
         startAndEndPoints = new ArrayList<LatLng>();
         addressesToReturn = new ArrayList<String>();
         geocoder = new Geocoder(this, Locale.getDefault());

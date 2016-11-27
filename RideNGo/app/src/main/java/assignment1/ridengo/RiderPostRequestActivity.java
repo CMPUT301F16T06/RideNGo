@@ -59,10 +59,8 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_post_request);
 
-        UserController.loadUserListFromServer();
-        RideRequestController.loadRequestListFromServer();
-
         final String username = getIntent().getStringExtra("username");
+        RideRequestController.notifyUser(username, this);
 
         if(isConnected()) {
             checkOfflinePostedRequest(username);
@@ -74,7 +72,6 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             }
         }
 
-        RideRequestController.notifyUser(username, this);
         final User rider = UserController.getUserList().getUserByUsername(username);
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
         final EditText end = (EditText) findViewById(R.id.EndPointEditText);

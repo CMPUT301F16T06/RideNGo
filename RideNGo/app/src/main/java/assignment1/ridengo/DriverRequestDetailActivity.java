@@ -52,7 +52,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
 
         if(isConnected()){
             UserController.loadUserListFromServer();
-            RideRequestController.loadRequestListFromServer();
+            RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"id\": " + String.valueOf(id) + "}}}");
             checkOfflineAcceptedRequest(username);
             if(offlineAcceptedRequest != null){
                 int offlineRequestId = offlineAcceptedRequest.getId();
