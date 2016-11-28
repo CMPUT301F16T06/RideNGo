@@ -30,6 +30,11 @@
         <item>Green</item>
         <item>Other</item>
     </string-array>
+    <string-array name="sort">
+        <item>Sort by...</item>
+        <item>Price</item>
+        <item>Price/KM</item>
+    </string-array>
     <string name="title_activity_maps_driver_search">Map</string>
     <string name="title_activity_show_points_on_map">Map</string>
 </resources>

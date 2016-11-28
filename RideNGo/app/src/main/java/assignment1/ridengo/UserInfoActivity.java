@@ -169,7 +169,9 @@ public class UserInfoActivity extends Activity {
                 if(!signUp(username,email,phoneNum)){
                     return;
                 }
-
+                Intent intent = new Intent(activity,RoleSelectActivity.class);
+                intent.putExtra("username",username);
+                startActivity(intent);
                 finish();
             }
         });
@@ -224,7 +226,12 @@ public class UserInfoActivity extends Activity {
         if(currentUser == null) {
             currentUser = new User(username, email, phoneNum);
             currentUser.setVehicle(vehicle);
-            UserController.addUser(currentUser);
+            try{
+                UserController.addUser(currentUser);
+            }catch (RuntimeException e) {
+                Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         } else if(user.isEmpty()) {
             Toast.makeText(activity, "User Already Exists.", Toast.LENGTH_SHORT).show();
             return false;

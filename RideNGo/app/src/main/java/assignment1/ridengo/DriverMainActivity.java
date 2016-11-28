@@ -1,16 +1,20 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -36,7 +40,9 @@ public class DriverMainActivity extends Activity {
     private RideRequest offlineAcceptedRequest;
     private static final String AR_FILE = "offlineAcceptedRequest";
     private static final String T = ".sav";
-
+    private static String filter = null;
+    private static float filter_value;
+    private static String operator = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,45 @@ public class DriverMainActivity extends Activity {
                 }
             }
         }
+
+        Button filterButton = (Button) findViewById(R.id.button_Filter);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(DriverMainActivity.this);
+                dialog.setTitle("Filter");
+                dialog.setContentView(R.layout.dialog_filter);
+
+                final RadioButton perRide = (RadioButton) dialog.findViewById(R.id.radioButton_Ride);
+                final RadioButton perKM = (RadioButton) dialog.findViewById(R.id.radioButton_KM);
+                final Spinner op = (Spinner) dialog.findViewById(R.id.spinnerOption);
+                final EditText value = (EditText) dialog.findViewById(R.id.editText_Value);
+                final Button apply = (Button) dialog.findViewById(R.id.button_Apply);
+
+                ArrayList<String> arrayOp = new ArrayList<String>();
+                arrayOp.add("greater");
+                arrayOp.add("equal");
+                arrayOp.add("less");
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(activity, R.layout.support_simple_spinner_dropdown_item, arrayOp);
+                op.setAdapter(spinnerAdapter);
+
+                apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(perRide.isChecked()) {
+                            filter = "filter per ride";
+                        } else if(perKM.isChecked()) {
+                            filter = "filter per km";
+                        }
+                        filter_value = Float.valueOf(value.getText().toString());
+                        operator = op.getSelectedItem().toString();
+                        dialog.cancel();
+                    }
+                });
+                dialog.show();
+            }
+        });
+
 
         /*
         Set up all buttons, ListView, and adapter here
@@ -96,33 +141,70 @@ public class DriverMainActivity extends Activity {
                 String search = searchText.getText().toString().trim().toLowerCase();
                 String query;
                 if(search.isEmpty()) {
-                    query = "{  \n" +
+                    query = "{\n" +
                             "   \"query\" : {\n" +
+                            "      \"filtered\" : { \n" +
+                            "         \"query\" : {\n" +
                             "            \"bool\" : {\n" +
-                            "              \"should\" : [\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
-                            "              ]\n" +
+                            "          \t  \"must\" :[{\"match\":{\"status\":\"Waiting\"}}\n" +
+                            "          \t  ]\n" +
                             "           }\n" +
+                            "         }\n" +
+                            "      }\n" +
                             "   }\n" +
                             "}";
                 } else {
-                    query = "{  \n" +
+                    query = "{\n" +
                             "   \"query\" : {\n" +
+                            "      \"filtered\" : { \n" +
+                            "         \"query\" : {\n" +
                             "            \"bool\" : {\n" +
-                            "              \"must\" : [\n" +
-                            "                 { \"wildcard\" : {\"description\" : \"\"}}\n" +
-                            "              ],\n" +
-                            "              \"should\" : [\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
-                            "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
-                            "              ]\n" +
+                            "          \t  \"must\" :[{\"match\":{\"status\":\"Waiting\"}},\n" +
+                            "          \t  \t{\"wildcard\":{\"description\":\""+ search + "\"}}\n" +
+                            "          \t  ]\n" +
                             "           }\n" +
+                            "         }\n" +
+                            "      }\n" +
                             "   }\n" +
                             "}";
                 }
                 RideRequestController.loadRequestListFromServer(query);
-                rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
+                if(filter == null) {
+                    rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
+                } else if(filter.equals("filter per ride")) {
+                    for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
+                        if(operator.equals("greater")) {
+                            if(request.getFare() > filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("equal")) {
+                            if(request.getFare() == filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("less")) {
+                            if(request.getFare() < filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        }
+                    }
+                } else if(filter.equals("filter per km")) {
+                    for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
+                        if(operator.equals("greater")) {
+                            if(request.getFare() / request.getDistance() > filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("equal")) {
+                            if(request.getFare() / request.getDistance() == filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("less")) {
+                            if(request.getFare() / request.getDistance() < filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        }
+                    }
+                }
+
                 adapter.notifyDataSetChanged();
             }
         });
@@ -130,9 +212,14 @@ public class DriverMainActivity extends Activity {
         findNearbyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+                if(isConnected()) {
+                    Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(activity,"You are offine now, please check your network status.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

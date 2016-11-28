@@ -15,15 +15,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ViewAcceptedButton"
-        android:layout_below="@+id/FindNearbyButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/SearchButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/SearchButton" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/DriverRequestListView"
-        android:layout_below="@+id/ViewAcceptedButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ViewAcceptedButton" />
 
     <Button
         android:text="Search"
@@ -31,17 +32,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/SearchButton"
         android:layout_below="@+id/SearchTextView"
-        android:layout_alignStart="@+id/FindNearbyButton"
-        android:layout_alignEnd="@+id/FindNearbyButton" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/button_Filter"
+        android:layout_alignEnd="@+id/SearchTextView" />
 
     <Button
         android:text="Find Nearby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/FindNearbyButton"
-        android:layout_below="@+id/SearchButton"
-        android:layout_alignEnd="@+id/ViewAcceptedButton"
-        android:layout_alignStart="@+id/ViewAcceptedButton" />
+        android:layout_below="@+id/button_Filter"
+        android:layout_alignEnd="@+id/button_Filter"
+        android:layout_toEndOf="@+id/ViewAcceptedButton"
+        android:layout_above="@+id/ViewAcceptedButton" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -50,7 +53,17 @@
         android:hint="Search"
         android:ems="10"
         android:id="@+id/SearchTextView"
-        android:layout_marginTop="23dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD FILTER"
+        android:id="@+id/button_Filter"
+        android:layout_alignBottom="@+id/SearchTextView"
+        android:layout_alignEnd="@+id/DriverRequestListView"
+        android:layout_toEndOf="@+id/SearchTextView" />
+
+
 </RelativeLayout>

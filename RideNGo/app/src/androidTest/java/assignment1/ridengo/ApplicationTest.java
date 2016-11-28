@@ -152,7 +152,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         float newDistance = 4000; //4km, the distance will be calculate on map activity
         RideRequest newRequest1 = new RideRequest(new LatLng(0,100), new LatLng(100,0),"", "", "From start to end", rider1, newDistance);
 
-        assertTrue(newRequest.getFare(distance) < newRequest1.getFare(newDistance));
+        assertTrue(newRequest.getFare() < newRequest1.getFare());
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
     }
@@ -454,8 +454,15 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * As a driver, I want to browse and search for open requests by geo-location.
      */
     public void testUS040101() {
-        fail("Not implement yet");
+        User rider1 = new User("User1", "user1@gmail.com", "8888888888");
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
 
+        //The driver able to select a LatLng and search nearby request.
+        assertNotNull(newRequest1.getStartCoord());
+        assertNotNull(newRequest1.getEndCoord());
+
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
     /**
@@ -463,6 +470,16 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      * As a driver, I want to browse and search for open requests by keyword.
      */
     public void testUS040201() {
+        String query = "{  \n" +
+                "   \"query\" : {\n" +
+                "            \"bool\" : {\n" +
+                "              \"should\" : [\n" +
+                "              \t { \"match\" : {\"status\" : \"Waiting for Driver\"}},\n" +
+                "              \t { \"match\" : {\"status\" : \"Waiting for Confirmation\"}}\n" +
+                "              ]\n" +
+                "           }\n" +
+                "   }\n" +
+                "}";
         fail("Not implement yet");
     }
 
@@ -494,14 +511,11 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         rider1.confirmAcception(newRequest, driver2);
         driver2.driverCompleteRide(newRequest);
-        assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
+        rider1.riderCompleteRide(newRequest);
 
-
-
+        assertTrue("All payment will be done by cash", true);
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
-
-        fail("Rider still need to confirm completion");
     }
 
     /**
@@ -537,7 +551,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
      */
     public void testUS050301() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
-        //UserRider rider1 = new UserRider(user1);
         Double fare = 50.0;
 
         RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);

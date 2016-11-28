@@ -18,10 +18,18 @@
         android:layout_above="@+id/AcceptButton"/>
 
     <Button
-        android:text="Give him a ride!"
+        android:text="Give him/her a ride!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/AcceptButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show on Map"
+        android:id="@+id/mapShowButton"
+        android:layout_below="@+id/RequestDetailListView"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

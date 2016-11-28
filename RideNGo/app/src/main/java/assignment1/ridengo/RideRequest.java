@@ -32,13 +32,22 @@ public class RideRequest {
 
     private int id;
     private String description;
-    private Double fare;
+
     private float distance;
+    private double fare;
     private User rider;
     private User driver;
     private String status;
     private List<User> acceptions = null;
     private ArrayList<Listener> listeners;
+
+    public double getFare() {
+        return this.fare;
+    }
+
+    public float getDistance() {
+        return this.distance;
+    }
 
     public boolean isNotifyRider() {
         return notifyRider;
@@ -84,6 +93,7 @@ public class RideRequest {
      * @param description the description
      * @param rider       the rider
      * @param distance        the fare
+
      */
     public RideRequest(LatLng startCoord, LatLng endCoord, String startPoint, String endPoint, String description, User rider, float distance){
         this.startCoord = startCoord;
@@ -93,13 +103,15 @@ public class RideRequest {
         this.description = description;
         this.rider = rider;
         this.distance = distance;
-        this.fare = getFare(distance);
+        this.fare = calculateFare(distance);
         this.driver = null;
+
         this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
         this.id = this.hashCode();
         this.notifyRider = false;
         this.notifyDriver = false;
+        this.fare = calculateFare(distance);
         addUpdateListener(this);
     }
 
@@ -170,14 +182,16 @@ public class RideRequest {
     }
 
     /**
-     * Get fare for the ride.
-     *
+     * Calculate fare for the ride.
+     * @param distance
      * @return the double
      */
-    static public Double getFare(float distance){
 
+    static public Double calculateFare(float distance){
+        NumberFormat formatter = new DecimalFormat("#0.00");
         return new Double((distance/1000)*1.5)+10;
     }
+
 
     /**
      * Get request status.

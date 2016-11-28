@@ -1,12 +1,14 @@
 package assignment1.ridengo.UITesting.InteractionTest;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import assignment1.ridengo.MainActivity;
@@ -40,22 +42,26 @@ public class postRequest extends ActivityInstrumentationTestCase2<MainActivity> 
         solo.clickOnView(solo.getView(R.id.button_Rider));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 
-        final ListView oldListView = (ListView)solo.getView(R.id.RiderRequestListView);
-        final int oldCount = oldListView.getCount();
-
         solo.clickOnView(solo.getView(R.id.AddRequestButton));
         assertTrue(solo.waitForActivity(RiderPostRequestActivity.class));
+
+        solo.clickOnView(solo.getView(R.id.FindPointOnMapButton));
+        solo.clickOnView(solo.getView(R.id.locationSearcher));
+        solo.clickOnText("Use address searcher");
+
+        solo.clickOnView(solo.getView(R.id.place_autocomplete_fragment));
+        assertTrue(solo.waitForFragmentById(R.id.place_autocomplete_fragment));
+        ArrayList<View> v = solo.getViews();
+        solo.enterText((EditText)v.get(0), "University of Alberta");
+        solo.clickInList(1);
+
+                solo.clickOnView(solo.getView(R.id.place_autocomplete_fragment_from));
+        solo.enterText(0, "Edmonton International Airport");
+        solo.clickInList(1);
 
         solo.clickOnView(solo.getView(R.id.postRequestButton));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 
-//        solo.clickInList(oldCount+1);
-//        assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
-//
-//        TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
-//        assertTrue(textView.getText().toString().equals("Posted"));
-//
-//        solo.goBack();
 
     }
     @Override

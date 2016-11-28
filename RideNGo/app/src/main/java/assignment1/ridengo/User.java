@@ -267,7 +267,7 @@ public class User {
      */
     public void confirmAcception(RideRequest request, User driver){
         request.setDriver(driver);
-        request.setNotifyRider(true);
+        request.setNotifyDriver(true);
     }
 
     /**
@@ -302,7 +302,5 @@ public class User {
     public String toString(){
         return username;
     }
-
-
 
 }
