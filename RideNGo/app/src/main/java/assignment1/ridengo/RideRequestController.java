@@ -23,11 +23,7 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Controller for Ride request lists
- *1. Load from server
- * 2. Save to Server
- * 3. Load from file
- * 4. Save to file
+ * The type Ride request controller.
  */
 public class RideRequestController {
 
@@ -48,6 +44,11 @@ public class RideRequestController {
     }
 
 
+    /**
+     * Load request list from server.
+     *
+     * @param query the query
+     */
     static public void loadRequestListFromServer(String query){
         if(requestList == null) {
             requestList = new RideRequestList();
@@ -70,6 +71,11 @@ public class RideRequestController {
         }
     }
 
+    /**
+     * Add request.
+     *
+     * @param request the request
+     */
     static public void addRequest(RideRequest request) {
         getRequestList().addRequest(request);
         //requestList.addRequest(request);
@@ -82,6 +88,11 @@ public class RideRequestController {
         }
     }
 
+    /**
+     * Remove request.
+     *
+     * @param request the request
+     */
     public static void removeRequest(RideRequest request) {
         requestList.removeRequest(request);
         DeleteRequestsTask deleteRequestsTask = new DeleteRequestsTask();
@@ -93,6 +104,12 @@ public class RideRequestController {
         }
     }
 
+    /**
+     * Notify user.
+     *
+     * @param username the username
+     * @param activity the activity
+     */
     public static void notifyUser(String username, Activity activity){
         loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
         for(RideRequest request : requestList.getRequests()) {
@@ -117,7 +134,7 @@ public class RideRequestController {
     }
 
     /**
-     * The type Get users task.
+     * The type Get requests task.
      */
     public static class GetRequestsTask extends AsyncTask<String, Void, ArrayList<RideRequest>> {
         @Override
@@ -156,7 +173,7 @@ public class RideRequestController {
 
 
     /**
-     * The type Add users task.
+     * The type Add requests task.
      */
 // TODO we need a function which adds a tweet!
     public static class AddRequestsTask extends AsyncTask<RideRequest, Void, Void> {
@@ -185,6 +202,9 @@ public class RideRequestController {
         }
     }
 
+    /**
+     * The type Delete requests task.
+     */
     public static class DeleteRequestsTask extends AsyncTask<RideRequest, Void, Void> {
 
         @Override

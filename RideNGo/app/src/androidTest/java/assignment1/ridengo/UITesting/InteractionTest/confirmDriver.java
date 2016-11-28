@@ -35,12 +35,14 @@ public class confirmDriver extends ActivityInstrumentationTestCase2<MainActivity
         solo.clickOnView(solo.getView(R.id.button_MainSignIn));
         assertTrue(solo.waitForActivity(RoleSelectActivity.class));
 
+        assertTrue(solo.searchText(""));
+
         solo.clickOnView(solo.getView(R.id.button_Rider));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 
         ListView listView = (ListView)solo.getView(R.id.RiderRequestListView);
         for(int i = 0; i<listView.getCount(); i++) {
-            solo.clickInList(i+1);
+            solo.clickInList(i);
             assertTrue(solo.waitForActivity(RiderRequestDetailActivity.class));
 
             TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);

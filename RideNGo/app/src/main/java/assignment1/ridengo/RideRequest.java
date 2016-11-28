@@ -2,6 +2,8 @@ package assignment1.ridengo;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +32,22 @@ public class RideRequest {
 
     private int id;
     private String description;
-    private Double fare;
+
+    private float distance;
+    private double fare;
     private User rider;
     private User driver;
     private String status;
     private List<User> acceptions = null;
     private ArrayList<Listener> listeners;
+
+    public double getFare() {
+        return this.fare;
+    }
+
+    public float getDistance() {
+        return this.distance;
+    }
 
     public boolean isNotifyRider() {
         return notifyRider;
@@ -80,22 +92,26 @@ public class RideRequest {
      * @param endPoint    the end point
      * @param description the description
      * @param rider       the rider
-     * @param fare        the fare
+     * @param distance        the fare
+
      */
-    public RideRequest(LatLng startCoord, LatLng endCoord, String startPoint, String endPoint, String description, User rider, Double fare){
+    public RideRequest(LatLng startCoord, LatLng endCoord, String startPoint, String endPoint, String description, User rider, float distance){
         this.startCoord = startCoord;
         this.endCoord = endCoord;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
         this.rider = rider;
+        this.distance = distance;
+        this.fare = calculateFare(distance);
         this.driver = null;
-        this.fare = fare;
+
         this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
         this.id = this.hashCode();
         this.notifyRider = false;
         this.notifyDriver = false;
+        this.fare = calculateFare(distance);
         addUpdateListener(this);
     }
 
@@ -122,18 +138,6 @@ public class RideRequest {
         return this.rider;
     }
 
-    /**
-     * Gets start point.
-     *
-     * @return the start point
-     */
-//    public LatLng getStartPoint(){
-//        return this.startPoint;
-//    }
-//
-//    public LatLng getEndPoint(){
-//        return this.endPoint;
-//    }
     public String getStartPoint(){
         return this.startPoint;
     }
@@ -166,13 +170,16 @@ public class RideRequest {
     }
 
     /**
-     * Get fare for the ride.
-     *
+     * Calculate fare for the ride.
+     * @param distance
      * @return the double
      */
-    public Double getFare(){
-        return this.fare;
+
+    static public Double calculateFare(float distance){
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        return new Double((distance/1000)*1.5)+10;
     }
+
 
     /**
      * Get request status.
@@ -267,6 +274,15 @@ public class RideRequest {
 //        if(this.status.equals(tripConfirmed)){
 //            this.status = this.status + ", Driver is " + getDriver().toString();
 //        }
+        notifyListeners();
+    }
+
+    /**
+     * Set request fare
+     * @param fare the fare
+     */
+    public void setFare(Double fare){
+        this.fare = fare;
         notifyListeners();
     }
 

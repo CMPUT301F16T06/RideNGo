@@ -1,6 +1,7 @@
 package assignment1.ridengo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -27,7 +30,6 @@ import java.util.List;
 
 /**
  * The type Driver main activity.
- * Main activity for driver, he can search a request by keyword, search by geolocation. And he can view a requests he accepted.
  */
 public class DriverMainActivity extends Activity {
     private String username;
@@ -36,7 +38,9 @@ public class DriverMainActivity extends Activity {
     private RideRequest offlineAcceptedRequest;
     private static final String AR_FILE = "offlineAcceptedRequest";
     private static final String T = ".sav";
-
+    private static String filter = null;
+    private static float filter_value;
+    private static String operator = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,55 @@ public class DriverMainActivity extends Activity {
                 }
             }
         }
+
+        Button filterButton = (Button) findViewById(R.id.FilterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(DriverMainActivity.this);
+                dialog.setTitle("Filter");
+                dialog.setContentView(R.layout.dialog_filter);
+
+                final RadioButton rideRadioButton = (RadioButton) dialog.findViewById(R.id.RideRadioButton);
+                final RadioButton kmRadioButton = (RadioButton) dialog.findViewById(R.id.KmRadioButton);
+                final Spinner optionSpinner = (Spinner) dialog.findViewById(R.id.OptionSpinner);
+                final EditText valueEditText = (EditText) dialog.findViewById(R.id.ValueEditText);
+                final Button applyButton = (Button) dialog.findViewById(R.id.AppleButton);
+
+                ArrayList<String> arrayOp = new ArrayList<String>();
+                arrayOp.add("greater than");
+                arrayOp.add("equal to");
+                arrayOp.add("less than");
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(activity, R.layout.support_simple_spinner_dropdown_item, arrayOp);
+                optionSpinner.setAdapter(spinnerAdapter);
+
+                applyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(!rideRadioButton.isChecked() && !kmRadioButton.isChecked()){
+                            Toast.makeText(activity,"Please select a method of filter",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else if(valueEditText.getText().toString().equals("")){
+                            Toast.makeText(activity,"Please specify a range",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else {
+                            if (rideRadioButton.isChecked()) {
+                                filter = "filter per ride";
+                            } else if (kmRadioButton.isChecked()) {
+                                filter = "filter per km";
+                            }
+                            filter_value = Float.valueOf(valueEditText.getText().toString());
+                            operator = optionSpinner.getSelectedItem().toString();
+                            dialog.cancel();
+                        }
+                    }
+                });
+                dialog.show();
+            }
+        });
+
 
         /*
         Set up all buttons, ListView, and adapter here
@@ -124,7 +177,42 @@ public class DriverMainActivity extends Activity {
                             "}";
                 }
                 RideRequestController.loadRequestListFromServer(query);
-                rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
+                if(filter == null) {
+                    rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
+                } else if(filter.equals("filter per ride")) {
+                    for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
+                        if(operator.equals("greater than")) {
+                            if(request.getFare() > filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("equal to")) {
+                            if(request.getFare() == filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("less than")) {
+                            if(request.getFare() < filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        }
+                    }
+                } else if(filter.equals("filter per km")) {
+                    for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
+                        if(operator.equals("greater than")) {
+                            if(request.getFare() / request.getDistance() > filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("equal to")) {
+                            if(request.getFare() / request.getDistance() == filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        } else if(operator.equals("less than")) {
+                            if(request.getFare() / request.getDistance() < filter_value) {
+                                rideRequestList.add(request);
+                            }
+                        }
+                    }
+                }
+
                 adapter.notifyDataSetChanged();
             }
         });
@@ -132,9 +220,14 @@ public class DriverMainActivity extends Activity {
         findNearbyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+                if(isConnected()) {
+                    Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(activity,"You are offine now, please check your network status.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -152,12 +245,22 @@ public class DriverMainActivity extends Activity {
 
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
+    /**
+     * Check offline accepted request.
+     *
+     * @param username the username
+     */
     public void checkOfflineAcceptedRequest(String username){
         String FILENAME = AR_FILE+username+T;
         try {

@@ -50,11 +50,13 @@ import java.util.Locale;
  * @see RiderPostRequestActivity
  * @see DirectionsJSONParser
  * http://stackoverflow.com/questions/14710744/how-to-draw-road-directions-between-two-geocodes-in-android-google-map-v2
+ * Accessed November 9, 2016
  * The above link is where the code for getting the route between two points was taken and that
  * encompasses getDirectionsUrl, downloadUrl, DownloadTask, and ParserTask
  */
 public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCallback
 {
+    private static final int REQUEST_CODE = 1;
     private static final String TAG = "MapsActivity";
     private int menuLocationOption = 0;
     private GoogleMap mMap;
@@ -287,32 +289,11 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(edmonton,10));
 
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+        } else {
+            mMap.setMyLocationEnabled(true);
         }
-        mMap.setMyLocationEnabled(true);
-
-
-        /**
-         * When the location button is clicked, make the map move to the lat/lng co-ordinates
-         * of Edmonton
-         */
-        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-            @Override
-            public boolean onMyLocationButtonClick() {
-                LatLng loc = new LatLng(53.5444,-113.4909);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-                return true;
-            }
-        });
-
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -354,10 +335,34 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
     }
 
     /**
+     * This function checks the result after requesting permissions
+     * @param requestCode This parameter is from the request code in requestPermissions method
+     * @param permissions This string contains the permissions requested
+     * @param grantResults This parameter is either PERMISSION_GRANTED or PERMISSION_DENIED
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                        // Permissions granted
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+                } else {
+                    Toast.makeText(this, "You do not have the desired permissions", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    /**
      * This method gets the name of a address based on lat/lng co-ordinates
      * @param addressCoordinate this parameter is the lat/ln co-ordinates of a point
      * Some of the code was taken from the android developer tutorial located here
      * https://developer.android.com/training/location/display-address.html
+     * Accessed on November 8, 2016
      */
     // https://developer.android.com/training/location/display-address.html
     private void getAddressInfo(LatLng addressCoordinate){
@@ -396,180 +401,181 @@ public class MapsRiderActivity extends FragmentActivity implements OnMapReadyCal
         }
     }
 
-/**
- * This function gets the google directions url information from two points
- * @param origin this parameter is the starting point co-ordinates
- * @param dest   this parameter is the end point co-ordinates
- * @return An url address taken from google api
- *
- * Code taken from
- * http://stackoverflow.com/questions/14710744/how-to-draw-road-directions-between-two-geocodes-in-android-google-map-v2
- */
-private String getDirectionsUrl(LatLng origin,LatLng dest){
+    /**
+    * This function gets the google directions url information from two points
+    * @param origin this parameter is the starting point co-ordinates
+    * @param dest   this parameter is the end point co-ordinates
+    * @return An url address taken from google api
+    *
+    * Code taken from
+    * http://stackoverflow.com/questions/14710744/how-to-draw-road-directions-between-two-geocodes-in-android-google-map-v2
+    * Accessed November 9, 2016
+    */
+    private String getDirectionsUrl(LatLng origin,LatLng dest){
 
-// Origin of route
-String str_origin = "origin="+origin.latitude+","+origin.longitude;
+    // Origin of route
+    String str_origin = "origin="+origin.latitude+","+origin.longitude;
 
-// Destination of route
-String str_dest = "destination="+dest.latitude+","+dest.longitude;
+    // Destination of route
+    String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
-// Sensor enabled
-String sensor = "sensor=false";
+    // Sensor enabled
+    String sensor = "sensor=false";
 
-// Building the parameters to the web service
-String parameters = str_origin+"&"+str_dest+"&"+sensor;
+    // Building the parameters to the web service
+    String parameters = str_origin+"&"+str_dest+"&"+sensor;
 
-// Output format
-String output = "json";
+    // Output format
+    String output = "json";
 
-String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+    String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
-return url;
-}
-
-/**
- * This function downloads the data from the url gotten from getDirectionsUrl function
- * @param strUrl this parameter is the url gotten from getDirectionsUrl function
- * @return data from the url address
- *
- */
-private String downloadUrl(String strUrl) throws IOException{
-    String data = "";
-    InputStream iStream = null;
-    HttpURLConnection urlConnection = null;
-    try{
-        URL url = new URL(strUrl);
-
-        urlConnection = (HttpURLConnection) url.openConnection();
-
-        // Connecting to url
-        urlConnection.connect();
-
-        // Reading data from url
-        iStream = urlConnection.getInputStream();
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-        StringBuffer sb  = new StringBuffer();
-
-        String line = "";
-        while( ( line = br.readLine())  != null){
-            sb.append(line);
-        }
-
-        data = sb.toString();
-
-        br.close();
-
-    }catch(Exception e){
-        Log.d("Exception url", e.toString());
-    }finally{
-        iStream.close();
-        urlConnection.disconnect();
+    return url;
     }
-    return data;
-}
 
-/**
- * This class fetches the data with the help of the downloadUrl class
- * @return the fetched data
- *
- */
-// Fetches data from url passed
-private class DownloadTask extends AsyncTask<String, Void, String> {
-
-    // Downloading data in non-ui thread
-    @Override
-    protected String doInBackground(String... url) {
-
-        // For storing data from web service
+    /**
+     * This function downloads the data from the url gotten from getDirectionsUrl function
+     * @param strUrl this parameter is the url gotten from getDirectionsUrl function
+     * @return data from the url address
+     *
+     */
+    private String downloadUrl(String strUrl) throws IOException{
         String data = "";
-
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
         try{
-            // Fetching the data from web service
-            data = downloadUrl(url[0]);
+            URL url = new URL(strUrl);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb  = new StringBuffer();
+
+            String line = "";
+            while( ( line = br.readLine())  != null){
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
         }catch(Exception e){
-            Log.d("Background Task",e.toString());
+            Log.d("Exception url", e.toString());
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
         }
         return data;
     }
 
-    // Executes in UI thread, after the execution of
-    // doInBackground()
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
+    /**
+     * This class fetches the data with the help of the downloadUrl class
+     * @return the fetched data
+     *
+     */
+    // Fetches data from url passed
+    private class DownloadTask extends AsyncTask<String, Void, String> {
 
-        ParserTask parserTask = new ParserTask();
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
 
-        // Invokes the thread for parsing the JSON data
-        parserTask.execute(result);
-    }
-}
+            // For storing data from web service
+            String data = "";
 
-/**
- * This class parses the data with the help of the DirectionsJSONParser class and adds
- * the route to the map. A small edit to the source code was made so that the polyline
- * could be saved to be deleted in the future
- * @see DirectionsJSONParser
- *
- *
- */
-private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>>> {
-
-    @Override
-    protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
-        JSONObject jObject;
-        List<List<HashMap<String, String>>> routes = null;
-
-        try {
-            jObject = new JSONObject(jsonData[0]);
-            DirectionsJSONParser parser = new DirectionsJSONParser();
-
-            // Starts parsing data
-            routes = parser.parse(jObject);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try{
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            }catch(Exception e){
+                Log.d("Background Task",e.toString());
+            }
+            return data;
         }
-        return routes;
+
+        // Executes in UI thread, after the execution of
+        // doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+        }
     }
 
-    @Override
-    protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-        ArrayList<LatLng> points = null;
-        PolylineOptions lineOptions = null;
-        MarkerOptions markerOptions = new MarkerOptions();
+    /**
+     * This class parses the data with the help of the DirectionsJSONParser class and adds
+     * the route to the map. A small edit to the source code was made so that the polyline
+     * could be saved to be deleted in the future
+     * @see DirectionsJSONParser
+     *
+     *
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>>> {
 
-        // Traversing through all the routes
-        for (int i = 0; i < result.size(); i++) {
-            points = new ArrayList<LatLng>();
-            lineOptions = new PolylineOptions();
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
-            // Fetching i-th route
-            List<HashMap<String, String>> path = result.get(i);
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
 
-            // Fetching all the points in i-th route
-            for (int j = 0; j < path.size(); j++) {
-                HashMap<String, String> point = path.get(j);
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
 
-                double lat = Double.parseDouble(point.get("lat"));
-                double lng = Double.parseDouble(point.get("lng"));
-                LatLng position = new LatLng(lat, lng);
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
 
-                points.add(position);
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(2);
+                lineOptions.color(Color.RED);
             }
 
-            // Adding all the points in the route to LineOptions
-            lineOptions.addAll(points);
-            lineOptions.width(2);
-            lineOptions.color(Color.RED);
+            // Drawing polyline in the Google Map for the i-th route
+            polyLine = mMap.addPolyline(lineOptions);
         }
-
-        // Drawing polyline in the Google Map for the i-th route
-        polyLine = mMap.addPolyline(lineOptions);
     }
-}
 
 
 }

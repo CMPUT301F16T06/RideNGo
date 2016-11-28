@@ -19,7 +19,7 @@ public class RideRequestListTest extends TestCase {
 
     public void testContains() throws Exception {
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "", new User("","",""), 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "", new User("","",""), 0);
 
         assertFalse(rideRequestList.contains(newRequest));
         rideRequestList.addRequest(newRequest);
@@ -30,9 +30,9 @@ public class RideRequestListTest extends TestCase {
         RideRequestList rideRequestList = new RideRequestList();
         List<RideRequest> requestList = new ArrayList<RideRequest>();
 
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start1","end1", "", new User("1","",""), 0.00);
-        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start2","end2", "", new User("2","",""), 0.00);
-        RideRequest newRequest3 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start3","end3", "", new User("3","",""), 0.00);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start1","end1", "", new User("1","",""), 0);
+        RideRequest newRequest2 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start2","end2", "", new User("2","",""), 0);
+        RideRequest newRequest3 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start3","end3", "", new User("3","",""), 0);
         requestList.add(newRequest1);
         requestList.add(newRequest2);
         requestList.add(newRequest3);
@@ -53,8 +53,8 @@ public class RideRequestListTest extends TestCase {
         User rider1 = new User("rider1", "", "");
 
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", rider, 0.00);
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start1","end1", "rider1", rider1, 1.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", rider, 0);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start1","end1", "rider1", rider1, 1);
 
         rideRequestList.addRequest(newRequest);
         rideRequestList.addRequest(newRequest1);
@@ -77,9 +77,9 @@ public class RideRequestListTest extends TestCase {
         UserController.getUserList().addUser(driver1);
 
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", rider, 0);
         newRequest.addAcception(driver);
-        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start1","end1", "rider1", rider, 1.00);
+        RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start1","end1", "rider1", rider, 1);
         newRequest1.addAcception(driver1);
         rideRequestList.addRequest(newRequest);
         rideRequestList.addRequest(newRequest1);
@@ -96,7 +96,7 @@ public class RideRequestListTest extends TestCase {
         User rider = new User("name", "", "");
 
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "rider", rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start", "end", "rider", rider, 0);
 
         rideRequestList.addRequest(newRequest);
         assertTrue(rideRequestList.contains(newRequest));
@@ -108,7 +108,7 @@ public class RideRequestListTest extends TestCase {
 
     public void testAddRequest() throws Exception {
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", new User("","",""), 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", new User("","",""), 0);
 
         assertFalse(rideRequestList.contains(newRequest));
 
@@ -118,7 +118,7 @@ public class RideRequestListTest extends TestCase {
 
     public void testClear() throws Exception {
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", new User("","",""), 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", new User("","",""), 0);
         rideRequestList.addRequest(newRequest);
 
         assertFalse(rideRequestList.getRequests().size() == 0);
@@ -128,7 +128,7 @@ public class RideRequestListTest extends TestCase {
 
     public void testRemoveRequest() throws Exception {
         RideRequestList rideRequestList = new RideRequestList();
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", new User("","",""), 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"start","end", "rider", new User("","",""), 0);
 
         rideRequestList.addRequest(newRequest);
         assertTrue(rideRequestList.contains(newRequest));

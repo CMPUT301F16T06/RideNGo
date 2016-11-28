@@ -16,7 +16,7 @@ public class RideRequestTest extends TestCase {
 
     public void testGetAcceptions() throws Exception {
         User driver = new User("test2","", "");
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",new User("","",""), 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",new User("","",""), 0);
 
         assertFalse(newRequest.getAcceptions().contains(driver));
         newRequest.addAcception(driver);
@@ -27,7 +27,7 @@ public class RideRequestTest extends TestCase {
     public void testAddAcception() throws Exception {
         User rider = new User("test1", "","");
         User driver = new User("test2","", "");
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
 
         newRequest.addAcception(driver);
 
@@ -41,7 +41,7 @@ public class RideRequestTest extends TestCase {
         userList.addUser(rider);
         userList.addUser(driver);
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider,0);
 
         assertFalse(newRequest.isAccepted(driver.getUsername()));
         newRequest.addAcception(driver);
@@ -50,7 +50,7 @@ public class RideRequestTest extends TestCase {
 
     public void testCompleteTrip() throws Exception {
         User rider = new User("","","");
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         final String tripCompleted = "Trip Completed";
 
         assertFalse(newRequest.getStatus().equals(tripCompleted));

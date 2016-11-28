@@ -10,19 +10,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="assignment1.ridengo.DriverMainActivity">
 
-    <Button
-        android:text="View Accepted"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ViewAcceptedButton"
-        android:layout_below="@+id/FindNearbyButton"
-        android:layout_centerHorizontal="true" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/DriverRequestListView"
-        android:layout_below="@+id/ViewAcceptedButton"
+        android:inputType="textPersonName"
+        android:hint="Search"
+        android:ems="10"
+        android:id="@+id/SearchTextView"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -40,17 +35,32 @@
         android:layout_height="wrap_content"
         android:id="@+id/FindNearbyButton"
         android:layout_below="@+id/SearchButton"
-        android:layout_alignEnd="@+id/ViewAcceptedButton"
-        android:layout_alignStart="@+id/ViewAcceptedButton" />
+        android:layout_alignStart="@+id/ViewAcceptedButton"
+        android:layout_alignEnd="@+id/ViewAcceptedButton" />
 
-    <EditText
+    <Button
+        android:text="View Accepted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Search"
-        android:ems="10"
-        android:id="@+id/SearchTextView"
-        android:layout_marginTop="23dp"
-        android:layout_alignParentTop="true"
+        android:id="@+id/ViewAcceptedButton"
+        android:layout_below="@+id/FindNearbyButton"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD FILTER"
+        android:id="@+id/FilterButton"
+        android:layout_below="@+id/ViewAcceptedButton"
+        android:layout_alignStart="@+id/ViewAcceptedButton"
+        android:layout_alignEnd="@+id/ViewAcceptedButton" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/FilterButton"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/DriverRequestListView" />
+
+
 </RelativeLayout>

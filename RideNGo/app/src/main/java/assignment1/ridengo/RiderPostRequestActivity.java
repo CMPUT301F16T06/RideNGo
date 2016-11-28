@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,32 +30,33 @@ import java.lang.reflect.Type;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import static android.R.attr.delay;
 
 /**
  * The type Rider post request activity.
  * Rider able to post a new request.
  * Rider need to enter a starting point and a end point.
+ * @see MapsRiderActivity
  */
 public class RiderPostRequestActivity extends AppCompatActivity {
 
     private static final int RESULT_SUCCESS = 1;
-    private String startPoint;
-    private String endPoint;
-    private String description;
-    private Double fare;
-    private LatLng startCoord;
-    private LatLng endCoord;
+    private String startPoint = "";
+    private String endPoint = "";
+    private String description = "";
+    private Double fare = 0.0;
+    private LatLng startCoord = new LatLng(0,0);
+    private LatLng endCoord = new LatLng(0,0);
+    private float returnedDistance;
     final private Activity activity = this;
-    private RideRequest offlinePostedRequest;
+    private List<RideRequest> offlinePostedRequests;
     private static final String PR_FILE = "offlinePostedRequest";
     private static final String T = ".sav";
     private String username;
 
-    /**
-     * The Ride request controller.
-     */
-    //RideRequestController rideRequestController = new RideRequestController();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,25 +66,25 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()) {
-            checkOfflinePostedRequest(username);
-            if (offlinePostedRequest != null) {
-                User r = offlinePostedRequest.getRider();
-                r.postRideRequest(offlinePostedRequest);
-                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
-                offlinePostedRequest = null;
+            checkOfflinePostedRequest();
+            if (offlinePostedRequests != null) {
+                User r = UserController.getUserList().getUserByUsername(username);
+                for(RideRequest offlinePostedRequest:offlinePostedRequests) {
+                    r.postRideRequest(offlinePostedRequest);
+                    Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                }
+                offlinePostedRequests = null;
             }
         }
 
+        UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
         final User rider = UserController.getUserList().getUserByUsername(username);
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
         final EditText end = (EditText) findViewById(R.id.EndPointEditText);
         final EditText descText = (EditText) findViewById(R.id.DescriptionEditText);
-
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-        fare = 0.00;
 
-        estimatedFare.setText("$"+fare);
-
+        estimatedFare.setText("$"+0.00);
         Button postRequestButton = (Button) findViewById(R.id.postRequestButton);
         Button findPointsOnMapButton = (Button) findViewById(R.id.FindPointOnMapButton);
 
@@ -91,21 +93,27 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
-                if(startPoint.isEmpty() || endPoint.isEmpty()) {
-                    Toast.makeText(activity, "You Must Choose Two Points first.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                //if(startPoint.isEmpty() || endPoint.isEmpty()) {
+                //    Toast.makeText(activity, "You Must Choose Two Points first.", Toast.LENGTH_SHORT).show();
+                //    return;
+                //}
                 description = descText.getText().toString().toLowerCase().trim();
-                RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, fare);
+                RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, returnedDistance);
+                rideRequest.setFare(fare);
                 if(isConnected()) {
                     rider.postRideRequest(rideRequest);
+                    delay(300);
                     Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    offlinePostedRequest = rideRequest;
-                    saveOffLinePostedRequest(username);
-                    offlinePostedRequest = null;
-                    Toast.makeText(activity, "You are offline now, your request will be post once you get online again.", Toast.LENGTH_SHORT).show();
+                    checkOfflinePostedRequest();
+                    if(offlinePostedRequests == null){
+                        offlinePostedRequests = new ArrayList<RideRequest>();
+                    }
+                    offlinePostedRequests.add(rideRequest);
+                    saveOffLinePostedRequests();
+                    offlinePostedRequests = null;
+                    Toast.makeText(activity, "You are offline now, your request(s) will be post once your device get online again.", Toast.LENGTH_SHORT).show();
                 }
                 Intent intent = new Intent(activity, RiderMainActivity.class);
                 intent.putExtra("username", username);
@@ -128,11 +136,25 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         });
     }
 
-    //https://developer.android.com/training/basics/intents/result.html
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    /**
+     * This method takes the results from the MapsRiderActivity and stores those results(Start and
+     * end points, their LatLng coordinates, distance from start and end points) in order to be
+     * added to the ride requests.
+     * https://developer.android.com/training/basics/intents/result.html
+     * http://stackoverflow.com/questions/5195837/format-float-to-n-decimal-places
+     * Accessed on November 8, 2016
+     * @param requestCode This parameter is the request code sent from startActivityForResult()
+     *                    which allows us to know where the result came from
+     * @param resultCode  This parameter is used to determine if the results returned are good for
+     *                    use
+     * @param data        This parameter holds the data gotten from MapsRiderActivity
+     *
+     * @see RideRequest
+     * @see MapsRiderActivity
+     */
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESULT_SUCCESS) {
-            //Toast.makeText(getBaseContext(),"Error getting location",Toast.LENGTH_SHORT).show();
             if(resultCode == RESULT_OK) {
                 ArrayList<String> returnedAddresses = data.getStringArrayListExtra("ARRAY_LIST_ADDRESS_MARKER");
                 ArrayList<LatLng> markerLatLng = data.getParcelableArrayListExtra("MARKER_LAT_LNG");
@@ -140,7 +162,6 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 final EditText start = (EditText) findViewById(R.id.StartPointEditText);
                 final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                 final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-                //String result=data.getStringExtra("result");
 
                 // Then search option used when picking points
                 if (returnedAddresses == null) {
@@ -149,31 +170,26 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                     endCoord = searchedReturnAddressLatLng.get(1);
                     String fromLocationName = data.getStringExtra("FROM_LOCATION");
                     String toLocationName = data.getStringExtra("TO_LOCATION");
-                    //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
-                    //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                     start.setText(fromLocationName);
                     end.setText(toLocationName);
                 } else {
-                    //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
-                    //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                     startCoord = markerLatLng.get(0);
                     endCoord = markerLatLng.get(1);
                     start.setText(returnedAddresses.get(0));
                     end.setText(returnedAddresses.get(1));
                 }
-                float returnedDistance = data.getFloatExtra("DISTANCE_FROM_POINTS", 0);
-
-                //Toast.makeText(getBaseContext(),"asdasd" + returnedDistance,Toast.LENGTH_SHORT).show();
-                // http://stackoverflow.com/questions/5195837/format-float-to-n-decimal-places
+                returnedDistance = data.getFloatExtra("DISTANCE_FROM_POINTS", 0);
                 NumberFormat fareFormat = NumberFormat.getInstance(Locale.CANADA);
                 fareFormat.setMaximumFractionDigits(2);
                 fareFormat.setMinimumFractionDigits(2);
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
-                Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
-                estimatedFare.setText("$" + roundedFare);
+
+                fare = RideRequest.calculateFare(returnedDistance);
+
+                estimatedFare.setText("$" + fareFormat.format(fare));
             }
         }
-    }//onActivityResult
+    }
 
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
@@ -181,7 +197,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
-    private void saveOffLinePostedRequest(String username){
+    private void saveOffLinePostedRequests(){
         String FILENAME = PR_FILE+username+T;
         try {
             FileOutputStream fos = openFileOutput(FILENAME,Context.MODE_PRIVATE);
@@ -189,7 +205,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(offlinePostedRequest, out);
+            gson.toJson(offlinePostedRequests, out);
             out.flush();
 
             fos.close();
@@ -202,20 +218,20 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         }
     }
 
-    public void checkOfflinePostedRequest(String username){
+    public void checkOfflinePostedRequest(){
         String FILENAME = PR_FILE+username+T;
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+            Type rideRequestType = new TypeToken<List<RideRequest>>(){}.getType();
 
-            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            offlinePostedRequests = gson.fromJson(in, rideRequestType);
             deleteFile(FILENAME);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            offlinePostedRequest = null;
+            offlinePostedRequests = null;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
@@ -229,4 +245,18 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void delay(final int ms) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("XXX");                 //add your code here
+                    }
+                }, ms);
+            }
+        });
+    }
 }

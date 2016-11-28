@@ -20,12 +20,17 @@ import java.util.regex.Pattern;
 
 /**
  * The type User info activity.
- * Able to let user to update his/her information
  */
 public class UserInfoActivity extends Activity {
     private String user;
     private Vehicle vehicle;
+    /**
+     * The Activity.
+     */
     final Activity activity = this;
+    /**
+     * The Color list.
+     */
     final List<String> colorList = Arrays.asList("Black","White","Silver","Brown","Grey","Red","Blue","Yellow","Green","Other");
     private User currentUser;
 
@@ -202,6 +207,14 @@ public class UserInfoActivity extends Activity {
         adb.show();
     }
 
+    /**
+     * Sign up boolean.
+     *
+     * @param username the username
+     * @param email    the email
+     * @param phoneNum the phone num
+     * @return the boolean
+     */
     public boolean signUp(String username, String email, String phoneNum){
 
         String emailPattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";

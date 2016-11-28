@@ -1,9 +1,10 @@
 package assignment1.ridengo;
 
-import android.util.Pair;
-//import java.io.Serializable;
-
 /**
+ * This class makes a pair object that holds its value and index of its original location in
+ * the ride request list. This allows the sorting of the values from lowest to highest, while also
+ * having the original index stored.
+ * Accessed on November 24, 2016
  * http://stackoverflow.com/questions/23587314/how-to-sort-an-array-and-keep-track-of-the-index-in-java
  */
 public class PairForSearch implements Comparable<PairForSearch>, java.io.Serializable {
