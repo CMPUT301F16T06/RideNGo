@@ -44,12 +44,12 @@ import static android.R.attr.delay;
 public class RiderPostRequestActivity extends AppCompatActivity {
 
     private static final int RESULT_SUCCESS = 1;
-    private String startPoint;
-    private String endPoint;
-    private String description;
-    private Double fare;
-    private LatLng startCoord;
-    private LatLng endCoord;
+    private String startPoint = "";
+    private String endPoint = "";
+    private String description = "";
+    private Double fare = 0.0;
+    private LatLng startCoord = new LatLng(0,0);
+    private LatLng endCoord = new LatLng(0,0);
     private float returnedDistance;
     final private Activity activity = this;
     private List<RideRequest> offlinePostedRequests;
@@ -92,10 +92,10 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startPoint = start.getText().toString();
                 endPoint = end.getText().toString();
-                if(startPoint.isEmpty() || endPoint.isEmpty()) {
-                    Toast.makeText(activity, "You Must Choose Two Points first.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                //if(startPoint.isEmpty() || endPoint.isEmpty()) {
+                //    Toast.makeText(activity, "You Must Choose Two Points first.", Toast.LENGTH_SHORT).show();
+                //    return;
+                //}
                 description = descText.getText().toString().toLowerCase().trim();
                 RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, returnedDistance);
                 rideRequest.setFare(fare);

@@ -492,12 +492,19 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 "   }\n" +
                 "}";
 
-        //The server is really busy while doing this test, uncertain about the result. The test code is working fine in the app
         ArrayList<RideRequest> rideRequests = new ArrayList<RideRequest>();
         RideRequestController.loadRequestListFromServer(query);
         rideRequests.addAll(RideRequestController.getRequestList().getRequests());
-
-        assertTrue(rideRequests.contains(newRequest1));
+        boolean check = false;
+        for(RideRequest r: rideRequests){
+            if(r.getId() == newRequest1.getId()){
+                check = true;
+            }
+        }
+        assertEquals(check, 1);
+        assertTrue("Found request", check);
+        UserController.getUserList().clear();
+        RideRequestController.getRequestList().clear();
     }
 
     /**
@@ -539,13 +546,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 }
             }
         }
-
-
-
-
-
-
-
     }
 
     /**

@@ -47,7 +47,7 @@ public class acceptRequest extends ActivityInstrumentationTestCase2<MainActivity
         assertTrue(solo.waitForActivity(DriverMainActivity.class));
 
         solo.enterText((EditText)solo.getView(R.id.SearchTextView), "TESTESTEST");
-
+        solo.clickOnView(solo.getView(R.id.SearchButton));
         ListView listView = (ListView) solo.getView(R.id.DriverRequestListView);
         assertTrue(listView.getCount() == 1);
 
