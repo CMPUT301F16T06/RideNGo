@@ -49,20 +49,16 @@ public class postRequest extends ActivityInstrumentationTestCase2<MainActivity> 
         solo.clickOnView(solo.getView(R.id.locationSearcher));
         solo.clickOnText("Use address searcher");
 
-        solo.clickOnView(solo.getView(R.id.place_autocomplete_fragment));
-        assertTrue(solo.waitForFragmentById(R.id.place_autocomplete_fragment));
-        ArrayList<View> v = solo.getViews();
-        solo.enterText((EditText)v.get(0), "University of Alberta");
-        solo.clickInList(1);
+        solo.clickOnView(solo.getView(R.id.doneButton));
 
-                solo.clickOnView(solo.getView(R.id.place_autocomplete_fragment_from));
-        solo.enterText(0, "Edmonton International Airport");
-        solo.clickInList(1);
+        TextView start = (TextView) solo.getView(R.id.StartPointEditText);
+        TextView end = (TextView) solo.getView(R.id.EndPointEditText);
+        start.setText("University of Alberta");
+        end.setText("Edmonton international airpoit");
 
+        solo.enterText((EditText)solo.getView(R.id.DescriptionEditText), "TESTESTEST");
         solo.clickOnView(solo.getView(R.id.postRequestButton));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
-
-
     }
     @Override
     public void tearDown() throws Exception{

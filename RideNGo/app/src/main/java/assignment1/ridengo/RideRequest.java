@@ -289,6 +289,15 @@ public class RideRequest {
         notifyListeners();
     }
 
+    /**
+     * Set request fare
+     * @param fare the fare
+     */
+    public void setFare(Double fare){
+        this.fare = fare;
+        notifyListeners();
+    }
+
 
     /**
      * Add listener.

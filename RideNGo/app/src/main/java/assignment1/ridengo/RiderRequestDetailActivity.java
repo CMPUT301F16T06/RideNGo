@@ -147,6 +147,9 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if(isConnected()) {
                         rideRequest.getRider().cancelRequest(rideRequest);
+                        Intent intent = new Intent(activity,RiderMainActivity.class);
+                        intent.putExtra("username",username);
+                        startActivity(intent);
                         finish();
                     }
                     else{
