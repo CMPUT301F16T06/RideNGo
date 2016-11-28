@@ -126,7 +126,6 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                         });
                     }
                     dialog.show();
-
                 }
                 else{
                     Toast.makeText(RiderRequestDetailActivity.this,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();

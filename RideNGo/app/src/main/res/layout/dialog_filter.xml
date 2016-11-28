@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <RadioButton
+            android:layout_width="201dp"
+            android:layout_height="wrap_content"
+            android:text="Filter by Price Per Ride"
+            android:id="@+id/radioButton_Ride" />
+
+        <RadioButton
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:text="Filter by Price Per KM"
+            android:id="@+id/radioButton_KM" />
+    </RadioGroup>
+
+    <Spinner
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerOption"
+        android:layout_gravity="center_horizontal"
+        android:spinnerMode="dropdown" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editText_Value"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply"
+        android:id="@+id/button_Apply"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

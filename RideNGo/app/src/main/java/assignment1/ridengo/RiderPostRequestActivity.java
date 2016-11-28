@@ -171,7 +171,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 fareFormat.setMinimumFractionDigits(2);
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
                 //Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
-                fare = RideRequest.getFare(returnedDistance);
+                fare = RideRequest.calculateFare(returnedDistance);
                 estimatedFare.setText("$" + fareFormat.format(fare));
             }
         }

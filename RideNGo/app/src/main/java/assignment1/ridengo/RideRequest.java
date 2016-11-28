@@ -40,6 +40,14 @@ public class RideRequest {
     private List<User> acceptions = null;
     private ArrayList<Listener> listeners;
 
+    public double getFare() {
+        return this.fare;
+    }
+
+    public float getDistance() {
+        return this.distance;
+    }
+
     public boolean isNotifyRider() {
         return notifyRider;
     }
@@ -98,7 +106,7 @@ public class RideRequest {
         this.id = this.hashCode();
         this.notifyRider = false;
         this.notifyDriver = false;
-        this.fare = getFare(distance);
+        this.fare = calculateFare(distance);
         addUpdateListener(this);
     }
 
@@ -173,7 +181,7 @@ public class RideRequest {
      *
      * @return the double
      */
-    static public Double getFare(float distance){
+    static public Double calculateFare(float distance){
         NumberFormat formatter = new DecimalFormat("#0.00");
         return new Double((distance/1000)*1.5)+10;
     }
