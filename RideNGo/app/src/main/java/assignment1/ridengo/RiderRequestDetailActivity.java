@@ -122,6 +122,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
                     } else {
                         okButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
+
                                 User driver = driverList.get(id);
                                 rideRequest.getRider().confirmAcception(rideRequest, driver);
                                 finish();

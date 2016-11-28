@@ -86,9 +86,8 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         final EditText descText = (EditText) findViewById(R.id.DescriptionEditText);
 
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-        fare = 0.00;
 
-        estimatedFare.setText("$"+fare);
+        estimatedFare.setText("$"+0.00);
 
         Button postRequestButton = (Button) findViewById(R.id.postRequestButton);
         Button findPointsOnMapButton = (Button) findViewById(R.id.FindPointOnMapButton);
@@ -174,7 +173,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                     start.setText(returnedAddresses.get(0));
                     end.setText(returnedAddresses.get(1));
                 }
-                float returnedDistance = data.getFloatExtra("DISTANCE_FROM_POINTS", 0);
+                returnedDistance = data.getFloatExtra("DISTANCE_FROM_POINTS", 0);
 
                 //Toast.makeText(getBaseContext(),"asdasd" + returnedDistance,Toast.LENGTH_SHORT).show();
                 // http://stackoverflow.com/questions/5195837/format-float-to-n-decimal-places
@@ -183,7 +182,10 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 fareFormat.setMinimumFractionDigits(2);
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
                 //Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
+
+                //fare = RideRequest.getFare(returnedDistance);
                 fare = RideRequest.calculateFare(returnedDistance);
+
                 estimatedFare.setText("$" + fareFormat.format(fare));
             }
         }

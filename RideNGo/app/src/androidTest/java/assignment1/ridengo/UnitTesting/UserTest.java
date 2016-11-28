@@ -87,7 +87,7 @@ public class UserTest extends TestCase {
         User rider = new User("test1", "test@example.com", "1234567890");
         User driver = new User("test2", "test2@example.com", "1234567891");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         driver.acceptRequest(newRequest);
 
         assertTrue(driver.getAcceptedRequests().contains(newRequest.getId()));
@@ -99,7 +99,7 @@ public class UserTest extends TestCase {
         User rider = new User("test1", "test@example.com", "1234567890");
         User driver = new User("test2", "test2@example.com", "1234567891");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         driver.driverCompleteRide(newRequest);
 
         assertTrue(newRequest.getStatus().equals("Driver Confirmed Completion"));
@@ -114,7 +114,7 @@ public class UserTest extends TestCase {
     public void testGetRequests() throws Exception{
         User rider = new User("test1", "test@example.com", "1234567890");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         rider.postRideRequest(newRequest);
 
         List<Integer> requestList = rider.getRequests();
@@ -127,7 +127,7 @@ public class UserTest extends TestCase {
         User rider = new User("test1", "test@example.com", "1234567890");
         User driver = new User("test2", "test2@example.com", "1234567891");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         driver.acceptRequest(newRequest);
 
         List<Integer> requestList = driver.getAcceptedRequests();
@@ -139,7 +139,7 @@ public class UserTest extends TestCase {
     public void testPostRideRequest() throws Exception{
         User rider = new User("test1", "test@example.com", "1234567890");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         rider.postRideRequest(newRequest);
 
         assertTrue(rider.getRequests().contains(newRequest.getId()));
@@ -156,7 +156,7 @@ public class UserTest extends TestCase {
         User rider = new User("test1", "test@example.com", "1234567890");
         User driver = new User("test2", "test2@example.com", "1234567891");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         driver.confirmAcception(newRequest, driver);
 
         assertEquals(newRequest.getDriver().getUsername(), driver.getUsername());
@@ -171,7 +171,7 @@ public class UserTest extends TestCase {
     public void testCancelRequest() throws Exception{
         User rider = new User("test1", "test@example.com", "1234567890");
 
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
         rider.postRideRequest(newRequest);
 
         assertTrue(rider.getRequests().contains(newRequest.getId()));
@@ -184,7 +184,7 @@ public class UserTest extends TestCase {
 
     public void testRiderCompleteRide() throws Exception {
         User rider = new User("test1", "test@example.com", "1234567890");
-        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0.00);
+        RideRequest newRequest = new RideRequest(new LatLng(0,0), new LatLng(0,0),"","","",rider, 0);
 
         rider.riderCompleteRide(newRequest);
         RideRequestController.getRequestList().clear();
