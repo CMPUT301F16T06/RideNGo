@@ -99,7 +99,7 @@ public class RideRequestList {
     public List<RideRequest> getRequestsWithRider(String username){
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
         for(RideRequest request: requestList){
-            if(request.getRider().getUsername().equals(username)){
+            if(request.getRider() != null && request.getRider().getUsername().equals(username)){
                 rideRequests.add(request);
             }
         }
