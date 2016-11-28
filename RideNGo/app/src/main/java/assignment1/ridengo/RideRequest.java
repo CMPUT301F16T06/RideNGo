@@ -2,6 +2,8 @@ package assignment1.ridengo;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,8 @@ public class RideRequest {
 
     private int id;
     private String description;
-    private Double fare;
+    private float distance;
+    private double fare;
     private User rider;
     private User driver;
     private String status;
@@ -80,22 +83,22 @@ public class RideRequest {
      * @param endPoint    the end point
      * @param description the description
      * @param rider       the rider
-     * @param fare        the fare
+     * @param distance    the distance
      */
-    public RideRequest(LatLng startCoord, LatLng endCoord, String startPoint, String endPoint, String description, User rider, Double fare){
+    public RideRequest(LatLng startCoord, LatLng endCoord, String startPoint, String endPoint, String description, User rider, float distance){
         this.startCoord = startCoord;
         this.endCoord = endCoord;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.description = description;
         this.rider = rider;
-        this.driver = null;
-        this.fare = fare;
+        this.distance = distance;
         this.status = waitForDriver;
         this.listeners = new ArrayList<Listener>();
         this.id = this.hashCode();
         this.notifyRider = false;
         this.notifyDriver = false;
+        this.fare = getFare(distance);
         addUpdateListener(this);
     }
 
@@ -170,9 +173,11 @@ public class RideRequest {
      *
      * @return the double
      */
-    public Double getFare(){
-        return this.fare;
+    static public Double getFare(float distance){
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        return new Double((distance/1000)*1.5)+10;
     }
+
 
     /**
      * Get request status.

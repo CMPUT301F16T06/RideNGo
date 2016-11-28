@@ -132,9 +132,14 @@ public class DriverMainActivity extends Activity {
         findNearbyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
+                if(isConnected()) {
+                    Intent intent = new Intent(DriverMainActivity.this, MapsDriverSearchActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(activity,"You are offine now, please check your network status.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

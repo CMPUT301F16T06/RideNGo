@@ -45,6 +45,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private Double fare;
     private LatLng startCoord;
     private LatLng endCoord;
+    private float returnedDistance;
     final private Activity activity = this;
     private RideRequest offlinePostedRequest;
     private static final String PR_FILE = "offlinePostedRequest";
@@ -96,7 +97,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                     return;
                 }
                 description = descText.getText().toString().toLowerCase().trim();
-                RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, fare);
+                RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, returnedDistance);
                 if(isConnected()) {
                     rider.postRideRequest(rideRequest);
                     Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
@@ -169,8 +170,9 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 fareFormat.setMaximumFractionDigits(2);
                 fareFormat.setMinimumFractionDigits(2);
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
-                Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
-                estimatedFare.setText("$" + roundedFare);
+                //Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
+                fare = RideRequest.getFare(returnedDistance);
+                estimatedFare.setText("$" + fareFormat.format(fare));
             }
         }
     }//onActivityResult
