@@ -36,7 +36,7 @@ import java.util.List;
 public class RiderMainActivity extends AppCompatActivity {
 
     private String username;
-    private RideRequest offlinePostedRequest;
+    private List<RideRequest> offlinePostedRequests;
     private List<RideRequest> rideRequestList;
     private static final String PR_FILE = "offlinePostedRequest";
     private static final String RRL_FILE = "riderOfflineRequestList";
@@ -57,11 +57,13 @@ public class RiderMainActivity extends AppCompatActivity {
         if(isConnected()) {
             RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
             checkOfflinePostedRequest();
-            if (offlinePostedRequest != null) {
-                User r = offlinePostedRequest.getRider();
-                r.postRideRequest(offlinePostedRequest);
-                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
-                offlinePostedRequest = null;
+            if (offlinePostedRequests != null) {
+                User r = UserController.getUserList().getUserByUsername(username);
+                for(RideRequest offlinePostedRequest:offlinePostedRequests) {
+                    r.postRideRequest(offlinePostedRequest);
+                    Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                }
+                offlinePostedRequests = null;
             }
             rideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
             savePostedRequestList();
@@ -77,20 +79,17 @@ public class RiderMainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
         requestListView.setAdapter(adapter);
 
-        Button addRequestButton = (Button) findViewById(R.id.AddRequestButton);
-        addRequestButton.setOnClickListener(new View.OnClickListener() {
+        Button postRequestButton = (Button) findViewById(R.id.AddRequestButton);
+        postRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnected()) {
-                    Intent intent = new Intent(activity, RiderPostRequestActivity.class);
-                    intent.putExtra("username", username);
-                    startActivity(intent);
-                    finish();
+                if(!isConnected()){
+                    Toast.makeText(activity,"You are offline now, your request will be posted once your device get online again.",Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    Toast.makeText(RiderMainActivity.this,"You are offline now, please check your network status.",Toast.LENGTH_SHORT).show();
-                }
-
+                Intent intent = new Intent(activity, RiderPostRequestActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -101,6 +100,7 @@ public class RiderMainActivity extends AppCompatActivity {
                 intent.putExtra("username", username);
                 intent.putExtra("position", position);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -113,15 +113,6 @@ public class RiderMainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        ListView requestListView = (ListView) findViewById(R.id.RiderRequestListView);
-        final List<RideRequest> rideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
-        adapter = new ArrayAdapter<RideRequest>(activity, android.R.layout.simple_list_item_1, rideRequestList);
-        requestListView.setAdapter(adapter);
     }
 
     public boolean isConnected(){
@@ -137,13 +128,13 @@ public class RiderMainActivity extends AppCompatActivity {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+            Type rideRequestType = new TypeToken<List<RideRequest>>(){}.getType();
 
-            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            offlinePostedRequests = gson.fromJson(in, rideRequestType);
             deleteFile(FILENAME);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            offlinePostedRequest = null;
+            offlinePostedRequests = null;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();

@@ -2,6 +2,7 @@ package assignment1.ridengo;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
 
     private int position;
     private RideRequest rideRequest;
-    private RideRequest offlinePostedRequest;
+    private List<RideRequest> offlinePostedRequests;
     private static final String PR_FILE = "offlinePostedRequest";
     private static final String T = ".sav";
     private String username;
@@ -48,7 +49,7 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_detail);
+        setContentView(R.layout.activity_rider_request_detail);
 
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
@@ -57,11 +58,13 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
         if(isConnected()) {
             checkOfflinePostRequest();
-            if (offlinePostedRequest != null) {
-                User r = offlinePostedRequest.getRider();
-                r.postRideRequest(offlinePostedRequest);
-                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
-                offlinePostedRequest = null;
+            if (offlinePostedRequests != null) {
+                User r = UserController.getUserList().getUserByUsername(username);
+                for(RideRequest offlinePostedRequest:offlinePostedRequests) {
+                    r.postRideRequest(offlinePostedRequest);
+                    Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                }
+                offlinePostedRequests = null;
             }
         }
 
@@ -218,13 +221,21 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+            Type rideRequestType = new TypeToken<List<RideRequest>>(){}.getType();
 
-            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            offlinePostedRequests = gson.fromJson(in, rideRequestType);
             deleteFile(FILENAME);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            offlinePostedRequest = null;
+            offlinePostedRequests = null;
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this,RiderMainActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
+        finish();
     }
 }

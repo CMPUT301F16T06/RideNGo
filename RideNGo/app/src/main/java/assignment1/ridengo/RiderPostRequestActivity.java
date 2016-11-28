@@ -29,7 +29,10 @@ import java.lang.reflect.Type;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import static android.R.attr.delay;
 
 /**
  * The type Rider post request activity.
@@ -47,7 +50,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private LatLng endCoord;
     private float returnedDistance;
     final private Activity activity = this;
-    private RideRequest offlinePostedRequest;
+    private List<RideRequest> offlinePostedRequests;
     private static final String PR_FILE = "offlinePostedRequest";
     private static final String T = ".sav";
     private String username;
@@ -65,12 +68,14 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         RideRequestController.notifyUser(username, this);
 
         if(isConnected()) {
-            checkOfflinePostedRequest(username);
-            if (offlinePostedRequest != null) {
-                User r = offlinePostedRequest.getRider();
-                r.postRideRequest(offlinePostedRequest);
-                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
-                offlinePostedRequest = null;
+            checkOfflinePostedRequest();
+            if (offlinePostedRequests != null) {
+                User r = UserController.getUserList().getUserByUsername(username);
+                for(RideRequest offlinePostedRequest:offlinePostedRequests) {
+                    r.postRideRequest(offlinePostedRequest);
+                    Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                }
+                offlinePostedRequests = null;
             }
         }
 
@@ -103,10 +108,14 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                     Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    offlinePostedRequest = rideRequest;
-                    saveOffLinePostedRequest(username);
-                    offlinePostedRequest = null;
-                    Toast.makeText(activity, "You are offline now, your request will be post once you get online again.", Toast.LENGTH_SHORT).show();
+                    checkOfflinePostedRequest();
+                    if(offlinePostedRequests == null){
+                        offlinePostedRequests = new ArrayList<RideRequest>();
+                    }
+                    offlinePostedRequests.add(rideRequest);
+                    saveOffLinePostedRequests();
+                    offlinePostedRequests = null;
+                    Toast.makeText(activity, "You are offline now, your request(s) will be post once your device get online again.", Toast.LENGTH_SHORT).show();
                 }
                 Intent intent = new Intent(activity, RiderMainActivity.class);
                 intent.putExtra("username", username);
@@ -183,7 +192,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
-    private void saveOffLinePostedRequest(String username){
+    private void saveOffLinePostedRequests(){
         String FILENAME = PR_FILE+username+T;
         try {
             FileOutputStream fos = openFileOutput(FILENAME,Context.MODE_PRIVATE);
@@ -191,7 +200,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(offlinePostedRequest, out);
+            gson.toJson(offlinePostedRequests, out);
             out.flush();
 
             fos.close();
@@ -204,20 +213,20 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         }
     }
 
-    public void checkOfflinePostedRequest(String username){
+    public void checkOfflinePostedRequest(){
         String FILENAME = PR_FILE+username+T;
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+            Type rideRequestType = new TypeToken<List<RideRequest>>(){}.getType();
 
-            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            offlinePostedRequests = gson.fromJson(in, rideRequestType);
             deleteFile(FILENAME);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            offlinePostedRequest = null;
+            offlinePostedRequests = null;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();

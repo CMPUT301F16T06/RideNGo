@@ -34,7 +34,7 @@ public class RoleSelectActivity extends Activity {
     final Activity activity = this;
     private int mBackKeyPressedTimes = 0;
     private String username;
-    private RideRequest offlinePostedRequest;
+    private List<RideRequest> offlinePostedRequests;
     private RideRequest offlineAcceptedRequest;
     private static final String AR_FILE = "offlineAcceptedRequest";
     private static final String PR_FILE = "offlinePostedRequest";
@@ -127,10 +127,13 @@ public class RoleSelectActivity extends Activity {
         super.onResume();
         User user = UserController.getUserList().getUserByUsername(username);
         if(isConnected()) {
-            checkOfflinePostRequest(username);
-            if (offlinePostedRequest != null) {
-                user.postRideRequest(offlinePostedRequest);
-                Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+            checkOfflinePostRequested(username);
+            if (offlinePostedRequests != null) {
+                for(RideRequest offlinePostedRequest:offlinePostedRequests) {
+                    user.postRideRequest(offlinePostedRequest);
+                    Toast.makeText(activity, "Offline request Added, from " + offlinePostedRequest.getStartPoint() + " to " + offlinePostedRequest.getEndPoint(), Toast.LENGTH_SHORT).show();
+                }
+                offlinePostedRequests = null;
             }
 
             checkOfflineAcceptedRequest(username);
@@ -182,20 +185,20 @@ public class RoleSelectActivity extends Activity {
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
-    public void checkOfflinePostRequest(String username){
+    public void checkOfflinePostRequested(String username){
         String FILENAME = PR_FILE+username+T;
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type rideRequestType = new TypeToken<RideRequest>(){}.getType();
+            Type rideRequestType = new TypeToken<List<RideRequest>>(){}.getType();
 
-            offlinePostedRequest = gson.fromJson(in, rideRequestType);
+            offlinePostedRequests = gson.fromJson(in, rideRequestType);
             deleteFile(FILENAME);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            offlinePostedRequest = null;
+            offlinePostedRequests = null;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
