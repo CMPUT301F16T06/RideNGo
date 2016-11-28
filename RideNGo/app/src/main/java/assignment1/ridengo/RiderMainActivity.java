@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -109,6 +110,17 @@ public class RiderMainActivity extends AppCompatActivity {
                 rideRequestList.clear();
                 Collection<RideRequest> rideRequests = RideRequestController.getRequestList().getRequestsWithRider(username);
                 rideRequestList.addAll(rideRequests);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        ImageButton refresh = (ImageButton) findViewById(R.id.imageButton_Refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rideRequestList.clear();
+                RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
+                rideRequestList.addAll(RideRequestController.getRequestList().getRequestsWithRider(username));
                 adapter.notifyDataSetChanged();
             }
         });
