@@ -46,12 +46,11 @@ public class CompleteTrip extends ActivityInstrumentationTestCase2<MainActivity>
             TextView textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
             if (textView.getText().toString().equals("Driver Confirmed")) {
                 solo.clickOnView(solo.getView(R.id.RequestDetailConfirmButton));
-
-                solo.clickInList(i + 1);
-                textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
-                assertTrue(textView.getText().toString().equals("Trip Completed"));
+//                solo.clickInList(i + 1);
+//                textView = (TextView) solo.getView(R.id.RequestDetailCurrentStatusTextView);
+//                assertTrue(textView.getText().toString().equals("Trip Completed"));
             }
-            solo.goBack();
+            //solo.goBack();
         }
     }
     @Override
