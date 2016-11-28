@@ -35,6 +35,8 @@ public class confirmDriver extends ActivityInstrumentationTestCase2<MainActivity
         solo.clickOnView(solo.getView(R.id.button_MainSignIn));
         assertTrue(solo.waitForActivity(RoleSelectActivity.class));
 
+        assertTrue(solo.searchText(""));
+
         solo.clickOnView(solo.getView(R.id.button_Rider));
         assertTrue(solo.waitForActivity(RiderMainActivity.class));
 

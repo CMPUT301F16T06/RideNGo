@@ -492,6 +492,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 "   }\n" +
                 "}";
 
+        //Working on the app, not sure why it is not working on test
         ArrayList<RideRequest> rideRequests = new ArrayList<RideRequest>();
         RideRequestController.loadRequestListFromServer(query);
         rideRequests.addAll(RideRequestController.getRequestList().getRequests());
@@ -501,8 +502,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 check = true;
             }
         }
-        assertEquals(check, 1);
-        assertTrue("Found request", check);
+        assertTrue("Working in the app, not sure why it is not working on test", check);
         UserController.getUserList().clear();
         RideRequestController.getRequestList().clear();
     }

@@ -30,8 +30,6 @@ import java.util.List;
 
 /**
  * The type Rider request detail activity.
- * Rider able to see the detail for the requests he/she posted.
- * The rider can select the driver, confirm the driver and/or cancel the request
  */
 public class RiderRequestDetailActivity extends AppCompatActivity {
 
@@ -211,12 +209,20 @@ public class RiderRequestDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
+    /**
+     * Check offline post request.
+     */
     public void checkOfflinePostRequest(){
         String FILENAME = PR_FILE+username+T;
         try {

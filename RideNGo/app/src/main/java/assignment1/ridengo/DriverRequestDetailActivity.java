@@ -35,7 +35,6 @@ import static android.provider.CalendarContract.CalendarCache.URI;
 
 /**
  * The type Driver request detail activity.
- * Driver able to see the details of the request including rider's username, phone number and email address
  */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
@@ -187,6 +186,11 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         info.add("Description: " + rideRequest.getDescription());
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -214,6 +218,11 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check offline accepted request.
+     *
+     * @param username the username
+     */
     public void checkOfflineAcceptedRequest(String username){
         String FILENAME = AR_FILE+username+T;
         try {

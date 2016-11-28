@@ -125,12 +125,20 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
+    /**
+     * Check offline accepted request.
+     */
     public void checkOfflineAcceptedRequest(){
         String FILENAME = AR_FILE+username+T;
         try {
@@ -173,6 +181,9 @@ public class DriverAcceptedListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Offline load driver request list.
+     */
     public void offlineLoadDriverRequestList(){
         String FILENAME = DRL_FILE+username+T;
         try {

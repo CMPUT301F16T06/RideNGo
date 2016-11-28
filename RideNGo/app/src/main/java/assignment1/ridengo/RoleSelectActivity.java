@@ -28,9 +28,11 @@ import java.util.List;
 
 /**
  * The type Role select activity.
- * The user can select to be a driver or to be a rider
  */
 public class RoleSelectActivity extends Activity {
+    /**
+     * The Activity.
+     */
     final Activity activity = this;
     private int mBackKeyPressedTimes = 0;
     private String username;
@@ -179,12 +181,22 @@ public class RoleSelectActivity extends Activity {
         }
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
+    /**
+     * Check offline post requested.
+     *
+     * @param username the username
+     */
     public void checkOfflinePostRequested(String username){
         String FILENAME = PR_FILE+username+T;
         try {
@@ -205,6 +217,11 @@ public class RoleSelectActivity extends Activity {
         }
     }
 
+    /**
+     * Check offline accepted request.
+     *
+     * @param username the username
+     */
     public void checkOfflineAcceptedRequest(String username){
         String FILENAME = AR_FILE+username+T;
         try {

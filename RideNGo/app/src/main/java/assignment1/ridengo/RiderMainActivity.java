@@ -31,7 +31,6 @@ import java.util.List;
 
 /**
  * The type Rider main activity.
- * Main activity for Rider. Rider able to see/update a list of requests he/she posted, and/or post a new request
  */
 public class RiderMainActivity extends AppCompatActivity {
 
@@ -122,12 +121,20 @@ public class RiderMainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
+    /**
+     * Check offline posted request.
+     */
     public void checkOfflinePostedRequest(){
         String FILENAME = PR_FILE+username+T;
         try {
@@ -170,6 +177,9 @@ public class RiderMainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Offline load rider request list.
+     */
     public void offlineLoadRiderRequestList(){
         String FILENAME = RRL_FILE+username+T;
         try {

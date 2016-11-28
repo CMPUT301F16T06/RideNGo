@@ -30,7 +30,6 @@ import java.util.List;
 
 /**
  * The type Driver main activity.
- * Main activity for driver, he can search a request by keyword, search by geolocation. And he can view a requests he accepted.
  */
 public class DriverMainActivity extends Activity {
     private String username;
@@ -246,12 +245,22 @@ public class DriverMainActivity extends Activity {
 
     }
 
+    /**
+     * Is connected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
     }
 
+    /**
+     * Check offline accepted request.
+     *
+     * @param username the username
+     */
     public void checkOfflineAcceptedRequest(String username){
         String FILENAME = AR_FILE+username+T;
         try {

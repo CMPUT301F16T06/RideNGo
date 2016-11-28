@@ -138,18 +138,6 @@ public class RideRequest {
         return this.rider;
     }
 
-    /**
-     * Gets start point.
-     *
-     * @return the start point
-     */
-//    public LatLng getStartPoint(){
-//        return this.startPoint;
-//    }
-//
-//    public LatLng getEndPoint(){
-//        return this.endPoint;
-//    }
     public String getStartPoint(){
         return this.startPoint;
     }
