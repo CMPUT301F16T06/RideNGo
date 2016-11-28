@@ -77,6 +77,7 @@ public class RiderPostRequestActivity extends AppCompatActivity {
             }
         }
 
+        UserController.loadUserListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"username\": \"" + username + "\"}}}");
         final User rider = UserController.getUserList().getUserByUsername(username);
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
         final EditText end = (EditText) findViewById(R.id.EndPointEditText);

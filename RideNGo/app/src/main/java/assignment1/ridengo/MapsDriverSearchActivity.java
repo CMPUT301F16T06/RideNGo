@@ -131,7 +131,7 @@ public class MapsDriverSearchActivity extends FragmentActivity implements OnMapR
                     if(rideRequests.get(i).getStartCoord() == null || rideRequests.get(i).getEndCoord() == null || rideRequests.get(i).getStartCoord() == rideRequests.get(i).getEndCoord()){
                         // Filter out invalid request
                     } else {
-                        mMap.addMarker(new MarkerOptions().position(rideRequests.get(i).getStartCoord()).title("Start Point"));
+//                        mMap.addMarker(new MarkerOptions().position(rideRequests.get(i).getStartCoord()).title("Start Point"));
                         Location.distanceBetween(driverCoordinates.latitude,
                                 driverCoordinates.longitude,
                                 rideRequests.get(i).getStartCoord().latitude,
@@ -140,6 +140,7 @@ public class MapsDriverSearchActivity extends FragmentActivity implements OnMapR
                         if(rideRequests.get(i).getStatus().equals("Driver Confirmed") || rideRequests.get(i).getStatus().equals("Trip Completed")){
                             // Do not add to nearby requests list if the request is already confirmed by other drivers
                         } else {
+                            mMap.addMarker(new MarkerOptions().position(rideRequests.get(i).getStartCoord()).title("Start Point"));
                             distanceFloat = distanceResult[0];
                             pairCoord = new PairForSearch(i,distanceFloat);
                             pairRequests.add(pairCoord);

@@ -115,6 +115,13 @@ public class RiderMainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this,RoleSelectActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
+    }
+
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
