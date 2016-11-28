@@ -65,4 +65,5 @@
         android:layout_alignEnd="@+id/DriverRequestListView"
         android:layout_toEndOf="@+id/SearchTextView" />
 
+
 </RelativeLayout>

@@ -188,6 +188,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
         info.add("Phone: " + rider.getPhoneNum());
         phoneNum = new String[]{ rider.getPhoneNum()};
         info.add("Status: " + rideRequest.getStatus().toString());
+        info.add("Description: " + rideRequest.getDescription());
     }
 
     public boolean isConnected(){
