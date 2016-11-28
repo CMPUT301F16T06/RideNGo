@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,9 +33,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This activity allows the user to see the start and end points of a request on a map
+ * @see DriverRequestDetailActivity
+ * @see NearbyListRiderInfoActivity
+ */
 public class ShowPointsOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private static final String TAG = "ShowPointsMapActivity";
+    private static final int REQUEST_CODE = 1;
     private GoogleMap mMap;
     private ArrayList<LatLng> latLngPoints = null;
     private Polyline polyLine = null;
@@ -51,7 +57,6 @@ public class ShowPointsOnMapActivity extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -66,25 +71,40 @@ public class ShowPointsOnMapActivity extends FragmentActivity implements OnMapRe
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+        } else {
+            mMap.setMyLocationEnabled(true);
         }
-        mMap.setMyLocationEnabled(true);
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(latLngPoints.get(0)).title("Start Point"));
         mMap.addMarker(new MarkerOptions().position(latLngPoints.get(1)).title("End Point"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngPoints.get(0),10));
-        String url = getDirectionsUrl(latLngPoints.get(0),latLngPoints.get(1));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngPoints.get(0), 10));
+        String url = getDirectionsUrl(latLngPoints.get(0), latLngPoints.get(1));
         DownloadTask downloadTask = new DownloadTask();
         downloadTask.execute(url);
+    }
+
+    /**
+     * This function checks the result after requesting permissions
+     * @param requestCode This parameter is from the request code in requestPermissions method
+     * @param permissions This string contains the permissions requested
+     * @param grantResults This parameter is either PERMISSION_GRANTED or PERMISSION_DENIED
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                        // Permissions granted
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+                } else {
+                    Toast.makeText(ShowPointsOnMapActivity.this, "You do not have the desired permissions", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     /**
@@ -95,6 +115,7 @@ public class ShowPointsOnMapActivity extends FragmentActivity implements OnMapRe
      *
      * Code taken from
      * http://stackoverflow.com/questions/14710744/how-to-draw-road-directions-between-two-geocodes-in-android-google-map-v2
+     * Accessed November 9, 2016
      */
     private String getDirectionsUrl(LatLng origin,LatLng dest){
 

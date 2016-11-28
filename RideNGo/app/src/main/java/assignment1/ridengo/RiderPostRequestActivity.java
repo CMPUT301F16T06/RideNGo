@@ -39,6 +39,7 @@ import static android.R.attr.delay;
  * The type Rider post request activity.
  * Rider able to post a new request.
  * Rider need to enter a starting point and a end point.
+ * @see MapsRiderActivity
  */
 public class RiderPostRequestActivity extends AppCompatActivity {
 
@@ -56,10 +57,6 @@ public class RiderPostRequestActivity extends AppCompatActivity {
     private static final String T = ".sav";
     private String username;
 
-    /**
-     * The Ride request controller.
-     */
-    //RideRequestController rideRequestController = new RideRequestController();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +81,9 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         final EditText start = (EditText) findViewById(R.id.StartPointEditText);
         final EditText end = (EditText) findViewById(R.id.EndPointEditText);
         final EditText descText = (EditText) findViewById(R.id.DescriptionEditText);
-
         final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
 
         estimatedFare.setText("$"+0.00);
-
         Button postRequestButton = (Button) findViewById(R.id.postRequestButton);
         Button findPointsOnMapButton = (Button) findViewById(R.id.FindPointOnMapButton);
 
@@ -140,11 +135,25 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         });
     }
 
-    //https://developer.android.com/training/basics/intents/result.html
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    /**
+     * This method takes the results from the MapsRiderActivity and stores those results(Start and
+     * end points, their LatLng coordinates, distance from start and end points) in order to be
+     * added to the ride requests.
+     * https://developer.android.com/training/basics/intents/result.html
+     * http://stackoverflow.com/questions/5195837/format-float-to-n-decimal-places
+     * Accessed on November 8, 2016
+     * @param requestCode This parameter is the request code sent from startActivityForResult()
+     *                    which allows us to know where the result came from
+     * @param resultCode  This parameter is used to determine if the results returned are good for
+     *                    use
+     * @param data        This parameter holds the data gotten from MapsRiderActivity
+     *
+     * @see RideRequest
+     * @see MapsRiderActivity
+     */
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESULT_SUCCESS) {
-            //Toast.makeText(getBaseContext(),"Error getting location",Toast.LENGTH_SHORT).show();
             if(resultCode == RESULT_OK) {
                 ArrayList<String> returnedAddresses = data.getStringArrayListExtra("ARRAY_LIST_ADDRESS_MARKER");
                 ArrayList<LatLng> markerLatLng = data.getParcelableArrayListExtra("MARKER_LAT_LNG");
@@ -152,7 +161,6 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 final EditText start = (EditText) findViewById(R.id.StartPointEditText);
                 final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                 final TextView estimatedFare = (TextView) findViewById(R.id.estimatedFareTextView);
-                //String result=data.getStringExtra("result");
 
                 // Then search option used when picking points
                 if (returnedAddresses == null) {
@@ -161,35 +169,26 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                     endCoord = searchedReturnAddressLatLng.get(1);
                     String fromLocationName = data.getStringExtra("FROM_LOCATION");
                     String toLocationName = data.getStringExtra("TO_LOCATION");
-                    //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
-                    //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                     start.setText(fromLocationName);
                     end.setText(toLocationName);
                 } else {
-                    //final EditText start = (EditText) findViewById(R.id.StartPointEditText);
-                    //final EditText end = (EditText) findViewById(R.id.EndPointEditText);
                     startCoord = markerLatLng.get(0);
                     endCoord = markerLatLng.get(1);
                     start.setText(returnedAddresses.get(0));
                     end.setText(returnedAddresses.get(1));
                 }
                 returnedDistance = data.getFloatExtra("DISTANCE_FROM_POINTS", 0);
-
-                //Toast.makeText(getBaseContext(),"asdasd" + returnedDistance,Toast.LENGTH_SHORT).show();
-                // http://stackoverflow.com/questions/5195837/format-float-to-n-decimal-places
                 NumberFormat fareFormat = NumberFormat.getInstance(Locale.CANADA);
                 fareFormat.setMaximumFractionDigits(2);
                 fareFormat.setMinimumFractionDigits(2);
                 fareFormat.setRoundingMode(RoundingMode.HALF_UP);
-                //Float roundedFare = new Float(fareFormat.format(((returnedDistance / 1000) * 2.00)));
 
-                //fare = RideRequest.getFare(returnedDistance);
                 fare = RideRequest.calculateFare(returnedDistance);
 
                 estimatedFare.setText("$" + fareFormat.format(fare));
             }
         }
-    }//onActivityResult
+    }
 
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(this.CONNECTIVITY_SERVICE);

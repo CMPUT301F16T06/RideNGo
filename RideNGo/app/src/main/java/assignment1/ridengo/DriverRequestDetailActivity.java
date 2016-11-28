@@ -39,6 +39,7 @@ import static android.provider.CalendarContract.CalendarCache.URI;
  */
 public class DriverRequestDetailActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE = 1;
     private String username;
     private RideRequest rideRequest;
     private ArrayList<String> info = new ArrayList<String>();
@@ -49,6 +50,7 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
     private LatLng endPoint;
     private String[] phoneNum;
     private String[] emailAddress;
+    private Intent phoneIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,19 +133,13 @@ public class DriverRequestDetailActivity extends AppCompatActivity {
                     startActivity(Intent.createChooser(emailIntent, "Send Email"));
                 }
                 else if(id == 4) {
-                    Toast.makeText(DriverRequestDetailActivity.this, "Call rider", Toast.LENGTH_SHORT).show();
-                    Intent phoneIntent = new Intent(Intent.ACTION_CALL, URI.parse("tel: " + phoneNum[0]));
-                    if (ActivityCompat.checkSelfPermission(DriverRequestDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
+                    phoneIntent = new Intent(Intent.ACTION_CALL, URI.parse("tel: " + phoneNum[0]));
+                    // Checking for phone permissions
+                    if(ActivityCompat.checkSelfPermission(DriverRequestDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(DriverRequestDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE);
+                    } else {
+                        startActivity(phoneIntent);
                     }
-                    startActivity(phoneIntent);
                 }
             }
         });
