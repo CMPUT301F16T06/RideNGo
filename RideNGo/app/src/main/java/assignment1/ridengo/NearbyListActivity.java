@@ -22,9 +22,10 @@ import java.util.List;
 public class NearbyListActivity extends AppCompatActivity {
 
     private String username;
-    private ArrayList<Double> distanceArray = new ArrayList<Double>();
+    private ArrayList<String> distanceArray = new ArrayList<String>();
     private List<PairForSearch> pairRequests = new ArrayList<PairForSearch>();
     private Integer index = null;
+    private double distance;
 
     /**
      * Called upon when activity is first created. Load users and requests with their respective
@@ -45,12 +46,15 @@ public class NearbyListActivity extends AppCompatActivity {
         pairRequests = (List<PairForSearch>)getIntent().getSerializableExtra("NEARBY_LOCATIONS");
         // Sort the requests from shortest to largest distance
         for(int i = 0; i < pairRequests.size(); i++){
-            distanceArray.add(pairRequests.get(i).getValue());
+            distance = pairRequests.get(i).getValue();
+            String distanceString = String.format("%.2f", (distance/1000));
+            String distanceKm = distanceString + "KM";
+            distanceArray.add(distanceKm);
         }
 
         username = getIntent().getStringExtra("username");
         ListView nearbyRequestsListView = (ListView)findViewById(R.id.NearbyRequestsListView);
-        ArrayAdapter<Double> adapter = new ArrayAdapter<Double>(this, android.R.layout.simple_list_item_1, distanceArray);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, distanceArray);
         nearbyRequestsListView.setAdapter(adapter);
 
         /**
