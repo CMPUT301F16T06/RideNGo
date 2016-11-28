@@ -562,7 +562,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testUS050401() {
         User rider1 = new User("User1", "user1@gmail.com", "8888888888");
 
-        Double fare = 50.0;
         RideRequest newRequest1 = new RideRequest(new LatLng(0,0), new LatLng(0,0),"", "", "From start to end", rider1, 0);
         rider1.postRideRequest(newRequest1);
 
