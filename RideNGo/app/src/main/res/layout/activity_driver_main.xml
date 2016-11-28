@@ -22,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/DriverRequestListView"
-        android:layout_below="@+id/ViewAcceptedButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/SortSpinner" />
 
     <Button
         android:text="Search"
@@ -53,4 +53,14 @@
         android:layout_marginTop="23dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SortSpinner"
+        android:layout_below="@+id/ViewAcceptedButton"
+        android:layout_alignStart="@+id/ViewAcceptedButton"
+        android:layout_alignEnd="@+id/ViewAcceptedButton"
+        android:entries="@array/sort"/>
+
 </RelativeLayout>

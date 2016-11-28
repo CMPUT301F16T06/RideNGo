@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -74,6 +75,7 @@ public class DriverMainActivity extends Activity {
         Button searchButton = (Button) findViewById(R.id.SearchButton);
         Button findNearbyButton = (Button) findViewById(R.id.FindNearbyButton);
         Button viewAcceptedButton = (Button) findViewById(R.id.ViewAcceptedButton);
+        Spinner sortSpinner = (Spinner) findViewById(R.id.SortSpinner);
         final EditText searchText = (EditText) findViewById(R.id.SearchTextView);
         final ListView requestListView = (ListView) findViewById(R.id.DriverRequestListView);
         final List<RideRequest> rideRequestList = new ArrayList<>();
@@ -152,6 +154,23 @@ public class DriverMainActivity extends Activity {
                 intent.putExtra("id", request.getId());
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 1){
+                    Toast.makeText(activity,"sort by price",Toast.LENGTH_SHORT).show();
+                }
+                else if(i==2){
+                    Toast.makeText(activity,"sort by price/km",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
