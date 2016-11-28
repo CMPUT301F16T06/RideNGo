@@ -13,19 +13,19 @@
             android:layout_width="201dp"
             android:layout_height="wrap_content"
             android:text="Filter by Price Per Ride"
-            android:id="@+id/radioButton_Ride" />
+            android:id="@+id/RideRadioButton" />
 
         <RadioButton
             android:layout_width="205dp"
             android:layout_height="wrap_content"
             android:text="Filter by Price Per KM"
-            android:id="@+id/radioButton_KM" />
+            android:id="@+id/KmRadioButton" />
     </RadioGroup>
 
     <Spinner
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:id="@+id/spinnerOption"
+        android:id="@+id/OptionSpinner"
         android:layout_gravity="center_horizontal"
         android:spinnerMode="dropdown" />
 
@@ -34,14 +34,15 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText_Value"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/ValueEditText"
+        android:layout_gravity="center_horizontal"
+        android:hint="Range"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Apply"
-        android:id="@+id/button_Apply"
+        android:id="@+id/AppleButton"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

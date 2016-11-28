@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -103,8 +104,10 @@ public class RiderPostRequestActivity extends AppCompatActivity {
                 }
                 description = descText.getText().toString().toLowerCase().trim();
                 RideRequest rideRequest = new RideRequest(startCoord, endCoord, startPoint, endPoint, description, rider, returnedDistance);
+                rideRequest.setFare(fare);
                 if(isConnected()) {
                     rider.postRideRequest(rideRequest);
+                    delay(300);
                     Toast.makeText(activity, "Request Added, from " + startPoint + " to " + endPoint, Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -240,4 +243,18 @@ public class RiderPostRequestActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void delay(final int ms) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("XXX");                 //add your code here
+                    }
+                }, ms);
+            }
+        });
+    }
 }

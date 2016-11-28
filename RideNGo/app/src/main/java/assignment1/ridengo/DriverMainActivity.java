@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,7 +71,7 @@ public class DriverMainActivity extends Activity {
             }
         }
 
-        Button filterButton = (Button) findViewById(R.id.button_Filter);
+        Button filterButton = (Button) findViewById(R.id.FilterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,30 +79,40 @@ public class DriverMainActivity extends Activity {
                 dialog.setTitle("Filter");
                 dialog.setContentView(R.layout.dialog_filter);
 
-                final RadioButton perRide = (RadioButton) dialog.findViewById(R.id.radioButton_Ride);
-                final RadioButton perKM = (RadioButton) dialog.findViewById(R.id.radioButton_KM);
-                final Spinner op = (Spinner) dialog.findViewById(R.id.spinnerOption);
-                final EditText value = (EditText) dialog.findViewById(R.id.editText_Value);
-                final Button apply = (Button) dialog.findViewById(R.id.button_Apply);
+                final RadioButton rideRadioButton = (RadioButton) dialog.findViewById(R.id.RideRadioButton);
+                final RadioButton kmRadioButton = (RadioButton) dialog.findViewById(R.id.KmRadioButton);
+                final Spinner optionSpinner = (Spinner) dialog.findViewById(R.id.OptionSpinner);
+                final EditText valueEditText = (EditText) dialog.findViewById(R.id.ValueEditText);
+                final Button applyButton = (Button) dialog.findViewById(R.id.AppleButton);
 
                 ArrayList<String> arrayOp = new ArrayList<String>();
-                arrayOp.add("greater");
-                arrayOp.add("equal");
-                arrayOp.add("less");
+                arrayOp.add("greater than");
+                arrayOp.add("equal to");
+                arrayOp.add("less than");
                 ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(activity, R.layout.support_simple_spinner_dropdown_item, arrayOp);
-                op.setAdapter(spinnerAdapter);
+                optionSpinner.setAdapter(spinnerAdapter);
 
-                apply.setOnClickListener(new View.OnClickListener() {
+                applyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(perRide.isChecked()) {
-                            filter = "filter per ride";
-                        } else if(perKM.isChecked()) {
-                            filter = "filter per km";
+                        if(!rideRadioButton.isChecked() && !kmRadioButton.isChecked()){
+                            Toast.makeText(activity,"Please select a method of filter",Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        filter_value = Float.valueOf(value.getText().toString());
-                        operator = op.getSelectedItem().toString();
-                        dialog.cancel();
+                        else if(valueEditText.getText().toString().equals("")){
+                            Toast.makeText(activity,"Please specify a range",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        else {
+                            if (rideRadioButton.isChecked()) {
+                                filter = "filter per ride";
+                            } else if (kmRadioButton.isChecked()) {
+                                filter = "filter per km";
+                            }
+                            filter_value = Float.valueOf(valueEditText.getText().toString());
+                            operator = optionSpinner.getSelectedItem().toString();
+                            dialog.cancel();
+                        }
                     }
                 });
                 dialog.show();
@@ -173,15 +182,15 @@ public class DriverMainActivity extends Activity {
                     rideRequestList.addAll(RideRequestController.getRequestList().getRequests());
                 } else if(filter.equals("filter per ride")) {
                     for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
-                        if(operator.equals("greater")) {
+                        if(operator.equals("greater than")) {
                             if(request.getFare() > filter_value) {
                                 rideRequestList.add(request);
                             }
-                        } else if(operator.equals("equal")) {
+                        } else if(operator.equals("equal to")) {
                             if(request.getFare() == filter_value) {
                                 rideRequestList.add(request);
                             }
-                        } else if(operator.equals("less")) {
+                        } else if(operator.equals("less than")) {
                             if(request.getFare() < filter_value) {
                                 rideRequestList.add(request);
                             }
@@ -189,15 +198,15 @@ public class DriverMainActivity extends Activity {
                     }
                 } else if(filter.equals("filter per km")) {
                     for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
-                        if(operator.equals("greater")) {
+                        if(operator.equals("greater than")) {
                             if(request.getFare() / request.getDistance() > filter_value) {
                                 rideRequestList.add(request);
                             }
-                        } else if(operator.equals("equal")) {
+                        } else if(operator.equals("equal to")) {
                             if(request.getFare() / request.getDistance() == filter_value) {
                                 rideRequestList.add(request);
                             }
-                        } else if(operator.equals("less")) {
+                        } else if(operator.equals("less than")) {
                             if(request.getFare() / request.getDistance() < filter_value) {
                                 rideRequestList.add(request);
                             }
