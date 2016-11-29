@@ -159,6 +159,8 @@ public class DriverMainActivity extends Activity {
                 String query;
                 if(search.isEmpty()) {
                     query = "{\n" +
+                            "   \"from\" : 0," +
+                            "   \"size\" : 100," +
                             "   \"query\" : {\n" +
                             "      \"filtered\" : { \n" +
                             "         \"query\" : {\n" +
@@ -172,6 +174,8 @@ public class DriverMainActivity extends Activity {
                             "}";
                 } else {
                     query = "{\n" +
+                            "   \"from\" : 0," +
+                            "   \"size\" : 100," +
                             "   \"query\" : {\n" +
                             "      \"filtered\" : { \n" +
                             "         \"query\" : {\n" +
