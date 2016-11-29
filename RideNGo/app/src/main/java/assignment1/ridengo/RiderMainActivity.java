@@ -53,6 +53,8 @@ public class RiderMainActivity extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
         RideRequestController.notifyUser(username, this);
+        RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
+        rideRequestList = RideRequestController.getRequestList().getRequestsWithRider(username);
 
         if(isConnected()) {
             RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
@@ -118,9 +120,11 @@ public class RiderMainActivity extends AppCompatActivity {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rideRequestList.clear();
                 RideRequestController.loadRequestListFromServer("{\"from\":0,\"size\":10000,\"query\": { \"match\": { \"rider.username\": \"" + username + "\"}}}");
-                rideRequestList.addAll(RideRequestController.getRequestList().getRequestsWithRider(username));
+                rideRequestList.clear();
+                Collection<RideRequest> rideRequests = RideRequestController.getRequestList().getRequestsWithRider(username);
+                rideRequestList.addAll(rideRequests);
+
                 adapter.notifyDataSetChanged();
             }
         });

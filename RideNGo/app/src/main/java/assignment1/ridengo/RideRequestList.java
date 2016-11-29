@@ -100,7 +100,9 @@ public class RideRequestList {
         List<RideRequest> rideRequests = new ArrayList<RideRequest>();
         for(RideRequest request: requestList){
             if(request.getRider() != null && request.getRider().getUsername().equals(username)){
-                rideRequests.add(request);
+                if(!request.getStatus().equals("Trip Completed")) {
+                    rideRequests.add(request);
+                }
             }
         }
         return rideRequests;
