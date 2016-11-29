@@ -83,6 +83,7 @@ public class DriverMainActivity extends Activity {
                 final Spinner optionSpinner = (Spinner) dialog.findViewById(R.id.OptionSpinner);
                 final EditText valueEditText = (EditText) dialog.findViewById(R.id.ValueEditText);
                 final Button applyButton = (Button) dialog.findViewById(R.id.AppleButton);
+                final Button removeButton = (Button) dialog.findViewById(R.id.buttonRemoveFilter);
 
                 ArrayList<String> arrayOp = new ArrayList<String>();
                 arrayOp.add("greater than");
@@ -112,6 +113,14 @@ public class DriverMainActivity extends Activity {
                             operator = optionSpinner.getSelectedItem().toString();
                             dialog.cancel();
                         }
+                    }
+                });
+
+                removeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        filter = null;
+                        dialog.cancel();
                     }
                 });
                 dialog.show();
@@ -198,15 +207,15 @@ public class DriverMainActivity extends Activity {
                 } else if(filter.equals("filter per km")) {
                     for(RideRequest request : RideRequestController.getRequestList().getRequests()) {
                         if(operator.equals("greater than")) {
-                            if(request.getFare() / request.getDistance() > filter_value) {
+                            if(request.getFare() / (request.getDistance() / 1000) > filter_value) {
                                 rideRequestList.add(request);
                             }
                         } else if(operator.equals("equal to")) {
-                            if(request.getFare() / request.getDistance() == filter_value) {
+                            if(request.getFare() / (request.getDistance() / 1000) == filter_value) {
                                 rideRequestList.add(request);
                             }
                         } else if(operator.equals("less than")) {
-                            if(request.getFare() / request.getDistance() < filter_value) {
+                            if(request.getFare() / (request.getDistance() / 1000) < filter_value) {
                                 rideRequestList.add(request);
                             }
                         }
